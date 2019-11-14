@@ -90,7 +90,7 @@ exports.getShifts = function () {
     return Shift.find().exec();
 };
 
-exports.getShifts = function (shift) {
+exports.deleteShift = function (shift) {
     return Shift.deleteOne(shift);
 };
 
