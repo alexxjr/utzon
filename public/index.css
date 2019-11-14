@@ -9,6 +9,7 @@ body {font-family: Verdana, sans-serif;}
     width: 100%;
     background: cornflowerblue;
     text-align: center;
+    font-size: 25px;
 }
 
 /* Month list */
@@ -19,7 +20,6 @@ body {font-family: Verdana, sans-serif;}
 
 .month ul li {
     color: white;
-    font-size: 20px;
     text-transform: uppercase;
     letter-spacing: 3px;
 }
@@ -30,7 +30,7 @@ body {font-family: Verdana, sans-serif;}
     padding-top: 10px;
 }
 
-/* Next button */
+/* Next button inside month header */
 .month .next {
     float: right;
     padding-top: 10px;
@@ -58,6 +58,11 @@ body {font-family: Verdana, sans-serif;}
     margin: 0;
 }
 
+.days :hover{
+    background-color: #ddd;
+    border: 1px solid black;
+}
+
 .days li {
     list-style-type: none;
     display: inline-block;
@@ -76,14 +81,14 @@ body {font-family: Verdana, sans-serif;}
 }
 
 .shifts div {
-    /*background: cornflowerblue;*/
-    /*text-align: center;*/
-    /*font-size: 25px;*/
-    /*border: 50px;*/
-
     width: 300px;
-    border: 15px solid green;
+    border: 1px solid black;
+    background: cornflowerblue;
+    text-align: center;
     padding: 50px;
     margin: 20px;
+}
 
+.shifts ul :hover {
+    background-color: #ddd;
 }

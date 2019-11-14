@@ -3,8 +3,7 @@ let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", 
 let daysArray = [];
 let month;
 let date = new Date(Date.now());
-let nextBtn = document.querySelector("#nextBtn");
-nextBtn.onclick = nextMonth;
+
 
 update();
 
@@ -42,6 +41,9 @@ function setCurrentMonth() {
     month = date.getMonth();
     monthDisplay.innerHTML = monthArray[month];
 }
+
+let nextBtn = document.querySelector("#nextBtn");
+nextBtn.onclick = nextMonth;
 
 function nextMonth() {
     month++;
