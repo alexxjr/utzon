@@ -15,7 +15,7 @@ const port = process.env.PORT || 9119;
 app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 
-controller.init();
+// controller.init();
 
 
 

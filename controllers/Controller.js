@@ -11,11 +11,11 @@ exports.createEmployee = function (CPR, name, email, phoneNo) {
         email,
         phoneNo
     });
-    return employee; //employee.save
-}
+    return employee.save();
+};
 
 exports.createShift = function (start, end) {
-
+    //Calculates the amount of time (in hours) a shift lasts
     function time() {
         let time;
         let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
@@ -33,22 +33,22 @@ exports.createShift = function (start, end) {
         end,
         totalHours
     });
-    return shift; //shift.save
-}
+    return shift.save();
+};
 
 exports.addEmployeeToShift = function (employee, shift) {
     if (shift.employee !== undefined) {
-    employee.shifts.push(shift);
-    shift.employee = employee;
-    return Promise.all([employee.save(), shift.save()]);
+        employee.shifts.push(shift);
+        shift.employee = employee;
+        return Promise.all([employee.save(), shift.save()]);
     } else {
         throw new Error("An employee is already attached to this shift");
     }
 
-}
+};
 
 exports.removeEmployeeFromShift = function (employee, shift) {
-    for(let i = 0; i < employee.shifts.length; i++) {
+    for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i] === shift) {
             employee.shifts.splice(i, 1);
             shift.employee = undefined;
@@ -56,28 +56,36 @@ exports.removeEmployeeFromShift = function (employee, shift) {
         }
     }
     throw new Error("This employee is not attached to this shift");
-}
+};
 
 exports.getEmployee = function (CPR) {
-    return Employee.findOne({CPR : CPR}).exec();
-}
+    return Employee.findOne({CPR: CPR}).exec();
+};
 
-exports.getEmployees = function(){
+exports.deleteEmployee = function (employee) {
+    return Employee.deleteOne(employee).exec();
+};
+
+exports.getEmployees = function () {
     return Employee.find().exec();
-}
+};
 
-exports.getShifts = function(){
+exports.getShifts = function () {
     return Shift.find().exec();
-}
+};
 
-exports.getShiftsForEmployee = function(CPR) {
-    return Employee.findOne({CPR : CPR}).exec().shifts;
-}
+exports.getShifts = function (shift) {
+    return Shift.deleteOne(shift);
+};
 
-exports.init = function () {
-    let e1 = this.createEmployee('1234567890', 'John', 'Jonh@mail.com','12345678');
-    let s1 = this.createShift(new Date("2015-03-25T12:00:00Z"), new Date("2015-03-25T14:00:00Z"));
-}
+exports.getShiftsForEmployee = function (CPR) {
+    return Employee.findOne({CPR: CPR}).exec().shifts;
+};
+
+// exports.init = function () {
+//     let e1 = this.createEmployee('1234567890', 'John', 'Jonh@mail.com', '12345678');
+//     let s1 = this.createShift(new Date("2015-03-25T12:00:00Z"), new Date("2015-03-25T14:00:00Z"));
+// };
 
 
 
