@@ -1,7 +1,10 @@
 // INITIALIZATION
-// MONGOOSE
+const config = require('./config');
+
+// MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
-mongoose.promise = Promise;
+mongoose.Promise = Promise;
+mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 // Test Push
 const express = require('express');
 const controller = require('./controllers/Controller');
@@ -11,7 +14,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 // START THE SERVER
-const port = process.env.PORT || 9119;
+const port = process.env.PORT || config.localPort;
 app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 

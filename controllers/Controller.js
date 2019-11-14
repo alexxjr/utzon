@@ -4,15 +4,15 @@ const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
 
 
-exports.createEmployee = function (CPR, name, email, phoneNo) {
+exports.createEmployee = async function (CPR, name, email, phoneNo) {
     let CPRType = typeof CPR;
     let nameType = typeof name;
     let emailType = typeof email;
     let phoneNoType = typeof phoneNo;
-    if (CPRType != "String" || nameType != "String" || emailType != "String" || phoneNoType != "String") {
+    if (CPRType !== "string" || nameType !== "string" || emailType !== "string" || phoneNoType !== "string") {
         return undefined;
     }
-    if (CPR.length != 10 || name.length < 1 || email.length < 1 || phoneNo.length < 1) {
+    if (CPR.length !== 10 || name.length < 1 || email.length < 1 || phoneNo.length < 1) {
         return undefined;
     }
     const employee = new Employee({
@@ -24,15 +24,16 @@ exports.createEmployee = function (CPR, name, email, phoneNo) {
     return employee.save();
 };
 
-exports.createShift = function (start, end) {
-    let startType = typeof start;
-    let endType = typeof end;
-    if (startType != "Date" || endType != "Date"); {
+exports.createShift = async function (start, end) {
+    if (Object.prototype.toString.call(start) !== '[object Date]' || Object.prototype.toString.call(end) !== '[object Date]') {
+        return undefined;
+    }
+    if (end <= start) {
         return undefined;
     }
 
     // Calculates the amount of time (in decimal hours) a shift lasts
-    function time() {
+    function hourCalculation() {
         let time;
         let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
         if (start.getMinutes() < end.getMinutes()) {
@@ -43,7 +44,7 @@ exports.createShift = function (start, end) {
         return time;
     }
 
-    let totalHours = time();
+    let totalHours = hourCalculation();
     const shift = new Shift({
         start,
         end,
