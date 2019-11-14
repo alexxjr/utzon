@@ -5,6 +5,16 @@ const Shift = require('../models/Shift');
 
 
 exports.createEmployee = function (CPR, name, email, phoneNo) {
+    let CPRType = typeof CPR;
+    let nameType = typeof name;
+    let emailType = typeof email;
+    let phoneNoType = typeof phoneNo;
+    if (CPRType != "String" || nameType != "String" || emailType != "String" || phoneNoType != "String") {
+        return undefined;
+    }
+    if (CPR.length != 10 || name.length < 1 || email.length < 1 || phoneNo.length < 1) {
+        return undefined;
+    }
     const employee = new Employee({
         CPR,
         name,
@@ -15,7 +25,13 @@ exports.createEmployee = function (CPR, name, email, phoneNo) {
 };
 
 exports.createShift = function (start, end) {
-    //Calculates the amount of time (in hours) a shift lasts
+    let startType = typeof start;
+    let endType = typeof end;
+    if (startType != "Date" || endType != "Date"); {
+        return undefined;
+    }
+
+    // Calculates the amount of time (in decimal hours) a shift lasts
     function time() {
         let time;
         let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
