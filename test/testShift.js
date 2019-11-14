@@ -1,47 +1,29 @@
-const shift = require('../models/Shift');
+const controller = require('../Controllers/controller');
 let expect = require('chai').expect
-    , firsttry = model.createEmployee("")
-    , secondtry = model.createEmployee("test")
-    , thirdtry = model.createEmployee()
-    , fourthtry = model.createEmployee("");
+    , firsttry = controller.createShift(Date, "test@test.dk", "")
+    , secondtry = controller.createShift("test")
+    , thirdtry = controller.createShift()
+    , fourthtry = controller.createShift("123456789", "Anders", "test@test.dk", "test");
 
 describe('unitTest', () => {
-    it('make a joke without parameters', () => {
+    it('make an employee with one parameter as an empty string', () => {
         expect(firsttry).to.equal(undefined);
     });
 
-    it('make a joke with only one parameter', () => {
+    it('make an employee with only one parameters', () => {
         expect(secondtry).to.equal(undefined);
     });
 
-    // it('make a joke with only one parameter', () => {
-    //     let enUser = [
-    //         {
-    //             "id": 1,
-    //             "name": "Leanne Graham",
-    //             "username": "Bret",
-    //             "email": "Sincere@april.biz",
-    //             "address": {
-    //                 "street": "Kulas Light",
-    //                 "suite": "Apt. 556",
-    //                 "city": "Gwenborough",
-    //                 "zipcode": "92998-3874",
-    //                 "geo": {
-    //                     "lat": "-37.3159",
-    //                     "lng": "81.1496"
-    //                 }
-    //             },
-    //             "phone": "1-770-736-8031 x56442",
-    //             "website": "hildegard.org",
-    //             "company": {
-    //                 "name": "Romaguera-Crona",
-    //                 "catchPhrase": "Multi-layered client-server neural-net",
-    //                 "bs": "harness real-time e-markets"
-    //             }
-    //         }
-    //     ];
-    //     let enUserTabel =
-    //         `<table> <tr><td>1</td><td>Leanne Graham</td><td>Romaguera-Crona</td></tr>\n</table>`;
-    //     genererUserTabel(enUser).should.be.equal(enUserTabel);
-    // });
+    it('make an employee with no parameters', () => {
+        expect(thirdtry).to.equal(undefined);
+    });
+
+    it('make an employee with normal parameters', () => {
+        expect(fourthtry.name).to.equal("Anders");
+        expect(fourthtry.email).to.equal("test@test.dk");
+        expect(fourthtry.CPR).to.equal("123456789");
+        expect(fourthtry.phoneNo).to.equal("test");
+        expect(fourthtry.shifts.length).to.equal(0);
+    });
+
 });

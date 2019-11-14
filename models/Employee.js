@@ -12,7 +12,7 @@ const employee = new Schema({
 
 employee.methods.toString = function() {
     return 'CPR: ' + this.CPR + 'Navn: ' + this.name + 'Email: ' + this.email + 'Tlf: ' + this.phoneNo;
-}
+};
 
 
 module.exports = mongoose.model('Employee', employee);
