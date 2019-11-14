@@ -1,4 +1,4 @@
-const controller = require('../Controllers/controller');
+const controller = require('../controllers/controller');
 let expect = require('chai').expect
     , firsttry = controller.createEmployee("0123456789","Anders", "test@test.dk", "")
     , secondtry = controller.createEmployee("test")

@@ -1,4 +1,4 @@
-const controller = require('../Controllers/controller');
+const controller = require('../controllers/controller');
 
 let testStartDate = new Date(2019, 11, 15,10,25);
 let testEndDate = new Date(2019, 11, 15,18,25);

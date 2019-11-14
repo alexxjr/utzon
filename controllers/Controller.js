@@ -14,7 +14,7 @@ exports.createEmployee = function(CPR, name, email, phoneNo) {
     return employee; //employee.save
 }
 
-exports.createShift = function(start, end, employee) {
+exports.createShift = function(start, end) {
 
     function time() {
         let time;
