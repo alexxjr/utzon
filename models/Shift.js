@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const controller = require('../Controllers/controller');
+const controller = require('../controllers/Controller');
 const Schema = mongoose.Schema;
 
 const shift = new Schema({

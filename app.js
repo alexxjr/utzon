@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.promise = Promise;
 // Test Push
 const express = require('express');
-const controller = require('./Controllers/controller');
+const controller = require('./controllers/Controller');
 
 const app = express();
 app.use(express.static('public'));
@@ -19,7 +19,5 @@ let test = controller.createEmployee('0123456789','John','John@mail.com','123456
 
 console.log(test);
 
-let start = new Date("2015-03-25T13:30:00Z");
-let end = new Date("2015-03-25T14:15:00Z");
 
 
