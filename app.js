@@ -15,9 +15,11 @@ const port = process.env.PORT || 9119;
 app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 
-let test = controller.createEmployee('0123456789','John','John@mail.com','12345678');
+// controller.init();
 
-console.log(test);
+
+
+
 
 
 
