@@ -2,7 +2,7 @@
 
 const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
-const mongoose = require("../app");
+const mongoose = require("../app").mongoose;
 
 
 exports.createEmployee = async function (CPR, name, email, phoneNo) {
@@ -55,7 +55,7 @@ exports.createShift = async function (start, end) {
 };
 
 exports.addEmployeeToShift = function (employee, shift) {
-    if (shift.employee !== undefined) {
+    if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
         return Promise.all([employee.save(), shift.save()]);
