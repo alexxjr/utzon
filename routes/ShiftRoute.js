@@ -4,7 +4,7 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .get('/api/shifts/shifts',async(request, response) => {
+    .get('/',async(request, response) => {
         let shifts = await controller.getShifts();
         response.send(shifts);
     })
