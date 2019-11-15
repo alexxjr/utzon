@@ -1,29 +1,29 @@
-constcontroller = require("../controllers/Controller");
-constexpress = require('express');
-constrouter = express.Router();
-constfetch = require('node-fetch');
+const controller = require("../controllers/Controller");
+const express = require('express');
+const router = express.Router();
+const fetch = require('node-fetch');
 
 router
-    .get('/', async (request, response) => {
-        letshifts = awaitcontroller.getShifts();
+    .get('/',async(request, response)=>{
+        let shifts = await controller.getShifts();
         response.send(shifts);
     })
-    .post('/', async (request, response) => {
-        const {start, end, totalHours} = request.body;
-        letshift = controller.createShift(start, end)
-        if (shift == undefined) {
+    .post('/',async(request, response) => {
+        const{start, end, totalHours} = request.body;
+        let shift = controller.createShift(start, end)
+        if(shift === undefined){
             response.sendStatus(403);
-        } else {
+        }else{
             response.sendStatus(201);
         }
     });
 
-async function GET(url) {
-    constOK = 200;
-    letresponse = awaitfetch(url);
-    if (response.status !== OK)
-        thrownewError("GETstatuscode" + response.status);
-    returnawaitresponse.json();
+async function GET(url){
+    const OK = 200;
+    let response = await fetch(url);
+    if(response.status !== OK)
+        throw new Error ("GET status code " + response.status);
+    return await response.json();
 };
 
 module.exports = router;
