@@ -2,6 +2,7 @@
 
 const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
+const mongoose = require("../app");
 
 
 exports.createEmployee = async function (CPR, name, email, phoneNo) {
@@ -21,7 +22,7 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
         email,
         phoneNo
     });
-    return employee.save();
+    return await employee.save();
 };
 
 exports.createShift = async function (start, end) {
@@ -50,7 +51,7 @@ exports.createShift = async function (start, end) {
         end,
         totalHours
     });
-    return shift.save();
+    return await shift.save();
 };
 
 exports.addEmployeeToShift = function (employee, shift) {
