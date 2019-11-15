@@ -4,14 +4,29 @@ const config = require('./config');
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
-mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 // Test Push
 const express = require('express');
 const controller = require('./controllers/Controller');
 
+
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
+
+const employeeRoute = require('./routes/EmployeeRoute');
+const shiftRoute = require('./routes/Shiftroute');
+app.use('/1', employeeRoute);
+app.use('/2', shiftRoute);
+
+async function test() {
+    await controller.createEmployee("123456789","Ole", "ole.dk", "123");
+
+}
+
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
@@ -21,7 +36,7 @@ console.log('Listening on port ' + port + ' ...');
 // controller.init();
 module.exports = app;
 
-
+test();
 
 
 
