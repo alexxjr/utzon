@@ -2,7 +2,7 @@
 
 const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
-const mongoose = require("../app");
+const mongoose = require("../app").mongoose;
 
 
 exports.createEmployee = async function (CPR, name, email, phoneNo) {
