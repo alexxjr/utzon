@@ -5,12 +5,13 @@ let daysArray = [];
 let month;
 let date = new Date(Date.now());
 let year = date.getFullYear();
+let shifts = document.getElementById("shifts");
 
 let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
-let daysList = document.querySelectorAll(".daysList");
+let daysList = document.querySelector(".daysList");
 daysList.onclick = chooseDate;
 
 
@@ -79,8 +80,44 @@ function prevMonth() {
 
 function chooseDate() {
     let date = new Date(year, month, this.getValue());
-
-
 }
 
+async function generateShiftList(shift) {
+    let template = await GETtext('/shifts.handlebars');
+    let compiledTemplate = Handlebars.compile(template);
+    return compiledTemplate({shift});
+}
 
+async function getShifts(url){
+    shifts.innerHTML = "";
+    const response = await GET(url);
+    shifts.innerHTML = await generateShiftList(response);
+}
+
+async function GET(url) {
+    const OK = 200;
+    let response = await fetch(url);
+    if (response.status !== OK)
+        throw new Error("GET status code " + response.status);
+    return await response.json();
+};
+
+async function GETtext(url) {
+    const OK = 200;
+    let response = await fetch(url);
+    if (response.status !== OK)
+        throw new Error("GET status code " + response.status);
+    return await response.text();
+}
+
+async function POST(data, url) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status !== CREATED)
+        throw new Error("POST status code " + response.status);
+    return await response.text();
+};
