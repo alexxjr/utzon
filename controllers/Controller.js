@@ -55,7 +55,7 @@ exports.createShift = async function (start, end) {
 };
 
 exports.addEmployeeToShift = function (employee, shift) {
-    if (shift.employee !== undefined) {
+    if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
         return Promise.all([employee.save(), shift.save()]);
