@@ -19,7 +19,7 @@ app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 
 // controller.init();
-module.exports = mongoose;
+module.exports = app;
 
 
 

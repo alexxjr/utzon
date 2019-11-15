@@ -76,27 +76,27 @@ exports.removeEmployeeFromShift = function (employee, shift) {
     throw new Error("This employee is not attached to this shift");
 };
 
-exports.getEmployee = function (CPR) {
+exports.getEmployee = async function (CPR) {
     return Employee.findOne({CPR: CPR}).exec();
 };
 
-exports.deleteEmployee = function (employee) {
+exports.deleteEmployee = async function (employee) {
     return Employee.deleteOne(employee).exec();
 };
 
-exports.getEmployees = function () {
+exports.getEmployees = async function () {
     return Employee.find().exec();
 };
 
-exports.getShifts = function () {
+exports.getShifts = async function () {
     return Shift.find().exec();
 };
 
-exports.deleteShift = function (shift) {
+exports.deleteShift = async function (shift) {
     return Shift.deleteOne(shift);
 };
 
-exports.getShiftsForEmployee = function (CPR) {
+exports.getShiftsForEmployee = async function (CPR) {
     return Employee.findOne({CPR: CPR}).exec().shifts;
 };
 
