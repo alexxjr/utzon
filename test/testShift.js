@@ -13,17 +13,17 @@ let expect = require('chai').expect;
 describe('unitTest', ()  => {
 
     it('Make a shift with only one date', async () => {
-        let firsttry = await controller.createShift(testStartDate)
+        let firsttry = await controller.createShift(testStartDate);
         expect(firsttry).to.equal(undefined);
     });
 
     it('make a shift with no parameters', async () => {
-        let secondtry = await controller.createShift()
+        let secondtry = await controller.createShift();
         expect(secondtry).to.equal(undefined);
     });
 
     it('make a shift with normal parameters', async () => {
-        let thirdtry = await controller.createShift(testStartDate, testEndDate)
+        let thirdtry = await controller.createShift(testStartDate, testEndDate);
         expect(thirdtry.start.getFullYear()).to.equal(2019);
         expect(thirdtry.start.getMonth()).to.equal(11);
         expect(thirdtry.start.getDate()).to.equal(15);
