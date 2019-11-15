@@ -54,7 +54,7 @@ exports.createShift = async function (start, end) {
     return await shift.save();
 };
 
-exports.addEmployeeToShift = function (employee, shift) {
+exports.addEmployeeToShift = async function (employee, shift) {
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
@@ -65,9 +65,9 @@ exports.addEmployeeToShift = function (employee, shift) {
 
 };
 
-exports.removeEmployeeFromShift = function (employee, shift) {
+exports.removeEmployeeFromShift = async function (employee, shift) {
     for (let i = 0; i < employee.shifts.length; i++) {
-        if (employee.shifts[i] === shift) {
+        if (employee.shifts[i]._id === shift._id) {
             employee.shifts.splice(i, 1);
             shift.employee = undefined;
             return;
@@ -93,7 +93,7 @@ exports.getShifts = async function () {
 };
 
 exports.deleteShift = async function (shift) {
-    return Shift.deleteOne(shift);
+    return Shift.remove(shift);
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
