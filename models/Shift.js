@@ -14,7 +14,7 @@ const shift = new Schema({
 
 shift.methods.toString = function() {
     return 'Start: ' + this.start + 'Slut: ' + this.end + 'Total antal timer: ' + this.totalHours;
-}
+};
 
 
 module.exports = mongoose.model('Shift', shift);
