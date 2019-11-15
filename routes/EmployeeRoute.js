@@ -1,4 +1,4 @@
-constcontroller=require("../controllers/Controller");
+const controller=require("../controllers/Controller");
 constexpress=require('express');
 constrouter=express.Router();
 constfetch=require('node-fetch');
