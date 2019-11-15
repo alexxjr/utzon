@@ -1,15 +1,17 @@
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
-let daysList = document.querySelector(".daysList");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
 let date = new Date(Date.now());
 let year = date.getFullYear();
+
 let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
+let daysList = document.querySelectorAll(".daysList");
+daysList.onclick = chooseDate;
 
 
 update();
@@ -39,7 +41,7 @@ function insertDays() {
     let days = daysArray[month];
     daysList.innerHTML = "";
     for (let i = 1; i <= days; i++) {
-       daysList.innerHTML += "<li class='days'>" + i + "</li>";
+       daysList.innerHTML += "<li class='days' onclick='chooseDate()'>" + i + "</li>";
     }
 }
 
@@ -76,6 +78,9 @@ function prevMonth() {
 }
 
 function chooseDate() {
-    daysList
+    let date = new Date(year, month, this.getValue());
+
 
 }
+
+
