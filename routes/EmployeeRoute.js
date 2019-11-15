@@ -10,7 +10,7 @@ router
     })
     .post('/',async(request,response)=>{
         const{CPR, name, email, phoneNo} = request.body;
-        let employee = controller.createEmployee(CPR, name, email, phoneNo)
+        let employee = controller.createEmployee(CPR, name, email, phoneNo);
         if(employee === undefined){
             response.sendStatus(403);
         }else{

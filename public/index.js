@@ -1,19 +1,26 @@
 let monthDisplay = document.querySelector("#monthDisplay");
+let yearDisplay = document.querySelector("#yearDisplay");
+let daysList = document.querySelector(".daysList");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
 let date = new Date(Date.now());
+let year = date.getFullYear();
+let prevBtn = document.querySelector("#prevBtn");
+prevBtn.onclick = prevMonth;
+let nextBtn = document.querySelector("#nextBtn");
+nextBtn.onclick = nextMonth;
 
 
 update();
 
 function update() {
     setCurrentMonth();
-    calculateDaysInMonth();
+    setYear();
+    insertDays();
 }
 
 function calculateDaysInMonth() {
-    let year = date.getFullYear();
     for (let i = 0; i < 12; i++) {
         if (i === 3 || i === 5 || i === 8 || i === 10) {
             daysArray[i] = 30;
@@ -30,38 +37,45 @@ function calculateDaysInMonth() {
 
 function insertDays() {
     let days = daysArray[month];
-    let daysList = document.querySelector(".days");
     daysList.innerHTML = "";
     for (let i = 1; i <= days; i++) {
-       daysList.innerHTML += "<li>" + i + "</li>";
+       daysList.innerHTML += "<li class='days'>" + i + "</li>";
     }
 }
 
 function setCurrentMonth() {
     month = date.getMonth();
-    monthDisplay.innerHTML = monthArray[month];
+    monthDisplay.innerHTML = monthArray[month] + monthDisplay.innerHTML;
 }
 
-let nextBtn = document.querySelector("#nextBtn");
-nextBtn.onclick = nextMonth;
+function setYear() {
+   yearDisplay.innerHTML = year + "";
+   calculateDaysInMonth();
+}
 
 function nextMonth() {
     month++;
     if (month > 11) {
+        year++;
+        setYear();
         month = 0;
     }
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
 }
 
-let prevBtn = document.querySelector("#prevBtn");
-prevBtn.onclick = prevMonth;
-
 function prevMonth() {
     month--;
     if (month < 0) {
+        year--;
+        setYear();
         month = 11;
     }
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
+}
+
+function chooseDate() {
+    daysList
+
 }
