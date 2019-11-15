@@ -4,11 +4,11 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .get('/',async(request, response)=>{
+    .get('/api/shifts/shifts',async(request, response) => {
         let shifts = await controller.getShifts();
         response.send(shifts);
     })
-    .post('/',async(request, response) => {
+    .post('/api/shifts/shifts',async(request, response) => {
         const{start, end, totalHours} = request.body;
         let shift = controller.createShift(start, end)
         if(shift === undefined){

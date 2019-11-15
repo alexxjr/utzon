@@ -22,11 +22,6 @@ const shiftRoute = require('./routes/Shiftroute');
 app.use('/1', employeeRoute);
 app.use('/2', shiftRoute);
 
-async function test() {
-    await controller.createEmployee("123456789","Ole", "ole.dk", "123");
-
-}
-
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
@@ -36,7 +31,8 @@ console.log('Listening on port ' + port + ' ...');
 // controller.init();
 module.exports = app;
 
-test();
+
+
 
 
 
