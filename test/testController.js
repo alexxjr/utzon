@@ -1,5 +1,8 @@
 const controller = require('../controllers/controller');
-let expect = require('chai').expect;
+const chai = require('chai');
+let expect = chai.expect;
+chai.use(require('chai-as-promised'));
+
 let testEmployee1;
 let testEmployee2;
 let testShift;
@@ -9,7 +12,6 @@ before(async function() {
     testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "test2@test2.dk", "test2");
     testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
         , new Date(2018, 11, 15,18,55));
-    console.log(testShift.employee);
 });
 
 describe('unitTest', function(){
@@ -22,14 +24,21 @@ describe('unitTest', function(){
         expect(testEmployee1.shifts[0]._id).to.equal(testShift._id);
     });
 
-    it('make an employee with only one parameters', async () => {
-        let secondtry = await controller.createEmployee("test");
-        expect(secondtry).to.equal(undefined);
+    // it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
+    //     try {
+    //         await controller.addEmployeeToShift(testEmployee2, testShift);
+    //     }catch (e) {
+    //         expect(e).to.equal("An employee is already attached to this shift")
+    //     }
+    // });
+    it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
+        await expect(controller.addEmployeeToShift(testEmployee2, testShift)).to.be.rejectedWith("An employee is already attached to this shift");
+
     });
     //
-    // it('make an employee with no parameters', async () => {
-    //     let thirdtry = await controller.createEmployee();
-    //     expect(thirdtry).to.equal(undefined);
+    // it('assign an employee to an empty shift', async () => {
+    //     let testResponse = await controller.addEmployeeToShift(testEmployee1, testShift);
+    //     expect(testEmployee1.shifts[0]._id).to.equal(testShift._id);
     // });
     //
     // it('make an employee with normal parameters', async () => {
