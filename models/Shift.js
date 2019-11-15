@@ -16,6 +16,10 @@ shift.methods.toString = function() {
     return 'Start: ' + this.start + 'Slut: ' + this.end + 'Total antal timer: ' + this.totalHours;
 };
 
+shift.pre('remove', function(callback) {
+    this.model('Employee').remove({ Shift_Id: this._id }, callback);
+});
+
 
 module.exports = mongoose.model('Shift', shift);
 

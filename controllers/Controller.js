@@ -93,7 +93,7 @@ exports.getShifts = async function () {
 };
 
 exports.deleteShift = async function (shift) {
-    return Shift.deleteOne(shift);
+    return Shift.remove(shift);
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
