@@ -15,7 +15,7 @@ router
     })
     .post('/', async (request, response) => {
         const {start, end} = request.body;
-        let shift = controller.createShift(start, end)
+        let shift = controller.createShift(start, end);
         if (shift === undefined) {
             response.sendStatus(403);
         } else {

@@ -11,6 +11,7 @@ mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {
 // Test Push
 const express = require('express');
 const controller = require('./controllers/Controller');
+const init = require('./public/init');
 
 
 const app = express();
@@ -28,7 +29,7 @@ const port = process.env.PORT || config.localPort;
 app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 
-// controller.init();
+//init.init();
 module.exports = app;
 
 
