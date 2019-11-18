@@ -1,10 +1,6 @@
 {{#each shifts}}
 <div>
-    {{#if employee}}
-    <li>{{this.employee.name}}</li>
-{{else}}
-    <li>Ingen ansat</li>
-    {{/if}}
+    <li>Ansat: {{this.employee.name}}</li>
     <li>Fra: {{this.start}}</li>
     <li>Til: {{this.end}}</li>
 </div>
