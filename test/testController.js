@@ -37,7 +37,7 @@ describe('unitTest', function(){
         expect(testEmployee1.shifts.length).to.equal(0);
         expect(testShift.employee).to.equal(undefined);
     });
-    //
+
     // it('make an employee with normal parameters', async () => {
     //     fourthtry = await controller.createEmployee("0123456789", "Anders", "test@test.dk", "test");
     //     expect(fourthtry.name).to.equal("Anders");
@@ -51,7 +51,9 @@ describe('unitTest', function(){
 
 after(async () => {
 
-    await controller.deleteEmployee(testEmployee2);
-    await controller.deleteShift(testShift);
-    await controller.deleteEmployee(testEmployee1);
+    // await controller.deleteEmployee(testEmployee2);
+    // await controller.deleteEmployee(testEmployee1);
+    // await controller.deleteShift(testShift);
+    // let anders = await controller.getEmployee("0123456789");
+    // await controller.deleteEmployee(anders);
 });

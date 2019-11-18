@@ -81,7 +81,7 @@ exports.getEmployee = async function (CPR) {
 };
 
 exports.deleteEmployee = async function (employee) {
-    return Employee.deleteOne(employee).exec();
+    return Employee.findByIdAndDelete(employee._id);
 };
 
 exports.getEmployees = async function () {
@@ -93,7 +93,7 @@ exports.getShifts = async function () {
 };
 
 exports.deleteShift = async function (shift) {
-    return Shift.remove(shift);
+    return Shift.findByIdAndDelete(shift._id);
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
