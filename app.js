@@ -8,10 +8,8 @@ mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
-// Test Push
+
 const express = require('express');
-const controller = require('./controllers/Controller');
-const init = require('./public/init');
 
 
 const app = express();
@@ -29,8 +27,7 @@ const port = process.env.PORT || config.localPort;
 app.listen(port);
 console.log('Listening on port ' + port + ' ...');
 
-//init.init();
-module.exports = app;
+module.exports = mongoose;
 
 
 
