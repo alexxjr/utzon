@@ -12,7 +12,7 @@ let endDate;
 describe('Test af controllerfunktioner', function(){
 
     before(async function() {
-
+        this.timeout(10000);
         testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "test@test.dk", "test");
         testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "test2@test2.dk", "test2");
         testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
@@ -59,7 +59,7 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift.employee).to.equal(undefined);
     });
 
-    // Testing for changes on database objects.
+    // Testing for changes on shift objects in the database.
 
     it('changing shift dates', async () => {
         await controller.changeShiftTime(testShift, startDate, endDate);
@@ -68,13 +68,13 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift.end).to.equal(endDate);
     });
 
-    it('changing shift startDate, ', async () => {
-        await controller.changeShiftTime(testShift, startDate, endDate);
-        testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start).to.equal(startDate);
-        expect(testShift.end).to.equal(endDate);
+    it('changing shift with only startDate', async () => {
+        await expect(controller.changeShiftTime(testShift, startDate)).to.be.rejectedWith("One of the param variables is empty");
     });
 
+    it('changing shift startDate with a date, which is ahead of the current endDate', async () => {
+        await expect(controller.changeShiftTime(testShift, endDate, startDate)).to.be.rejectedWith("The ");
+    });
     after(async () => {
 
         await controller.deleteEmployee(testEmployee2).then();
