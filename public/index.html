@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Utzon vagtplan</title>
+    <script src="handlebars-v4.4.3.js" defer></script>
     <link rel="stylesheet" href="index.css">
     <script src="index.js" defer></script>
     <script src="app.js" defer></script>
@@ -16,7 +17,11 @@
         <li class="next">
             <button type="button" id="nextBtn">&#10095;</button>
         </li>
-        <li><div id="monthDisplay"></div><br><div id="yearDisplay">hej</div></li>
+        <li>
+            <div id="monthDisplay"></div>
+            <br>
+            <div id="yearDisplay">hej</div>
+        </li>
     </ul>
 </div>
 
@@ -33,9 +38,8 @@
 <ul class="daysList">
 </ul>
 
-<div class="shift1">
+<div class="shifts">
     <ul id="hover">
-        <div id="shifts"></div>
     </ul>
 </div>
 </body>

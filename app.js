@@ -19,8 +19,8 @@ app.use(express.json());
 
 const employeeRoute = require('./routes/EmployeeRoute');
 const shiftRoute = require('./routes/Shiftroute');
-app.use('/1', employeeRoute);
-app.use('/2', shiftRoute);
+app.use('/api/employees', employeeRoute);
+app.use('/api/shifts', shiftRoute);
 
 
 // START THE SERVER
@@ -30,6 +30,8 @@ console.log('Listening on port ' + port + ' ...');
 
 // controller.init();
 module.exports = app;
+
+
 
 
 

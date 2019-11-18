@@ -5,6 +5,8 @@ const Shift = require('../models/Shift');
 const mongoose = require("../app").mongoose;
 
 
+
+
 exports.createEmployee = async function (CPR, name, email, phoneNo) {
     let CPRType = typeof CPR;
     let nameType = typeof name;
@@ -14,6 +16,9 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
         return undefined;
     }
     if (CPR.length !== 10 || name.length < 1 || email.length < 1 || phoneNo.length < 1) {
+        return undefined;
+    }
+    if (await getEmployee(CPR) !== null) {
         return undefined;
     }
     const employee = new Employee({
@@ -67,18 +72,18 @@ exports.addEmployeeToShift = async function (employee, shift) {
 
 exports.removeEmployeeFromShift = async function (employee, shift) {
     for (let i = 0; i < employee.shifts.length; i++) {
-        if (employee.shifts[i]._id === shift._id) {
+        if (employee.shifts[i]._id.toString() === shift._id.toString()) {
             employee.shifts.splice(i, 1);
             shift.employee = undefined;
-            return;
+            return Promise.all([employee.save(), shift.save()]);
         }
     }
     throw new Error("This employee is not attached to this shift");
 };
 
-exports.getEmployee = async function (CPR) {
+async function getEmployee (CPR) {
     return Employee.findOne({CPR: CPR}).exec();
-};
+}
 
 exports.deleteEmployee = async function (employee) {
     return Employee.findByIdAndDelete(employee._id);
@@ -92,6 +97,11 @@ exports.getShifts = async function () {
     return Shift.find().exec();
 };
 
+//For testing purposes
+exports.getOneShift = async function (objectid) {
+    return Shift.findOne({_id: objectid});
+};
+
 exports.deleteShift = async function (shift) {
     return Shift.findByIdAndDelete(shift._id);
 };
@@ -100,14 +110,28 @@ exports.getShiftsForEmployee = async function (CPR) {
     return Employee.findOne({CPR: CPR}).exec().shifts;
 };
 
+
+exports.getShiftsOnDate = async function(date)  {
+    let result = [];
+    let shifts = await this.getShifts();
+    for (let i = 0; i < shifts.length; i++) {
+        if (shifts[i].start.toDateString() === date.toDateString()) {
+            result.push(shifts[i]);
+        }
+    }
+    return result;
+}
+
 exports.init = function () {
     let e1 = this.createEmployee('1234567890', 'John', 'Jonh@mail.com', '12345678');
     let s1 = this.createShift(new Date("2019-11-16T12:00:00Z"), new Date("2019-11-16T14:00:00Z"));
     let e2 = this.createEmployee('1234567890', 'Ole', 'Jonh@mail.com', '12345678');
     addEmployeeToShift(e1, s1);
 
-
 };
+exports.getEmployee = getEmployee;
+
+
 
 
 

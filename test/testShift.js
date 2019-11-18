@@ -57,9 +57,10 @@ describe('unitTest', ()  => {
         expect(sixthtry).to.equal(undefined);
     });
 
+    after(async () =>  {
+        await controller.deleteShift(thirdtry);
+        await controller.deleteShift(fifthtry);
+    });
 });
 
-after(async () =>  {
-    await controller.deleteShift(thirdtry);
-    await controller.deleteShift(fifthtry);
-});
+

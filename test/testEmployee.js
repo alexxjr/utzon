@@ -27,8 +27,13 @@ describe('unitTest', () => {
         expect(fourthtry.shifts.length).to.equal(0);
     }).timeout(10000);
 
+    it('make an employee with normal parameters', async () => {
+        let fifthtry = await controller.createEmployee("0123456789", "Ole", "test@test.dk", "test");
+        expect(fifthtry).to.equal(undefined);
+    }).timeout(10000);
+
+    after(async () => {
+        await controller.deleteEmployee(fourthtry);
+    });
 });
 
-after(async () => {
-   await controller.deleteEmployee(fourthtry);
-});
