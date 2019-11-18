@@ -20,6 +20,7 @@ describe('unitTest', () => {
 
     it('make an employee with normal parameters', async () => {
         fourthtry = await controller.createEmployee("0123456789", "Anders", "test@test.dk", "test");
+        fourthtry = await controller.getEmployee("0123456789");
         expect(fourthtry.name).to.equal("Anders");
         expect(fourthtry.email).to.equal("test@test.dk");
         expect(fourthtry.CPR).to.equal("0123456789");
