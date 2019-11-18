@@ -28,7 +28,7 @@ describe('unittest shift', ()  => {
 
     it('make a shift with normal parameters', async () => {
         thirdtry = await controller.createShift(testStartDate, testEndDate);
-        thirdtry = await controller.getOneShift()
+        thirdtry = await controller.getOneShift(thirdtry._id);
         expect(thirdtry.start.getFullYear()).to.equal(2018);
         expect(thirdtry.start.getMonth()).to.equal(11);
         expect(thirdtry.start.getDate()).to.equal(15);
