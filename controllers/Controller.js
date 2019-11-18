@@ -120,8 +120,15 @@ exports.getShiftsOnDate = async function(date)  {
         }
     }
     return result;
-}
+};
 
+exports.changeShiftTime = async function(shift, newStart, newEnd) {
+
+};
+
+exports.changeShiftEmployee = async function(shift, newEmployee){
+
+};
 exports.init = function () {
     let e1 = this.createEmployee('1234567890', 'John', 'Jonh@mail.com', '12345678');
     let s1 = this.createShift(new Date("2019-11-16T12:00:00Z"), new Date("2019-11-16T14:00:00Z"));
