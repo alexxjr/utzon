@@ -6,22 +6,27 @@ chai.use(require('chai-as-promised'));
 let testEmployee1;
 let testEmployee2;
 let testShift;
-before(async function() {
-    this.timeout(10000);
-    testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "test@test.dk", "test");
-    testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "test2@test2.dk", "test2");
-    testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
-        , new Date(2018, 11, 15,18,55));
-});
+
 
 describe('unitTest', function(){
+
+    before(async function() {
+        this.timeout(10000);
+        testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "test@test.dk", "test");
+        testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "test2@test2.dk", "test2");
+        testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
+            , new Date(2018, 11, 15,18,55));
+    });
+
     this.timeout(10000);
     it('test if shift is created without employee', async () => {
         expect(testShift.employee).to.equal(undefined);
     });
     it('assign an employee to an empty shift', async () => {
         await controller.addEmployeeToShift(testEmployee1, testShift);
-        expect(testEmployee1.shifts[0]._id).to.equal(testShift._id);
+        testEmployee1 = await controller.getEmployee("0123456789");
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testEmployee1.shifts[0]._id.toString()).to.equal(testShift._id.toString());
     });
 
     it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
@@ -34,6 +39,8 @@ describe('unitTest', function(){
 
     it('remove an employee from a shift', async () => {
         await controller.removeEmployeeFromShift(testEmployee1, testShift);
+        testEmployee1 = await controller.getEmployee("0123456789");
+        testShift = await controller.getOneShift(testShift._id);
         expect(testEmployee1.shifts.length).to.equal(0);
         expect(testShift.employee).to.equal(undefined);
     });
@@ -47,13 +54,13 @@ describe('unitTest', function(){
     //     expect(fourthtry.shifts.length).to.equal(0);
     // }).timeout(10000);
 
+    after(async () => {
+
+        await controller.deleteEmployee(testEmployee2).then();
+        await controller.deleteEmployee(testEmployee1);
+        await controller.deleteShift(testShift);
+        // let anders = await controller.getEmployee("0123456789");
+        // await controller.deleteEmployee(anders);
+    });
 });
 
-after(async () => {
-
-    // await controller.deleteEmployee(testEmployee2);
-    // await controller.deleteEmployee(testEmployee1);
-    // await controller.deleteShift(testShift);
-    // let anders = await controller.getEmployee("0123456789");
-    // await controller.deleteEmployee(anders);
-});
