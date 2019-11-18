@@ -69,12 +69,17 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('changing shift with only startDate', async () => {
-        await expect(controller.changeShiftTime(testShift, startDate)).to.be.rejectedWith("One of the param variables is empty");
+        await expect(controller.changeShiftTime(testShift, startDate)).to.be.rejectedWith("One of the param variables are empty");
     });
 
-    it('changing shift startDate with a date, which is ahead of the current endDate', async () => {
-        await expect(controller.changeShiftTime(testShift, endDate, startDate)).to.be.rejectedWith("The ");
+    it('changing shift startDate with a date, which is ahead of the current endDate or they are equal', async () => {
+        await expect(controller.changeShiftTime(testShift, endDate, startDate)).to.be.rejectedWith("The end date is before the startdate or they are equal");
     });
+
+    it('changing shift startDate with a parameter missing', async () => {
+        await expect(controller.changeShiftTime(testShift, endDate)).to.be.rejectedWith("Missing parameter when changing shift time");
+    });
+
     after(async () => {
 
         await controller.deleteEmployee(testEmployee2).then();
