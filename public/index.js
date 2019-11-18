@@ -1,9 +1,10 @@
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
+let daysList = document.querySelector(".daysList");
+let dayShift = document.querySelector("#hover");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
-let testfelt = document.querySelector("#test");
 
 let date = new Date(Date.now());
 let year = date.getFullYear();
@@ -12,7 +13,7 @@ let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
-let daysList = document.querySelector(".daysList");
+
 
 
 update();
@@ -47,12 +48,11 @@ function insertDays() {
         if (i < 10) {
             day = "0" + i;
         }
-        let node = document.createElement("LI");
+        let node = document.createElement("li");
         let textnode = document.createTextNode(day);
         node.appendChild(textnode);
         node.onclick = chooseDate;
         daysList.appendChild(node);
-
     }
 }
 
@@ -62,11 +62,8 @@ async function chooseDate() {
         monthNo = "0" + monthNo;
     }
     let date = year + "-" + monthNo + "-" + this.innerText;
-    let url = "/api/shifts/" + date;
     let shifts = await GET("/api/shifts/" + date);
-    for (let i = 0; i < shifts.length; i++) {
-        testfelt.value += shifts[i].toString();
-    }
+    dayShift.innerHTML = await generateShifts(shifts);
 }
 
 function setCurrentMonth() {
@@ -122,11 +119,6 @@ async function generateShifts(shifts) {
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
-}
-
-async function setShifts() {
-    const shifts = await GET("shifts");
-    daysList.innerHTML = await generateShifts(shifts);
 }
 
 
