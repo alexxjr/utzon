@@ -60,6 +60,9 @@ exports.createShift = async function (start, end) {
 };
 
 exports.addEmployeeToShift = async function (employee, shift) {
+    if (shift === undefined || employee === undefined) {
+        throw new Error("Shift or employee variable is empty");
+    }
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
@@ -71,6 +74,9 @@ exports.addEmployeeToShift = async function (employee, shift) {
 };
 
 exports.removeEmployeeFromShift = async function (employee, shift) {
+    if (shift === undefined || employee === undefined) {
+        throw new Error("Shift or employee variable is empty");
+    }
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
             employee.shifts.splice(i, 1);
@@ -120,9 +126,22 @@ exports.getShiftsOnDate = async function(date)  {
         }
     }
     return result;
-}
+};
 
+exports.changeShiftTime = async function(shift, newStart, newEnd) {
 
+};
+
+exports.changeShiftEmployee = async function(shift, newEmployee){
+
+};
+exports.init = function () {
+    let e1 = this.createEmployee('1234567890', 'John', 'Jonh@mail.com', '12345678');
+    let s1 = this.createShift(new Date("2019-11-16T12:00:00Z"), new Date("2019-11-16T14:00:00Z"));
+    let e2 = this.createEmployee('1234567890', 'Ole', 'Jonh@mail.com', '12345678');
+    addEmployeeToShift(e1, s1);
+
+};
 exports.getEmployee = getEmployee;
 
 
