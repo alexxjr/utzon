@@ -1,8 +1,13 @@
 {{#each shifts}}
 <div>
-    <li>Ansat: {{this.employee.name}}</li>
-    <li>Fra: {{this.start}}</li>
-    <li>Til: {{this.end}}</li>
+    {{#if employee}}
+    <li>{{this.employee.name}}</li>
+{{else}}
+    <li>Ingen ansat</li>
+    {{/if}}
+    <li>Dato: {{formatDate this.start}}</li>
+    <li>Starttid: {{formatTime this.start}}</li>
+    <li>Sluttid: {{formatTime this.end}}</li>
 </div>
 {{/each}}
 
