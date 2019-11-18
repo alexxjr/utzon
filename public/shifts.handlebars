@@ -5,8 +5,9 @@
 {{else}}
     <li>Ingen ansat</li>
     {{/if}}
-    <li>Fra: {{this.start}}</li>
-    <li>Til: {{this.end}}</li>
+    <li>Dato: {{formatDate this.start}}</li>
+    <li>Starttid: {{formatTime this.start}}</li>
+    <li>Sluttid: {{formatTime this.end}}</li>
 </div>
 {{/each}}
 

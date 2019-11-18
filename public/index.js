@@ -121,5 +121,15 @@ async function generateShifts(shifts) {
     return compiledTemplate({shifts});
 }
 
+Handlebars.registerHelper("formatDate", function(date) {
+    date = date.toString();
+    return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
+});
+
+Handlebars.registerHelper("formatTime", function(date) {
+    date = date.toString();
+    return /[0-9]{2}:[0-9]{2}/g.exec(date);
+});
+
 
 
