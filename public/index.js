@@ -3,6 +3,7 @@ let yearDisplay = document.querySelector("#yearDisplay");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
+let testfelt = document.querySelector("#test");
 
 let date = new Date(Date.now());
 let year = date.getFullYear();
@@ -40,9 +41,14 @@ function calculateDaysInMonth() {
 function insertDays() {
     let days = daysArray[month];
     daysList.innerHTML = "";
+    let day;
     for (let i = 1; i <= days; i++) {
+        day = i + "";
+        if (i < 10) {
+            day = "0" + i;
+        }
         let node = document.createElement("LI");
-        let textnode = document.createTextNode(i +"");
+        let textnode = document.createTextNode(day);
         node.appendChild(textnode);
         node.onclick = chooseDate;
         daysList.appendChild(node);
@@ -50,11 +56,17 @@ function insertDays() {
     }
 }
 
-function chooseDate() {
-    let date = new Date(year, month, this.innerText);
-    let shifts = GET("localhost:9119/api/shifts/" + date.getDate());
-
-
+async function chooseDate() {
+    let monthNo = month + 1 + "";
+    if (monthNo.length === 1) {
+        monthNo = "0" + monthNo;
+    }
+    let date = year + "-" + monthNo + "-" + this.innerText;
+    let url = "/api/shifts/" + date;
+    let shifts = await GET("/api/shifts/" + date);
+    for (let i = 0; i < shifts.length; i++) {
+        testfelt.value += shifts[i].toString();
+    }
 }
 
 function setCurrentMonth() {
@@ -63,8 +75,8 @@ function setCurrentMonth() {
 }
 
 function setYear() {
-   yearDisplay.innerHTML = year + "";
-   calculateDaysInMonth();
+    yearDisplay.innerHTML = year + "";
+    calculateDaysInMonth();
 }
 
 function nextMonth() {
@@ -90,13 +102,20 @@ function prevMonth() {
 }
 
 
-
 async function GETtext(url) {
     const OK = 200;
     let response = await fetch(url);
     if (response.status !== OK)
         throw new Error("GET status code " + response.status);
     return await response.text();
+}
+
+async function GET(url) {
+    const OK = 200;
+    let response = await fetch(url);
+    if (response.status !== OK)
+        throw new Error("GET status code " + response.status);
+    return await response.json();
 }
 
 async function generateShifts(shifts) {
@@ -106,8 +125,8 @@ async function generateShifts(shifts) {
 }
 
 async function setShifts() {
-        const shifts = await GET("shifts");
-        daysList.innerHTML = await generateShifts(shifts);
+    const shifts = await GET("shifts");
+    daysList.innerHTML = await generateShifts(shifts);
 }
 
 

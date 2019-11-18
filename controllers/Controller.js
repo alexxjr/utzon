@@ -100,11 +100,12 @@ exports.getShiftsForEmployee = async function (CPR) {
     return Employee.findOne({CPR: CPR}).exec().shifts;
 };
 
+
 exports.getShiftsOnDate = async function(date)  {
     let result = [];
     let shifts = await this.getShifts();
     for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].start === date) {
+        if (shifts[i].start.toDateString() === date.toDateString()) {
             result.push(shifts[i]);
         }
     }
