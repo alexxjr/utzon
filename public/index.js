@@ -10,7 +10,7 @@ let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
-let daysList = document.querySelectorAll(".daysList");
+let daysList = document.querySelector(".daysList");
 daysList.onclick = chooseDate;
 
 
