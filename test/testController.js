@@ -8,7 +8,7 @@ let testEmployee2;
 let testShift;
 
 
-describe('unitTest', function(){
+describe('Test af controllerfunktioner', function(){
 
     before(async function() {
         this.timeout(10000);

@@ -60,6 +60,9 @@ exports.createShift = async function (start, end) {
 };
 
 exports.addEmployeeToShift = async function (employee, shift) {
+    if (shift === undefined || employee === undefined) {
+        throw new Error("Shift or employee variable is empty");
+    }
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
@@ -71,6 +74,9 @@ exports.addEmployeeToShift = async function (employee, shift) {
 };
 
 exports.removeEmployeeFromShift = async function (employee, shift) {
+    if (shift === undefined || employee === undefined) {
+        throw new Error("Shift or employee variable is empty");
+    }
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
             employee.shifts.splice(i, 1);

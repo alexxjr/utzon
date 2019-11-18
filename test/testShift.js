@@ -14,7 +14,7 @@ let fifthtry;
 
 let expect = require('chai').expect;
 
-describe('unitTest', ()  => {
+describe('unittest shift', ()  => {
 
     it('Make a shift with only one date', async () => {
         let firsttry = await controller.createShift(testStartDate);
@@ -28,6 +28,7 @@ describe('unitTest', ()  => {
 
     it('make a shift with normal parameters', async () => {
         thirdtry = await controller.createShift(testStartDate, testEndDate);
+        thirdtry = await controller.getOneShift()
         expect(thirdtry.start.getFullYear()).to.equal(2018);
         expect(thirdtry.start.getMonth()).to.equal(11);
         expect(thirdtry.start.getDate()).to.equal(15);
