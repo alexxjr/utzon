@@ -78,7 +78,7 @@ exports.removeEmployeeFromShift = async function (shift) {
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
-    let employee = getEmployeeWIthID(shift.employee);
+    let employee = await getEmployeeWIthID(shift.employee);
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {

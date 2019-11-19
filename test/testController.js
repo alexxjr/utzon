@@ -56,7 +56,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('should not be able to be remove an employee from a shift without any employee attached to it', async () => {
-        await expect(controller.removeEmployeeFromShift(testShift)).to.be.rejectedWith("There is no employee attached to this shift");
+        await expect(controller.removeEmployeeFromShift(testShift)).to.be.rejectedWith("This shift does not have an employee attached");
     });
 
 
