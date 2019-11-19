@@ -98,7 +98,7 @@ exports.getEmployees = async function () {
 };
 
 exports.getShifts = async function () {
-    return Shift.find().exec();
+    return Shift.find().populate('employee').exec();
 };
 
 //For testing purposes
@@ -111,7 +111,7 @@ exports.deleteShift = async function (shift) {
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).exec().shifts;
+    return Employee.findOne({CPR: CPR}).populate('employee').exec().shifts;
 };
 
 
@@ -126,6 +126,33 @@ exports.getShiftsOnDate = async function (date) {
     return result;
 };
 
+exports.updateShift = async function(update) {
+  if (update === undefined) {
+      throw new Error("One of the param variables are undefined");
+  }
+  if (update.shift === undefined) {
+      throw new Error("Shift is not defined in the update object");
+  }
+  if ((update.newStart !== undefined && update.newSlut === undefined) || (update.newStart === undefined && update.newSlut !== undefined)) {
+      throw new Error("One of the date objects are undefined");
+  }
+  if (update.newStart !== undefined && update.netSlut !== undefined) {
+      if (update.newEmployee === undefined) {
+          await changeShiftTime(update.shift, update.newStart, update.newSlut);
+      }
+      else {
+          await changeShiftTime(update.shift, update.newStart, update.newSlut);
+          await changeShiftEmployee(update.shift, update.newEmployee);
+      }
+  }
+  else {
+      if (update.newEmployee === undefined) {
+          throw new Error("Both dates and employee are undefined");
+      }
+      await changeShiftEmployee(update.shift, update.newEmployee);
+  }
+};
+
 exports.changeShiftTime = async function (shift, newStart, newEnd) {
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
         throw new Error("One of the param variables are undefined");
@@ -136,6 +163,10 @@ exports.changeShiftTime = async function (shift, newStart, newEnd) {
     if (newEnd <= newStart) {
         throw new Error("The enddate is before the startdate or they are equal");
     }
+    shift.start = newStart;
+    shift.end = newEnd;
+
+    await shift.save();
 
 };
 
@@ -146,6 +177,10 @@ exports.changeShiftEmployee = async function (shift, newEmployee) {
     if (shift.employee.CPR === newEmployee.CPR){
         throw new Error("This employee is already attached to this shift")
     }
+
+    shift.employee = newEmployee;
+    await shift.save();
+
 };
 
 exports.getEmployee = getEmployee;
