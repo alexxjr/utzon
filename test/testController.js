@@ -97,13 +97,23 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("This employee is already attached to this shift");
     });
 
-    it('checking for param in updateShift', async () => {
+    it('checking for no param in updateShift', async () => {
         await expect(controller.updateShift()).to.be.rejectedWith("One of the param variables are undefined");
     });
 
-    it('checking for param object having a valid shift', async () => {
+    it('checking param object for not having a valid shift attribute', async () => {
         let update = "hej";
-        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the param variables are undefined");
+        await expect(controller.updateShift(update)).to.be.rejectedWith("Shift is not defined in the update object");
+    });
+
+    it('checking for param object for not having a valid dates', async () => {
+        let update = {shift: "hej"};
+        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
+    });
+
+    it('checking for param object for having a valid dates, but not a proper shift object', async () => {
+        let update = {shift: "hej", newStart: startDate, newEnd: endDate};
+        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
     });
 
     after(async () => {
