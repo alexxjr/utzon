@@ -113,7 +113,12 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('checking for param object for having a valid dates, but (without) a proper shift object', async () => {
-        let update = {shift: "hej", newStart: startDate, newEnd: endDate};
+        let update = {shift: "Hej", newStart: startDate, newEnd: endDate};
+        await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not an object");
+    });
+
+    it('checking for param object for having a valid dates, but (without) a proper shift object', async () => {
+        let update = {shift: testEmployee1, newStart: startDate, newEnd: endDate};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not a shift");
     });
 
@@ -134,14 +139,14 @@ describe('Test af controllerfunktioner', function(){
         testShift = await controller.getOneShift(testShift._id);
         expect(testShift.start.getTime()).to.equal(startDate.getTime());
         expect(testShift.end.getTime()).to.equal(endDate.getTime());
-        expect(testShift.employee).to.equal(testEmployee1);
+        expect(testShift.employee._id.toString()).to.equal(testEmployee1._id.toString());
     });
 
     it('checking for param object for only having a proper shift object and a new employee', async () => {
         let update = {shift: testShift, newEmployee: testEmployee2};
         await controller.updateShift(update);
         testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.employee).to.equal(testEmployee2);
+        expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
     });
 
     after(async () => {
