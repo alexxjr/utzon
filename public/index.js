@@ -6,6 +6,7 @@ let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", 
 let daysArray = [];
 let month;
 
+
 let date = new Date(Date.now());
 let year = date.getFullYear();
 
@@ -50,6 +51,7 @@ function insertDays() {
         }
         let node = document.createElement("li");
         let textnode = document.createTextNode(day);
+        node.classList.add("date");
         node.appendChild(textnode);
         node.onclick = chooseDate;
         daysList.appendChild(node);
@@ -57,6 +59,9 @@ function insertDays() {
 }
 
 async function chooseDate() {
+    let allDates = document.querySelectorAll(".date");
+    allDates.forEach(e => {e.style.backgroundColor = "#eee"});
+
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -64,6 +69,7 @@ async function chooseDate() {
     let date = year + "-" + monthNo + "-" + this.innerText;
     let shifts = await GET("/api/shifts/" + date);
     dayShift.innerHTML = await generateShifts(shifts);
+    this.style.backgroundColor = "blue";
 }
 
 function setCurrentMonth() {
@@ -130,6 +136,11 @@ Handlebars.registerHelper("formatTime", function(date) {
     date = date.toString();
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
+
+function shiftSelected(shift) {
+    dayShift.style.display = 'none';
+}
+
 
 
 
