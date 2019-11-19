@@ -2,6 +2,7 @@ let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
 let dayShift = document.querySelector("#hover");
+let shiftUpdate = document.querySelector("#shiftUpdate");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
@@ -59,9 +60,11 @@ function insertDays() {
 }
 
 async function chooseDate() {
+    shiftUpdate.style.display = "none";
+    dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
-    allDates.forEach(e => {e.style.backgroundColor = "#eee"});
-
+    allDates.forEach(date => {date.style.backgroundColor = "#eee"});
+    this.style.backgroundColor = "blue";
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -69,7 +72,7 @@ async function chooseDate() {
     let date = year + "-" + monthNo + "-" + this.innerText;
     let shifts = await GET("/api/shifts/" + date);
     dayShift.innerHTML = await generateShifts(shifts);
-    this.style.backgroundColor = "blue";
+
 }
 
 function setCurrentMonth() {
@@ -138,7 +141,10 @@ Handlebars.registerHelper("formatTime", function(date) {
 });
 
 function shiftSelected(shift) {
-    dayShift.style.display = 'none';
+    shiftUpdate.style.display = "inline-block";
+    dayShift.style.display = "none";
+
+
 }
 
 
