@@ -40,7 +40,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
-        await expect(controller.addEmployeeToShift(testShift)).to.be.rejectedWith("An employee is already attached to this shift");
+        await expect(controller.addEmployeeToShift(testEmployee2, testShift)).to.be.rejectedWith("An employee is already attached to this shift");
     });
 
     it('testing for invalid variables on removeEmployeeFromShift (No shift in param)', async () => {
@@ -48,7 +48,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('remove an employee from a shift', async () => {
-        await controller.removeEmployeeFromShift(testEmployee1, testShift);
+        await controller.removeEmployeeFromShift(testShift);
         testEmployee1 = await controller.getEmployee("0123456789");
         testShift = await controller.getOneShift(testShift._id);
         expect(testEmployee1.shifts.length).to.equal(0);
