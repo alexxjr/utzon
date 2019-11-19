@@ -57,7 +57,7 @@ exports.createShift = async function (start, end) {
     return await shift.save();
 };
 
-exports.addEmployeeToShift = async function (employee, shift) {
+async function addEmployeeToShift(employee, shift) {
     if (shift === undefined || employee === undefined) {
         throw new Error("Shift or employee variable is empty");
     }
@@ -69,9 +69,11 @@ exports.addEmployeeToShift = async function (employee, shift) {
         throw new Error("An employee is already attached to this shift");
     }
 
-};
+}
 
-exports.removeEmployeeFromShift = async function (shift) {
+exports.addEmployeeToShift = addEmployeeToShift;
+
+async function removeEmployeeFromShift(shift) {
     if (shift === undefined) {
         throw new Error("Shift variable is empty");
     }
@@ -87,7 +89,9 @@ exports.removeEmployeeFromShift = async function (shift) {
             return Promise.all([employee.save(), shift.save()]);
         }
     }
-};
+}
+
+exports.removeEmployeeFromShift = removeEmployeeFromShift;
 
 async function getEmployeeWIthID(objectid) {
     return Employee.findOne({_id: objectid});
