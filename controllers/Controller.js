@@ -80,7 +80,7 @@ async function removeEmployeeFromShift(shift) {
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
-    let employee = getEmployeeWIthID(shift.employee);
+    let employee = await getEmployeeWIthID(shift.employee);
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
@@ -148,7 +148,7 @@ exports.updateShift = async function(update) {
   if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
       throw new Error("One of the date objects are undefined");
   }
-  if (update.shift.constructor.collection.name !== 'Shift'){
+  if (update.shift instanceof Shift){
       throw new Error("The shift object is not a shift");
   }
   if (update.newStart !== undefined && update.newEnd !== undefined) {
@@ -191,11 +191,11 @@ async function changeShiftEmployee(shift, newEmployee) {
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
-    if (shift.employee.CPR === newEmployee.CPR){
+    if (shift.employee._id.toString() === newEmployee._id.toString()){
         throw new Error("This employee is already attached to this shift")
     }
 
-    await removeEmployeeFromShift(shift.employee);
+    await removeEmployeeFromShift(shift);
     await addEmployeeToShift(newEmployee, shift);
 
 }
