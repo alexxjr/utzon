@@ -21,6 +21,17 @@ router
         } else {
             response.sendStatus(201);
         }
+    })
+    .post('/updateShift', async (request, response) => {
+        let update = request.body;
+        try{
+            let answer = await controller.updateShift(update);
+            response.sendStatus(403);
+        }
+        catch (Error) {
+            response.sendStatus(201);
+        }
+
     });
 
 module.exports = router;
