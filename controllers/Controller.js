@@ -5,8 +5,6 @@ const Shift = require('../models/Shift');
 const mongoose = require("../app");
 
 
-
-
 exports.createEmployee = async function (CPR, name, email, phoneNo) {
     let CPRType = typeof CPR;
     let nameType = typeof name;
@@ -87,7 +85,7 @@ exports.removeEmployeeFromShift = async function (employee, shift) {
     throw new Error("This employee is not attached to this shift");
 };
 
-async function getEmployee (CPR) {
+async function getEmployee(CPR) {
     return Employee.findOne({CPR: CPR}).exec();
 }
 
@@ -117,7 +115,7 @@ exports.getShiftsForEmployee = async function (CPR) {
 };
 
 
-exports.getShiftsOnDate = async function(date)  {
+exports.getShiftsOnDate = async function (date) {
     let result = [];
     let shifts = await this.getShifts();
     for (let i = 0; i < shifts.length; i++) {
@@ -128,12 +126,26 @@ exports.getShiftsOnDate = async function(date)  {
     return result;
 };
 
-exports.changeShiftTime = async function(shift, newStart, newEnd) {
+exports.changeShiftTime = async function (shift, newStart, newEnd) {
+    if (shift === undefined || newStart === undefined || newEnd === undefined) {
+        throw new Error("One of the param variables are undefined");
+    }
+    if (Object.prototype.toString.call(newStart) !== '[object Date]' || Object.prototype.toString.call(newEnd) !== '[object Date]') {
+        return undefined;
+    }
+    if (newEnd <= newStart) {
+        throw new Error("The enddate is before the startdate or they are equal");
+    }
 
 };
 
-exports.changeShiftEmployee = async function(shift, newEmployee){
-
+exports.changeShiftEmployee = async function (shift, newEmployee) {
+    if (shift === undefined || newEmployee === undefined) {
+        throw new Error("One of the param variables are undefined");
+    }
+    if (shift.employee.CPR === newEmployee.CPR){
+        throw new Error("This employee is already attached to this shift")
+    }
 };
 
 exports.getEmployee = getEmployee;
