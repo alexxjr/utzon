@@ -98,7 +98,7 @@ exports.getEmployees = async function () {
 };
 
 exports.getShifts = async function () {
-    return Shift.find().exec();
+    return Shift.find().populate('employee').exec();
 };
 
 //For testing purposes
@@ -111,7 +111,7 @@ exports.deleteShift = async function (shift) {
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).exec().shifts;
+    return Employee.findOne({CPR: CPR}).populate('employee').exec().shifts;
 };
 
 

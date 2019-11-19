@@ -97,12 +97,12 @@ body {
     margin: 2px;
     margin-bottom: 10px;
     font-size: 12px;
-
 }
 
 .shifts ul :hover {
     background-color: #ddd;
     display:inline;
+    alignment: center;
 }
 
 #hover {
