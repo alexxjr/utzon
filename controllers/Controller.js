@@ -148,7 +148,7 @@ exports.updateShift = async function(update) {
   if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
       throw new Error("One of the date objects are undefined");
   }
-  if (update.shift.constructor.collection.name !== 'Shift'){
+  if (update.shift instanceof Shift){
       throw new Error("The shift object is not a shift");
   }
   if (update.newStart !== undefined && update.newEnd !== undefined) {

@@ -108,7 +108,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('checking for param object for not having a valid dates', async () => {
-        let update = {shift: "hej"};
+        let update = {shift: "hej", newStart: startDate};
         await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
     });
 
