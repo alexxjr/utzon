@@ -111,9 +111,36 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
     });
 
-    it('checking for param object for having a valid dates, but not a proper shift object', async () => {
+    it('checking for param object for having a valid dates, but (without) a proper shift object', async () => {
         let update = {shift: "hej", newStart: startDate, newEnd: endDate};
-        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
+        await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not a shift");
+    });
+
+    it('checking for param object for having a valid dates, but (with) a proper shift object', async () => {
+        startDate = new Date(2018, 11, 17,10,25);
+        endDate = new Date(2018, 11, 17,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start).to.equal(startDate);
+        expect(testShift.end).to.equal(endDate);
+    });
+    it('checking for param object for having a valid dates, but (with) a proper shift object and a new employee', async () => {
+        startDate = new Date(2018, 11, 18,10,25);
+        endDate = new Date(2018, 11, 18,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, newEmployee: testEmployee1};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start).to.equal(startDate);
+        expect(testShift.end).to.equal(endDate);
+        expect(testShift.employee).to.equal(testEmployee1);
+    });
+
+    it('checking for param object for only having a proper shift object and a new employee', async () => {
+        let update = {shift: testShift, newEmployee: testEmployee2};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.employee).to.equal(testEmployee2);
     });
 
     after(async () => {
