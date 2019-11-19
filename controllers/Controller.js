@@ -168,7 +168,7 @@ exports.updateShift = async function(update) {
   }
 };
 
-exports.changeShiftTime = async function (shift, newStart, newEnd) {
+async function changeShiftTime(shift, newStart, newEnd) {
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -183,9 +183,11 @@ exports.changeShiftTime = async function (shift, newStart, newEnd) {
 
     await shift.save();
 
-};
+}
 
-exports.changeShiftEmployee = async function (shift, newEmployee) {
+exports.changeShiftTime = changeShiftTime;
+
+async function changeShiftEmployee(shift, newEmployee) {
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -196,7 +198,8 @@ exports.changeShiftEmployee = async function (shift, newEmployee) {
     await removeEmployeeFromShift(shift.employee);
     await addEmployeeToShift(newEmployee, shift);
 
-};
+}
+exports.changeShiftEmployee = changeShiftEmployee;
 
 exports.getEmployee = getEmployee;
 exports.getEmployeeWithId = getEmployeeWIthID;
