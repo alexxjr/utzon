@@ -181,8 +181,8 @@ exports.changeShiftEmployee = async function (shift, newEmployee) {
         throw new Error("This employee is already attached to this shift")
     }
 
-    shift.employee = newEmployee;
-    await shift.save();
+    await removeEmployeeFromShift(shift.employee);
+    await addEmployeeToShift(newEmployee, shift);
 
 };
 
