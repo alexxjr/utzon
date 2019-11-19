@@ -133,15 +133,18 @@ exports.updateShift = async function(update) {
   if (update.shift === undefined) {
       throw new Error("Shift is not defined in the update object");
   }
-  if ((update.newStart !== undefined && update.newSlut === undefined) || (update.newStart === undefined && update.newSlut !== undefined)) {
+  if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
       throw new Error("One of the date objects are undefined");
   }
-  if (update.newStart !== undefined && update.netSlut !== undefined) {
+  if (update.shift.constructor.collection.name !== 'Shift'){
+      throw new Error("The shift object is not a shift");
+  }
+  if (update.newStart !== undefined && update.newEnd !== undefined) {
       if (update.newEmployee === undefined) {
-          await changeShiftTime(update.shift, update.newStart, update.newSlut);
+          await changeShiftTime(update.shift, update.newStart, update.newEnd);
       }
       else {
-          await changeShiftTime(update.shift, update.newStart, update.newSlut);
+          await changeShiftTime(update.shift, update.newStart, update.newEnd);
           await changeShiftEmployee(update.shift, update.newEmployee);
       }
   }
@@ -178,8 +181,8 @@ exports.changeShiftEmployee = async function (shift, newEmployee) {
         throw new Error("This employee is already attached to this shift")
     }
 
-    shift.employee = newEmployee;
-    await shift.save();
+    await removeEmployeeFromShift(shift.employee);
+    await addEmployeeToShift(newEmployee, shift);
 
 };
 
