@@ -97,6 +97,15 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("This employee is already attached to this shift");
     });
 
+    it('checking for param in updateShift', async () => {
+        await expect(controller.updateShift()).to.be.rejectedWith("One of the param variables are undefined");
+    });
+
+    it('checking for param object having a valid shift', async () => {
+        let update = "hej";
+        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the param variables are undefined");
+    });
+
     after(async () => {
 
         await controller.deleteEmployee(testEmployee2).then();
