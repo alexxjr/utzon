@@ -115,3 +115,22 @@ body {
 
     display: inline-block;
 }
+
+#shiftUpdate {
+    width: 50%;
+    height: 220px;
+    border: 1px solid black;
+    background: cornflowerblue;
+    text-align: center;
+    alignment: center;
+    padding: 2px;
+    margin: 20px;
+    font-size: 24px;
+    display: none;
+
+}
+
+#shiftOK, #shiftCancel {
+    margin: 5px;
+    float: right;
+}
