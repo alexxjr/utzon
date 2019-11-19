@@ -6,6 +6,7 @@ let shiftUpdate = document.querySelector("#shiftUpdate");
 let datePicker = document.querySelector("#datePicker");
 let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
 let employeeSelect = document.querySelector("#employeeSelect");
+let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
@@ -146,8 +147,10 @@ async function populateEmployeeSelection() {
     let employees = await GET("/api/employees/");
     for (let e of employees) {
         employeeSelect.innerHTML += "<option>" + e.name + "</option>";
+        select.innerHTML += "<option>" + e.name + "</option>";
     }
     employeeSelect.innerHTML += "<option></option>";
+    select.innerHTML += "<option></option>";
 }
 
 async function shiftSelected(shiftID, employeeName) {
@@ -166,6 +169,7 @@ function okAction(shift) {
     console.log(datePicker.value);
 }
 
+
 function cancelAction() {
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
@@ -173,5 +177,19 @@ function cancelAction() {
 
 populateEmployeeSelection();
 
+function createShiftAction() {
+    let popup = document.getElementById("popup")
+    popup.style.display = "block";
+    select.value = "";
+    document.querySelector("#date").value = "";
+}
 
+function closeForm() {
+    let popup = document.getElementById("popup")
+    popup.style.display = "none"
+}
+
+function okCreateShift(){
+    document.getElementById("popup").style.display = "none";
+}
 

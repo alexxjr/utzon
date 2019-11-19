@@ -56,5 +56,30 @@
     <button id="shiftOK" onclick="okAction()">Ok</button>
     <button id="shiftCancel" onclick="cancelAction()">Annuller</button>
 </div>
+
+<button class="createButton" onclick="createShiftAction()">Opret vagt</button>
+
+<div class="form-popup" id="popup">
+    <form action="/action_page.php" class="form-container">
+        <h2>Opret ny vagt</h2>
+
+        <li>Vælg ansat:
+            <select id="select"></select>
+        </li>
+
+        <li>Vælg dato:
+            <input id="date" type="date">
+        </li>
+
+        <li>Vælg vagt start: </li>
+        <li>Vælg vagt slut: </li>
+        <li>Antal timer: </li>
+        <br>
+
+        <button type="submit" class="btn" onclick="okCreateShift()">Opret</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Annuller</button>
+    </form>
+</div>
+
 </body>
 </html>
