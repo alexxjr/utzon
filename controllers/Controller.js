@@ -191,11 +191,11 @@ async function changeShiftEmployee(shift, newEmployee) {
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
-    if (shift.employee.CPR === newEmployee.CPR){
+    if (shift.employee._id.toString() === newEmployee._id.toString()){
         throw new Error("This employee is already attached to this shift")
     }
 
-    await removeEmployeeFromShift(shift.employee);
+    await removeEmployeeFromShift(shift);
     await addEmployeeToShift(newEmployee, shift);
 
 }

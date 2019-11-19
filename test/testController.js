@@ -87,7 +87,7 @@ describe('Test af controllerfunktioner', function(){
         await controller.addEmployeeToShift(testEmployee1, testShift);
         await controller.changeShiftEmployee(testShift, testEmployee2);
         testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.employee).to.equal(testEmployee2);
+        expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
     });
 
     it('changing shift without an employee', async () => {
