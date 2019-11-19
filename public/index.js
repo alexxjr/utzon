@@ -3,6 +3,7 @@ let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
 let dayShift = document.querySelector("#hover");
 let shiftUpdate = document.querySelector("#shiftUpdate");
+let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
@@ -140,9 +141,9 @@ Handlebars.registerHelper("formatTime", function(date) {
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
 
-function shiftSelected(shift) {
-    shiftUpdate.style.display = "inline-block";
-    dayShift.style.display = "none";
+function shiftSelected() {
+    console.log(this.employee.name);
+
 
 
 }
