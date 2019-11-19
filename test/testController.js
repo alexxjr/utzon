@@ -73,11 +73,28 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('changing shift startDate with a date, which is ahead of the current endDate or they are equal', async () => {
-        await expect(controller.changeShiftTime(testShift, endDate, startDate)).to.be.rejectedWith("The end date is before the startdate or they are equal");
+        await expect(controller.changeShiftTime(testShift, endDate, startDate)).to.be.rejectedWith("The enddate is before the startdate or they are equal");
     });
 
     it('changing shift startDate with a parameter missing', async () => {
         await expect(controller.changeShiftTime(testShift, endDate)).to.be.rejectedWith("Missing parameter when changing shift time");
+    });
+
+    it('changing shift employee', async () => {
+        testEmployee1 = await controller.getEmployee(testEmployee1.CPR);
+        testEmployee2 = await controller.getEmployee(testEmployee2.CPR);
+        await controller.addEmployeeToShift(testEmployee1, testShift);
+        await controller.changeShiftEmployee(testShift, testEmployee2);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.employee).to.equal(testEmployee2);
+    });
+
+    it('changing shift without an employee', async () => {
+        await expect(controller.changeShiftEmployee(testShift)).to.be.rejectedWith("One of the param variables are empty");
+    });
+
+    it('changing shift employee with an employee, that are already on the shift', async () => {
+        await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("The employee is already attached to this shift");
     });
 
     after(async () => {
