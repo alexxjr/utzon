@@ -131,6 +131,10 @@ body {
 }
 
 #shiftOK, #shiftCancel {
-    margin: 5px;
+    margin: 1px;
     float: right;
+}
+
+#shiftUpdateInfo {
+    text-align: left;
 }
