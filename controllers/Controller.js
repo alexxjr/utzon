@@ -94,7 +94,7 @@ exports.deleteEmployee = async function (employee) {
 };
 
 exports.getEmployees = async function () {
-    return Employee.find().exec();
+    return Employee.find().populate('shifts').exec();
 };
 
 exports.getShifts = async function () {
@@ -111,7 +111,7 @@ exports.deleteShift = async function (shift) {
 };
 
 exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).populate('employee').exec().shifts;
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec().shifts;
 };
 
 
