@@ -20,7 +20,7 @@
         <li>
             <div id="monthDisplay"></div>
             <br>
-            <div id="yearDisplay">hej</div>
+            <div id="yearDisplay"></div>
         </li>
     </ul>
 </div>
@@ -40,7 +40,21 @@
 
 <div class="shifts">
     <ul id="hover">
+
     </ul>
+</div>
+<div id="shiftUpdate">
+    <ul id="shiftUpdateInfo">
+        <li>Ansat:
+            <select id="employeeSelect"></select>
+        </li>
+        <li>Dato: <input id="datePicker" type="date"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <button id="shiftOK" onclick="okAction()">Ok</button>
+    <button id="shiftCancel" onclick="cancelAction()">Annuller</button>
 </div>
 </body>
 </html>
