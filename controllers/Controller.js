@@ -139,7 +139,7 @@ exports.updateShift = async function(update) {
   if (update.shift.constructor.collection.name !== 'Shift'){
       throw new Error("The shift object is not a shift");
   }
-  if (update.newStart !== undefined && update.netSlut !== undefined) {
+  if (update.newStart !== undefined && update.newSlut !== undefined) {
       if (update.newEmployee === undefined) {
           await changeShiftTime(update.shift, update.newStart, update.newSlut);
       }
