@@ -113,12 +113,11 @@ body {
     display:inline-block;
 }
 #hover div{
-
     display: inline-block;
 }
 
 #shiftUpdate {
-    width: 50%;
+    width: 20%;
     height: 220px;
     border: 1px solid black;
     background: cornflowerblue;
@@ -135,10 +134,9 @@ input::-webkit-clear-button{
     display: none;
 }
 
-input::-webkit-inner-spin-button {
+input[type="date"]::-webkit-inner-spin-button {
     display: none;
 }
-
 
 #employeeSelect {
     font-family: Verdana, sans-serif;
@@ -152,9 +150,23 @@ input::-webkit-inner-spin-button {
     width: 130px;
 }
 
+#startTimePicker, #endTimePicker{
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+}
+
+
+#totalHours {
+    width: 50px;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+}
+
 #shiftOK, #shiftCancel {
     margin: 1px;
     float: right;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
 }
 
 #shiftUpdateInfo {
