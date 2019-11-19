@@ -69,7 +69,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('changing shift with only startDate', async () => {
-        await expect(controller.changeShiftTime(testShift, startDate)).to.be.rejectedWith("One of the param variables are empty");
+        await expect(controller.changeShiftTime(testShift, startDate)).to.be.rejectedWith("One of the param variables are undefined");
     });
 
     it('changing shift startDate with a date, which is ahead of the current endDate or they are equal', async () => {
@@ -77,7 +77,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('changing shift startDate with a parameter missing', async () => {
-        await expect(controller.changeShiftTime(testShift, endDate)).to.be.rejectedWith("Missing parameter when changing shift time");
+        expect(await controller.changeShiftTime(testShift, "Testing for failure", endDate)).to.equal(undefined);
     });
 
     it('changing shift employee', async () => {
@@ -90,11 +90,11 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('changing shift without an employee', async () => {
-        await expect(controller.changeShiftEmployee(testShift)).to.be.rejectedWith("One of the param variables are empty");
+        await expect(controller.changeShiftEmployee(testShift)).to.be.rejectedWith("One of the param variables are undefined");
     });
 
     it('changing shift employee with an employee, that are already on the shift', async () => {
-        await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("The employee is already attached to this shift");
+        await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("This employee is already attached to this shift");
     });
 
     after(async () => {
