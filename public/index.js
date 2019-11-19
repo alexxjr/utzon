@@ -3,10 +3,17 @@ let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
 let dayShift = document.querySelector("#hover");
 let shiftUpdate = document.querySelector("#shiftUpdate");
+let datePicker = document.querySelector("#datePicker");
+let startTimePicker = document.querySelector("#startTimePicker");
+let endTimePicker = document.querySelector("#endTimePicker");
+let totalHours = document.querySelector("#totalHours");
 let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
+let employeeSelect = document.querySelector("#employeeSelect");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
+
+
 
 
 let date = new Date(Date.now());
@@ -65,7 +72,7 @@ async function chooseDate() {
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
     allDates.forEach(date => {date.style.backgroundColor = "#eee"});
-    this.style.backgroundColor = "blue";
+    this.style.backgroundColor = "cornflowerblue";
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -141,21 +148,52 @@ Handlebars.registerHelper("formatTime", function(date) {
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
 
-function shiftSelected  (employee, start, end, totalHours) {
+async function populateEmployeeSelection() {
+    let employees = await GET("/api/employees/");
+    for (let e of employees) {
+        employeeSelect.innerHTML += "<option>" + e.name + "</option>";
+    }
+    employeeSelect.innerHTML += "<option></option>";
+}
+
+async function shiftSelected(shiftID, employeeName) {
+    dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
-    shiftInfo[0].innerText += " " + employee;
-    shiftInfo[1].innerText += " " + start;
-    shiftInfo[2].innerText += " " + start;
-    shiftInfo[3].innerText += " " + end;
-    shiftInfo[4].innerText += " " + totalHours;
-
-
-}
-
-function OKaction(shift) {
+    let shift = await GET("/api/shifts/getOneShift/" + shiftID);
+    employeeSelect.value = employeeName;
+    datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
+    startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
+    endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
+    totalHours.value = shift.totalHours;
 
 }
 
+function okAction(shift) {
+    console.log(datePicker.value);
+}
+
+function cancelAction() {
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
+}
+
+function hourCalculation(start, end) {
+    let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
+    if (start.getMinutes() < end.getMinutes()) {
+        return (end.getHours() - start.getHours()) + minutes / 60;
+    } else {
+        return (end.getHours() - start.getHours()) - minutes / 60;
+    }
+}
+
+startTimePicker.addEventListener("click", async function () {
+    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+});
+endTimePicker.addEventListener("click", async function () {
+    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+});
+
+populateEmployeeSelection();
 
 
 

@@ -45,11 +45,13 @@
 </div>
 <div id="shiftUpdate">
     <ul id="shiftUpdateInfo">
-        <li>Ansat: </li>
-        <li>Dato: </li>
-        <li>Starttid: </li>
-        <li>Sluttid: </li>
-        <li>Antal timer: </li>
+        <li>Ansat:
+            <select id="employeeSelect"></select>
+        </li>
+        <li>Dato: <input id="datePicker" type="date"></li>
+        <li>Starttid: <input id="startTimePicker" type="time" name="appt" required></li>
+        <li>Sluttid: <input id="endTimePicker" type="time"></li>
+        <li>Antal timer: <input id="totalHours"></li>
     </ul>
     <button id="shiftOK" onclick="okAction()">Ok</button>
     <button id="shiftCancel" onclick="cancelAction()">Annuller</button>

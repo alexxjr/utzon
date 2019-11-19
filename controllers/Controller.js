@@ -113,9 +113,8 @@ exports.getShifts = async function () {
     return Shift.find().populate('employee').exec();
 };
 
-//For testing purposes
 exports.getOneShift = async function (objectid) {
-    return Shift.findOne({_id: objectid});
+    return Shift.findOne({_id: objectid}).populate('employee');
 };
 
 exports.deleteShift = async function (shift) {

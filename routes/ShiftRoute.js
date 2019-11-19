@@ -13,6 +13,10 @@ router
         let shiftOnDate = await controller.getShiftsOnDate(date);
         response.send(shiftOnDate);
     })
+    .get('/getOneShift/:shiftID', async (request, response) => {
+        let getOneShift = await controller.getOneShift(request.params.shiftID);
+        response.send(getOneShift);
+    })
     .post('/', async (request, response) => {
         const {start, end} = request.body;
         let shift = controller.createShift(start, end);
