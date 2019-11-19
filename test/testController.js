@@ -40,15 +40,11 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
-        await expect(controller.addEmployeeToShift(testEmployee2, testShift)).to.be.rejectedWith("An employee is already attached to this shift");
+        await expect(controller.addEmployeeToShift(testShift)).to.be.rejectedWith("An employee is already attached to this shift");
     });
 
     it('testing for invalid variables on removeEmployeeFromShift (No shift in param)', async () => {
-        await expect(controller.removeEmployeeFromShift(testEmployee1)).to.be.rejectedWith("Shift or employee variable is empty");
-    });
-
-    it('an employee should not be able to be removed from a shift they are not attached to', async () => {
-        await expect(controller.removeEmployeeFromShift(testEmployee2, testShift)).to.be.rejectedWith("This employee is not attached to this shift");
+        await expect(controller.removeEmployeeFromShift()).to.be.rejectedWith("Shift variable is empty");
     });
 
     it('remove an employee from a shift', async () => {
@@ -59,13 +55,18 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift.employee).to.equal(undefined);
     });
 
+    it('should not be able to be remove an employee from a shift without any employee attached to it', async () => {
+        await expect(controller.removeEmployeeFromShift(testShift)).to.be.rejectedWith("There is no employee attached to this shift");
+    });
+
+
     // Testing for changes on shift objects in the database.
 
     it('changing shift dates', async () => {
         await controller.changeShiftTime(testShift, startDate, endDate);
         testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start).to.equal(startDate);
-        expect(testShift.end).to.equal(endDate);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
     });
 
     it('changing shift with only startDate', async () => {
@@ -122,8 +123,8 @@ describe('Test af controllerfunktioner', function(){
         let update = {shift: testShift, newStart: startDate, newEnd: endDate};
         await controller.updateShift(update);
         testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start).to.equal(startDate);
-        expect(testShift.end).to.equal(endDate);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
     });
     it('checking for param object for having a valid dates, but (with) a proper shift object and a new employee', async () => {
         startDate = new Date(2018, 11, 18,10,25);
@@ -131,8 +132,8 @@ describe('Test af controllerfunktioner', function(){
         let update = {shift: testShift, newStart: startDate, newEnd: endDate, newEmployee: testEmployee1};
         await controller.updateShift(update);
         testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start).to.equal(startDate);
-        expect(testShift.end).to.equal(endDate);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
         expect(testShift.employee).to.equal(testEmployee1);
     });
 
