@@ -141,10 +141,18 @@ Handlebars.registerHelper("formatTime", function(date) {
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
 
-function shiftSelected() {
-    console.log(this.employee.name);
+function shiftSelected  (employee, start, end, totalHours) {
+    shiftUpdate.style.display = "inline-block";
+    shiftInfo[0].innerText += " " + employee;
+    shiftInfo[1].innerText += " " + start;
+    shiftInfo[2].innerText += " " + start;
+    shiftInfo[3].innerText += " " + end;
+    shiftInfo[4].innerText += " " + totalHours;
 
 
+}
+
+function OKaction(shift) {
 
 }
 

@@ -57,7 +57,7 @@ exports.createShift = async function (start, end) {
     return await shift.save();
 };
 
-exports.addEmployeeToShift = async function (employee, shift) {
+async function addEmployeeToShift(employee, shift) {
     if (shift === undefined || employee === undefined) {
         throw new Error("Shift or employee variable is empty");
     }
@@ -69,16 +69,18 @@ exports.addEmployeeToShift = async function (employee, shift) {
         throw new Error("An employee is already attached to this shift");
     }
 
-};
+}
 
-exports.removeEmployeeFromShift = async function (shift) {
+exports.addEmployeeToShift = addEmployeeToShift;
+
+async function removeEmployeeFromShift(shift) {
     if (shift === undefined) {
         throw new Error("Shift variable is empty");
     }
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
-    let employee = shift.children.id(shift.employee._id);
+    let employee = await getEmployeeWIthID(shift.employee);
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
@@ -87,7 +89,13 @@ exports.removeEmployeeFromShift = async function (shift) {
             return Promise.all([employee.save(), shift.save()]);
         }
     }
-};
+}
+
+exports.removeEmployeeFromShift = removeEmployeeFromShift;
+
+async function getEmployeeWIthID(objectid) {
+    return Employee.findOne({_id: objectid});
+}
 
 async function getEmployee(CPR) {
     return Employee.findOne({CPR: CPR}).exec();
@@ -140,7 +148,7 @@ exports.updateShift = async function(update) {
   if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
       throw new Error("One of the date objects are undefined");
   }
-  if (update.shift.constructor.collection.name !== 'Shift'){
+  if (update.shift instanceof Shift){
       throw new Error("The shift object is not a shift");
   }
   if (update.newStart !== undefined && update.newEnd !== undefined) {
@@ -160,7 +168,7 @@ exports.updateShift = async function(update) {
   }
 };
 
-exports.changeShiftTime = async function (shift, newStart, newEnd) {
+async function changeShiftTime(shift, newStart, newEnd) {
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -175,22 +183,26 @@ exports.changeShiftTime = async function (shift, newStart, newEnd) {
 
     await shift.save();
 
-};
+}
 
-exports.changeShiftEmployee = async function (shift, newEmployee) {
+exports.changeShiftTime = changeShiftTime;
+
+async function changeShiftEmployee(shift, newEmployee) {
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
-    if (shift.employee.CPR === newEmployee.CPR){
+    if (shift.employee._id.toString() === newEmployee._id.toString()){
         throw new Error("This employee is already attached to this shift")
     }
 
-    await removeEmployeeFromShift(shift.employee);
+    await removeEmployeeFromShift(shift);
     await addEmployeeToShift(newEmployee, shift);
 
-};
+}
+exports.changeShiftEmployee = changeShiftEmployee;
 
 exports.getEmployee = getEmployee;
+exports.getEmployeeWithId = getEmployeeWIthID;
 
 
 
