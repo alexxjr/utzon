@@ -170,6 +170,21 @@ input[type="date"]::-webkit-inner-spin-button {
     font-family: Verdana, sans-serif;
 }
 
+#deleteBtn {
+    float: left;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    margin: 1px;
+}
+
+#saveBtn {
+    float: right;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    margin: 5px;
+   padding: 3px;
+}
+
 #shiftUpdateInfo {
     text-align: left;
 }

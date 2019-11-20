@@ -1,5 +1,5 @@
-let update = require('../models/Update');
 let updates = [];
+let shift;
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
@@ -9,7 +9,6 @@ let datePicker = document.querySelector("#datePicker");
 let startTimePicker = document.querySelector("#startTimePicker");
 let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
-let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
@@ -25,7 +24,8 @@ let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
-
+let deleteBtn = document.querySelector("#deleteBtn");
+deleteBtn.onclick = deleteAction;
 
 
 update();
@@ -163,26 +163,35 @@ async function populateEmployeeSelection() {
 async function shiftSelected(shiftID, employeeName) {
     dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
-    let shift = await GET("/api/shifts/getOneShift/" + shiftID);
+    shift = await GET("/api/shifts/getOneShift/" + shiftID)
     employeeSelect.value = employeeName;
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
     startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
     endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     totalHours.value = shift.totalHours;
+    let shiftOK = document.querySelector("#shiftOK");
+    shiftOK.onclick = okAction
+
 
 }
 
-function okAction(shift) {
+function okAction() {
     let newEmployee = employeeSelect.value;
     let newStart = startTimePicker.value;
     let newEnd = endTimePicker.value;
-    updates.push(update.createUpdate(shift, newStart, newEnd, newEmployee));
+    updates.push(createUpdate(shift, newStart, newEnd, newEmployee));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
 }
 
 
 function cancelAction() {
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
+}
+
+function deleteAction() {
+    updates.push(createUpdate(shift, undefined, undefined, undefined));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
 }
@@ -231,4 +240,5 @@ function closeForm() {
 function okCreateShift(){
     document.getElementById("popup").style.display = "none";
 }
+
 
