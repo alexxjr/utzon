@@ -210,9 +210,8 @@ populateEmployeeSelection();
 
 
 function createShiftAction() {
-    let popup = document.getElementById("popup")
-    popup.style.display = "block";
-
+    document.getElementById("popup").style.display = "block";
+    select.value = "";
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -247,20 +246,17 @@ function closeForm() {
 
 async function okCreateShift(){
     try {
-        let url = "api/updateShift";
-        let data = {
-            "shift" : undefined,
-            "start" : document.querySelector("#createStartTime").value,
-            "end" :  document.querySelector("#createEndTime").value,
-            "totalHours" :  document.querySelector("#createTotalHours").innerHTML,
-            "employee " : select.value
-        }
-        await POST(data, url);
-        closeForm();
-        alert("Vagten er nu oprettet!!!!!");
+        let thisShift = undefined;
+        let newStart = document.querySelector("#createStartTime").value;
+        let newEnd = document.querySelector("#createEndTime").value;
+        let newEmployee = select.value;
+        updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
+        closeForm()
+        alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
     }catch (e){
         console.log(e.name + ": " + e.message);
     }
 }
+
 
 
