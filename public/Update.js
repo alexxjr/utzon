@@ -34,7 +34,6 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
             type = "changeShiftTimesAndRemoveEmployee";
         }
     }
-
     return {
         shift,
         newStart,
