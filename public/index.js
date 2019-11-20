@@ -9,7 +9,6 @@ let datePicker = document.querySelector("#datePicker");
 let startTimePicker = document.querySelector("#startTimePicker");
 let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
-let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
@@ -25,7 +24,8 @@ let prevBtn = document.querySelector("#prevBtn");
 prevBtn.onclick = prevMonth;
 let nextBtn = document.querySelector("#nextBtn");
 nextBtn.onclick = nextMonth;
-
+let deleteBtn = document.querySelector("#deleteBtn");
+deleteBtn.onclick = deleteAction;
 
 
 update();
@@ -186,6 +186,12 @@ function okAction() {
 
 
 function cancelAction() {
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
+}
+
+function deleteAction() {
+    updates.push(createUpdate(shift, undefined, undefined, undefined));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
 }
