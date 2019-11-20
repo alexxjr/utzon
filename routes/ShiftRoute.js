@@ -27,13 +27,13 @@ router
         }
     })
     .post('/updateShift', async (request, response) => {
-        let update = request.body;
-        try{
-            await controller.updateShift(update);
-            response.sendStatus(403);
+        let updates = request.body;
+        let failures = await controller.manageIncomingUpdates(updates);
+        if (failures.length === 0) {
+            response.sendStatus(201);
         }
-        catch (e) {
-            response.send(e.value)
+        else {
+            response.status(400).send(failures);
         }
 
     });
