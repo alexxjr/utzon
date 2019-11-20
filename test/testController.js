@@ -13,8 +13,8 @@ describe('Test af controllerfunktioner', function(){
 
     before(async function() {
         this.timeout(10000);
-        testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "test@test.dk", "test");
-        testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "test2@test2.dk", "test2");
+        testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "utzonreceive@gmail.com", "test");
+        testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "utzonreceive@gmail.com", "test2");
         testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
             , new Date(2018, 11, 15,18,55));
         startDate = new Date(2018, 11, 16,10,25);
@@ -98,9 +98,27 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.changeShiftEmployee(testShift, testEmployee2)).to.be.rejectedWith("This employee is already attached to this shift");
     });
 
-    it('checking for no param in updateShift', async () => {
-        await expect(controller.updateShift()).to.be.rejectedWith("One of the param variables are undefined");
+    it('checking for no param in manageIncomingUpdates', async () => {
+        await expect(controller.manageIncomingUpdates()).to.be.rejectedWith("The param updates are undefined");
     });
+
+    it('checking for length of param in manageIncomingUpdates', async () => {
+        await expect(controller.manageIncomingUpdates([])).to.be.rejectedWith("The update array is empty");
+    });
+
+    it('ckecing for iterable of updates in manageIncomingUpdates', async() => {
+        await expect(controller.manageIncomingUpdates("hej")).to.be.rejectedWith("The updates variable is not an array");
+    });
+
+    it('checking for correct error handling in manageIncomingUpdates', async () => {
+        let update = "hej";
+        let response = await controller.manageIncomingUpdates([update]);
+        expect(response.length).to.equal(1);
+        expect(response[0].update).to.equal(update);
+        expect(response[0].error).to.equal("Shift is not defined in the update object");
+    });
+
+
 
     it('checking param object for not having a valid shift attribute', async () => {
         let update = "hej";
@@ -222,9 +240,20 @@ describe('Test af controllerfunktioner', function(){
         testShift = await controller.getOneShift(testShift._id);
         expect(testShift).to.equal(null);
     });
+
+    it('try to actually update and send a mail with ', async () => {
+        testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
+            , new Date(2018, 11, 15,18,55));
+        await controller.addEmployeeToShift(testEmployee1, testShift);
+        let update = {shift: testShift, type: "removeEmployeeFromShift"};
+        await controller.manageIncomingUpdates([update]);
+
+    });
+
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
+        await controller.deleteShift(testShift);
     });
 });
 

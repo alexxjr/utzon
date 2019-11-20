@@ -148,6 +148,15 @@ exports.getShiftsOnDate = async function (date) {
 };
 
 exports.manageIncomingUpdates = async function (updates) {
+    if (updates === undefined) {
+        throw new Error("The param updates are undefined");
+    }
+    if (updates.length === 0) {
+        throw new Error("The update array is empty");
+    }
+    if(!Array.isArray(updates)) {
+        throw new Error("The updates variable is not an array")
+    }
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
@@ -198,9 +207,6 @@ async function sendMails(mails) {
 }
 
 async function updateShift(update) {
-    if (update === undefined) {
-        throw new Error("One of the param variables are undefined");
-    }
     if (update.shift === undefined) {
         throw new Error("Shift is not defined in the update object");
     }
@@ -263,6 +269,8 @@ async function updateShift(update) {
             throw new Error("The update type is unknown")
     }
 }
+
+exports.updateShift = updateShift;
 
 async function changeShiftTime(shift, newStart, newEnd) {
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
