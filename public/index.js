@@ -14,6 +14,7 @@ let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", 
 let daysArray = [];
 let month;
 
+createUpdate()
 
 
 
