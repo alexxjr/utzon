@@ -170,6 +170,19 @@ async function shiftSelected(shiftID, employeeName) {
 
 function okAction(shift) {
     console.log(datePicker.value);
+    let newEmployee = employeeSelect.value;
+    let newStart = startTimePicker.value;
+    let newEnd = endTimePicker.value;
+
+    if(shift !== undefined) {
+        console.log("test");
+
+        dayShift.style.display = "inline-block";
+        shiftUpdate.style.display = "none";
+
+    } else {
+       shiftUpdate.style.display = "inline-block";
+    }
 }
 
 function cancelAction() {
