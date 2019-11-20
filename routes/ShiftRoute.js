@@ -29,11 +29,11 @@ router
     .post('/updateShift', async (request, response) => {
         let update = request.body;
         try{
-            let answer = await controller.updateShift(update);
+            await controller.updateShift(update);
             response.sendStatus(403);
         }
-        catch (Error) {
-            response.sendStatus(201);
+        catch (e) {
+            response.send(e.value)
         }
 
     });

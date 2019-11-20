@@ -106,7 +106,7 @@ exports.deleteEmployee = async function (employee) {
 };
 
 exports.getEmployees = async function () {
-    return Employee.find().exec();
+    return Employee.find().populate('shifts').exec();
 };
 
 exports.getShifts = async function () {
@@ -117,14 +117,15 @@ exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
 };
 
-exports.deleteShift = async function (shift) {
+async function deleteShift (shift) {
     return Shift.findByIdAndDelete(shift._id);
-};
+}
 
 exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).populate('employee').exec().shifts;
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec().shifts;
 };
 
+exports.deleteShift = deleteShift;
 
 exports.getShiftsOnDate = async function (date) {
     let result = [];
@@ -147,24 +148,62 @@ exports.updateShift = async function(update) {
   if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
       throw new Error("One of the date objects are undefined");
   }
-  if (update.shift instanceof Shift){
+
+  let type = typeof update.shift;
+  if (type !== 'object') {
+      throw new Error("The shift object is not an object");
+  }
+
+  if (update.shift.constructor.modelName !== 'Shift'){
       throw new Error("The shift object is not a shift");
   }
-  if (update.newStart !== undefined && update.newEnd !== undefined) {
-      if (update.newEmployee === undefined) {
-          await changeShiftTime(update.shift, update.newStart, update.newEnd);
-      }
-      else {
-          await changeShiftTime(update.shift, update.newStart, update.newEnd);
-          await changeShiftEmployee(update.shift, update.newEmployee);
-      }
+
+  if(update.type === undefined) {
+      throw new Error("No update type is given for this update");
   }
-  else {
-      if (update.newEmployee === undefined) {
-          throw new Error("Both dates and employee are undefined");
-      }
-      await changeShiftEmployee(update.shift, update.newEmployee);
+
+  let updateType = typeof update.type;
+  if (updateType !== 'string') {
+      throw new Error("The type variable is not a string");
   }
+
+    switch(update.type) {
+        case "addEmployeeToShift":
+            await addEmployeeToShift(update.newEmployee, update.shift);
+            break;
+        case "removeEmployeeFromShift":
+            await removeEmployeeFromShift(update.shift);
+            break;
+        case "changeShiftTimes":
+            await changeShiftTime(update.shift, update.newStart, update.newEnd);
+            break;
+        case "changeShiftTimesAndEmployee":
+            await changeShiftTime(update.shift, update.newStart, update.newEnd);
+            await changeShiftEmployee(update.shift, update.newEmployee);
+            break;
+        case "changeShiftEmployee":
+            await changeShiftEmployee(update.shift, update.newEmployee);
+            break;
+        case "changeShiftTimesAndAddEmployee":
+            await changeShiftTime(update.shift, update.newStart, update.newEnd);
+            await addEmployeeToShift(update.newEmployee, update.shift);
+            break;
+        case "changeShiftTimesAndRemoveEmployee":
+            await changeShiftTime(update.shift, update.newStart, update.newEnd);
+            await removeEmployeeFromShift(update.shift);
+            break;
+        case "deleteShift":
+            if(update.shift.employee === undefined) {
+                await deleteShift(update.shift);
+            }
+            else {
+                await removeEmployeeFromShift(update.shift);
+                await deleteShift(update.shift);
+            }
+            break;
+        default:
+            throw new Error("The update type is unknown")
+    }
 };
 
 async function changeShiftTime(shift, newStart, newEnd) {
@@ -190,6 +229,8 @@ async function changeShiftEmployee(shift, newEmployee) {
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
+
+
     if (shift.employee._id.toString() === newEmployee._id.toString()){
         throw new Error("This employee is already attached to this shift")
     }

@@ -9,10 +9,12 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let shiftInfo = document.querySelector("#shiftUpdateInfo").getElementsByTagName("li");
 let employeeSelect = document.querySelector("#employeeSelect");
+let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
 
+createUpdate()
 
 
 
@@ -152,8 +154,10 @@ async function populateEmployeeSelection() {
     let employees = await GET("/api/employees/");
     for (let e of employees) {
         employeeSelect.innerHTML += "<option>" + e.name + "</option>";
+        select.innerHTML += "<option>" + e.name + "</option>";
     }
     employeeSelect.innerHTML += "<option></option>";
+    select.innerHTML += "<option></option>";
 }
 
 async function shiftSelected(shiftID, employeeName) {
@@ -185,6 +189,7 @@ function okAction(shift) {
     }
 }
 
+
 function cancelAction() {
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
@@ -209,4 +214,29 @@ endTimePicker.addEventListener("click", async function () {
 populateEmployeeSelection();
 
 
+function createShiftAction() {
+    let popup = document.getElementById("popup")
+    popup.style.display = "block";
+    select.value = "";
+    document.querySelector("#date").value = "";
+
+    let start = document.querySelector("#createStartTime");
+    let end = document.querySelector("#createEndTime");
+    let createTotalHours = document.querySelector("#createTotalHours");
+    start.addEventListener("click", async function(){
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+    });
+    end.addEventListener("click", async function(){
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+    });
+}
+
+function closeForm() {
+    let popup = document.getElementById("popup")
+    popup.style.display = "none"
+}
+
+function okCreateShift(){
+    document.getElementById("popup").style.display = "none";
+}
 
