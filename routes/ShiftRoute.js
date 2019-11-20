@@ -32,8 +32,8 @@ router
             await controller.updateShift(update);
             response.sendStatus(403);
         }
-        catch (Error) {
-            response.sendStatus(201);
+        catch (e) {
+            response.send(e.value)
         }
 
     });

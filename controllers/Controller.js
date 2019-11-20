@@ -106,7 +106,7 @@ exports.deleteEmployee = async function (employee) {
 };
 
 exports.getEmployees = async function () {
-    return Employee.find().exec();
+    return Employee.find().populate('shifts').exec();
 };
 
 exports.getShifts = async function () {
@@ -117,14 +117,15 @@ exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
 };
 
-exports.deleteShift = async function (shift) {
+async function deleteShift (shift) {
     return Shift.findByIdAndDelete(shift._id);
-};
+}
 
 exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).populate('employee').exec().shifts;
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec().shifts;
 };
 
+exports.deleteShift = deleteShift;
 
 exports.getShiftsOnDate = async function (date) {
     let result = [];
@@ -190,6 +191,15 @@ exports.updateShift = async function(update) {
         case "changeShiftTimesAndRemoveEmployee":
             await changeShiftTime(update.shift, update.newStart, update.newEnd);
             await removeEmployeeFromShift(update.shift);
+            break;
+        case "deleteShift":
+            if(update.shift.employee === undefined) {
+                await deleteShift(update.shift);
+            }
+            else {
+                await removeEmployeeFromShift(update.shift);
+                await deleteShift(update.shift);
+            }
             break;
         default:
             throw new Error("The update type is unknown")
