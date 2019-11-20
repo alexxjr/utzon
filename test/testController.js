@@ -126,14 +126,14 @@ describe('Test af controllerfunktioner', function(){
         // startDate = new Date(2018, 11, 17,10,25);
         // endDate = new Date(2018, 11, 17,12,25);
         let update = {shift: testShift, newStart: startDate, newEnd: endDate};
-        await expect(controller.updateShift(update).to.be.rejectedWith("No update type is given for this update"));
+        await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
     });
 
     it('checking for param object for having a valid dates, but (with) a proper shift object, but updatetype is not a string', async () => {
         // startDate = new Date(2018, 11, 17,10,25);
         // endDate = new Date(2018, 11, 17,12,25);
         let update = {shift: testShift, newStart: startDate, newEnd: endDate, type: 2};
-        await expect(controller.updateShift(update).to.be.rejectedWith("The type variable is not a string"));
+        await expect(controller.updateShift(update)).to.be.rejectedWith("The type variable is not a string");
     });
 
     it('case removeEmployeeFromShift (valid data)', async () => {
@@ -205,11 +205,26 @@ describe('Test af controllerfunktioner', function(){
         let update = {shift: testShift, type: "Testing wrong input type"};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The update type is unknown");
     });
-    after(async () => {
 
+    it('case deleteShift, with employee (valid data)', async () => {
+        let update = {shift: testShift, type: "deleteShift"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift).to.equal(null);
+    });
+
+    it('case deleteShift (valid data)', async () => {
+        testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
+            , new Date(2018, 11, 15,18,55));
+
+        let update = {shift: testShift, type: "deleteShift"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift).to.equal(null);
+    });
+    after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
-        await controller.deleteShift(testShift);
     });
 });
 
