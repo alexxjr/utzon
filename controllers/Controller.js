@@ -157,19 +157,27 @@ exports.manageIncomingUpdates = async function (updates) {
     if(!Array.isArray(updates)) {
         throw new Error("The updates variable is not an array")
     }
+    let succes = [];
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
+            let updateInfo;
+            if (updates[i].shift !== undefined) {
+                updateInfo = {
+                    oldEmployee: updates[i].shift.employee,
+                    newEmployee: updates[i].newEmployee,
+                    type: updates[i].type
+                };
+            }
             await updateShift(updates[i]);
-
-
+            succes.push(updateInfo);
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
             updates.splice(i, 1);
             i--;
         }
     }
-    sendUpdateMail(updates);
+    await sendUpdateMail(succes);
     return failures;
 };
 
@@ -183,11 +191,11 @@ async function sendUpdateMail(updates) {
                 mails.set(update.newEmployee, {employee: update.newEmployee, context: update.type + "\n"});
             }
         }
-        if (update.shift.employee !== undefined) {
-            if (mails.has(update.shift.employee)) {
-                mails.set(update.shift.employee, mails.get(update.shift.employee).context += update.type + "\n");
+        if (update.oldEmployee !== undefined) {
+            if (mails.has(update.oldEmployee)) {
+                mails.set(update.oldEmployee, mails.get(update.oldEmployee).context += update.type + "\n");
             } else {
-                mails.set(update.shift.employee, {employee: update.shift.employee, context: update.type + "\n"});
+                mails.set(update.oldEmployee, {employee: update.oldEmployee, context: update.type + "\n"});
             }
         }
     }
@@ -195,12 +203,12 @@ async function sendUpdateMail(updates) {
 }
 
 async function sendMails(mails) {
-    for (let mail of mails) {
+    for (let mail of mails.values()) {
     let mailOptions = {
         from: 'utzonsend@gmail.com',
-        to: mail.employee.email,
+        to: mail.employee.email + '',
         subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
-        text: 'Ændringer: ' + mail
+        text: 'Ændringer: ' + mail.context
     };
     await transporter.sendMail(mailOptions);
     }
