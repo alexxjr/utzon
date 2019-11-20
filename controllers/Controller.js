@@ -67,8 +67,9 @@ exports.createShift = async function (start, end) {
 };
 
 async function addEmployeeToShift(employee, shift) {
-    if (shift === undefined || employee === undefined) {
-        throw new Error("Shift or employee variable is empty");
+    checkShift(shift);
+    if (employee === undefined) {
+        throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
@@ -83,9 +84,7 @@ async function addEmployeeToShift(employee, shift) {
 exports.addEmployeeToShift = addEmployeeToShift;
 
 async function removeEmployeeFromShift(shift) {
-    if (shift === undefined) {
-        throw new Error("Shift variable is empty");
-    }
+    checkShift(shift);
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
@@ -215,20 +214,8 @@ async function sendMails(mails) {
 }
 
 async function updateShift(update) {
-    if (update.shift === undefined) {
-        throw new Error("Shift is not defined in the update object");
-    }
     if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
         throw new Error("One of the date objects are undefined");
-    }
-
-    let type = typeof update.shift;
-    if (type !== 'object') {
-        throw new Error("The shift object is not an object");
-    }
-
-    if (update.shift.constructor.modelName !== 'Shift') {
-        throw new Error("The shift object is not a shift");
     }
 
     if (update.type === undefined) {
@@ -281,6 +268,7 @@ async function updateShift(update) {
 exports.updateShift = updateShift;
 
 async function changeShiftTime(shift, newStart, newEnd) {
+    checkShift(shift);
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -300,6 +288,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
 exports.changeShiftTime = changeShiftTime;
 
 async function changeShiftEmployee(shift, newEmployee) {
+    checkShift(shift);
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -312,6 +301,20 @@ async function changeShiftEmployee(shift, newEmployee) {
     await removeEmployeeFromShift(shift);
     await addEmployeeToShift(newEmployee, shift);
 
+}
+
+function checkShift(shift) {
+    if (shift === undefined) {
+        throw new Error("Shift is not defined");
+    }
+    let type = typeof shift;
+    if (type !== 'object') {
+        throw new Error("The shift object is not an object");
+    }
+
+    if (!("start" in shift) || !("end" in shift) || !("totalHours"  in shift)) {
+        throw new Error("The shift object is not a shift");
+    }
 }
 
 exports.changeShiftEmployee = changeShiftEmployee;

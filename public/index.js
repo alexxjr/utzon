@@ -165,14 +165,14 @@ async function shiftSelected(shiftID, employeeName, divID) {
     dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
 
-    shift = await GET("/api/shifts/getOneShift/" + shiftID)
+    shift = await GET("/api/shifts/getOneShift/" + shiftID);
     employeeSelect.value = employeeName;
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
     startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
     endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     totalHours.value = shift.totalHours;
     let shiftOK = document.querySelector("#shiftOK");
-    shiftOK.onclick = okAction
+    shiftOK.onclick = okAction;
     currentShift = document.querySelector("#shift"+divID);
 
 
@@ -189,7 +189,7 @@ function okAction() {
     let oldStart = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
     let oldEnd = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     let newEmployee = employeeSelect.value;
-    let newStart = startTimePicker.value
+    let newStart = startTimePicker.value;
     let newEnd = endTimePicker.value;
 
     if (oldEmployee == newEmployee && oldStart == newStart && oldEnd == newEnd) {
@@ -270,7 +270,7 @@ async function okCreateShift(){
         let newEnd = document.querySelector("#createEndTime").value;
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
-        closeForm()
+        closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
         console.log(updates)
     }catch (e){
@@ -281,18 +281,17 @@ async function okCreateShift(){
 async function saveAction() {
         let url = "/api/shifts/updateShift/";
         await POST(updates, url);
-
+        location.reload()
 }
 
 async function POST(data, url) {
-    const CREATED = 201;
     let response = await fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     });
     return await response.json();
-};
+}
 
 
 
