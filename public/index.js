@@ -199,11 +199,22 @@ endTimePicker.addEventListener("click", async function () {
 
 populateEmployeeSelection();
 
+
 function createShiftAction() {
     let popup = document.getElementById("popup")
     popup.style.display = "block";
     select.value = "";
     document.querySelector("#date").value = "";
+
+    let start = document.querySelector("#createStartTime");
+    let end = document.querySelector("#createEndTime");
+    let createTotalHours = document.querySelector("#createTotalHours");
+    start.addEventListener("click", async function(){
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+    });
+    end.addEventListener("click", async function(){
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+    });
 }
 
 function closeForm() {

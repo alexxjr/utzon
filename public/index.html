@@ -62,18 +62,21 @@
 <div class="form-popup" id="popup">
     <form action="/action_page.php" class="form-container">
         <h2>Opret ny vagt</h2>
-
-        <li>Vælg ansat:
-            <select id="select"></select>
+        <li>
+            Vælg ansat:<select id="select"></select>
         </li>
-
-        <li>Vælg dato:
-            <input id="date" type="date">
+        <li>
+            Vælg dato:<input id="date" type="date">
         </li>
-
-        <li>Vælg vagt start: </li>
-        <li>Vælg vagt slut: </li>
-        <li>Antal timer: </li>
+        <li>
+            Vælg vagt start: <input id="createStartTime" type="time">
+        </li>
+        <li>
+            Vælg vagt slut: <input id="createEndTime" type="time">
+        </li>
+        <li>
+            Antal timer: <label id="createTotalHours"> 00:00 </label>
+        </li>
         <br>
 
         <button type="submit" class="btn" onclick="okCreateShift()">Opret</button>
