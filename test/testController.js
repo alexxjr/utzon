@@ -122,38 +122,109 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not a shift");
     });
 
-    it('checking for param object for having a valid dates, but (with) a proper shift object', async () => {
-        startDate = new Date(2018, 11, 17,10,25);
-        endDate = new Date(2018, 11, 17,12,25);
+    it('checking for param object for having a valid dates, but (with) a proper shift object, but no updatetype', async () => {
+        // startDate = new Date(2018, 11, 17,10,25);
+        // endDate = new Date(2018, 11, 17,12,25);
         let update = {shift: testShift, newStart: startDate, newEnd: endDate};
-        await controller.updateShift(update);
-        testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start.getTime()).to.equal(startDate.getTime());
-        expect(testShift.end.getTime()).to.equal(endDate.getTime());
-    });
-    it('checking for param object for having a valid dates, but (with) a proper shift object and a new employee', async () => {
-        startDate = new Date(2018, 11, 18,10,25);
-        endDate = new Date(2018, 11, 18,12,25);
-        let update = {shift: testShift, newStart: startDate, newEnd: endDate, newEmployee: testEmployee1};
-        await controller.updateShift(update);
-        testShift = await controller.getOneShift(testShift._id);
-        expect(testShift.start.getTime()).to.equal(startDate.getTime());
-        expect(testShift.end.getTime()).to.equal(endDate.getTime());
-        expect(testShift.employee._id.toString()).to.equal(testEmployee1._id.toString());
+        await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
     });
 
-    it('checking for param object for only having a proper shift object and a new employee', async () => {
-        let update = {shift: testShift, newEmployee: testEmployee2};
+    it('checking for param object for having a valid dates, but (with) a proper shift object, but updatetype is not a string', async () => {
+        // startDate = new Date(2018, 11, 17,10,25);
+        // endDate = new Date(2018, 11, 17,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, type: 2};
+        await expect(controller.updateShift(update)).to.be.rejectedWith("The type variable is not a string");
+    });
+
+    it('case removeEmployeeFromShift (valid data)', async () => {
+        let update = {shift: testShift, type: "removeEmployeeFromShift"};
         await controller.updateShift(update);
         testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.employee).to.equal(undefined);
+    });
+
+    it('case addEmployeeToShift (valid data)', async () => {
+        let update = {shift: testShift, newEmployee: testEmployee1, type: "addEmployeeToShift"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.employee.CPR).to.equal(testEmployee1.CPR);
+    });
+
+    it('case changeShiftTimes (valid data)', async () => {
+        startDate = new Date(2018, 11, 17,10,25);
+        endDate = new Date(2018, 11, 17,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, type: "changeShiftTimes"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
+    });
+
+    it('case changeShiftTimesAndEmployee (valid data)', async () => {
+        startDate = new Date(2018, 11, 18,10,25);
+        endDate = new Date(2018, 11, 18,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, newEmployee: testEmployee2, type: "changeShiftTimesAndEmployee"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
         expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
     });
 
-    after(async () => {
 
-        await controller.deleteEmployee(testEmployee2).then();
+    it('case changeShiftEmployee (valid data)', async () => {
+        let update = {shift: testShift, newEmployee: testEmployee1, type: "changeShiftEmployee"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.employee._id.toString()).to.equal(testEmployee1._id.toString());
+    });
+
+    it('case changeShiftTimesAndRemoveEmployee (valid data)', async () => {
+        startDate = new Date(2018, 11, 18,10,25);
+        endDate = new Date(2018, 11, 18,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, type: "changeShiftTimesAndRemoveEmployee"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
+        expect(testShift.employee).to.equal(undefined);
+    });
+
+    it('case changeShiftTimesAndAddEmployee (valid data)', async () => {
+        startDate = new Date(2018, 11, 18,10,25);
+        endDate = new Date(2018, 11, 18,12,25);
+        let update = {shift: testShift, newStart: startDate, newEnd: endDate, newEmployee: testEmployee2, type: "changeShiftTimesAndAddEmployee"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift.start.getTime()).to.equal(startDate.getTime());
+        expect(testShift.end.getTime()).to.equal(endDate.getTime());
+        expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
+    });
+
+    it('default Testing wrong input type', async () => {
+        let update = {shift: testShift, type: "Testing wrong input type"};
+        await expect(controller.updateShift(update)).to.be.rejectedWith("The update type is unknown");
+    });
+
+    it('case deleteShift, with employee (valid data)', async () => {
+        let update = {shift: testShift, type: "deleteShift"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift).to.equal(null);
+    });
+
+    it('case deleteShift (valid data)', async () => {
+        testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
+            , new Date(2018, 11, 15,18,55));
+
+        let update = {shift: testShift, type: "deleteShift"};
+        await controller.updateShift(update);
+        testShift = await controller.getOneShift(testShift._id);
+        expect(testShift).to.equal(null);
+    });
+    after(async () => {
+        await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
-        await controller.deleteShift(testShift);
     });
 });
 
