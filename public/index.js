@@ -203,26 +203,54 @@ populateEmployeeSelection();
 function createShiftAction() {
     let popup = document.getElementById("popup")
     popup.style.display = "block";
-    select.value = "";
-    document.querySelector("#date").value = "";
 
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
     start.addEventListener("click", async function(){
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
     });
     end.addEventListener("click", async function(){
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2)
     });
 }
 
+async function POST(data, url) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status !== CREATED)
+        throw new Error("POST status code " + response.status);
+    return await response.text();
+};
+
 function closeForm() {
-    let popup = document.getElementById("popup")
-    popup.style.display = "none"
+    document.getElementById("popup").style.display = "none";
+    select.value = "";
+    document.querySelector("#date").value = "";
+    document.querySelector("#createStartTime").value = "";
+    document.querySelector("#createEndTime").value = "";
+    document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
-function okCreateShift(){
-    document.getElementById("popup").style.display = "none";
+async function okCreateShift(){
+    try {
+        let url = "api/updateShift";
+        let data = {
+            "shift" : undefined,
+            "start" : document.querySelector("#createStartTime").value,
+            "end" :  document.querySelector("#createEndTime").value,
+            "totalHours" :  document.querySelector("#createTotalHours").innerHTML,
+            "employee " : select.value
+        }
+        await POST(data, url);
+        closeForm();
+        alert("Vagten er nu oprettet!!!!!");
+    }catch (e){
+        console.log(e.name + ": " + e.message);
+    }
 }
 

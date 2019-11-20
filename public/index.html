@@ -66,20 +66,20 @@
             Vælg ansat:<select id="select"></select>
         </li>
         <li>
-            Vælg dato:<input id="date" type="date">
+            Vælg dato:<input id="date" type="date" required>
         </li>
         <li>
-            Vælg vagt start: <input id="createStartTime" type="time">
+            Vælg vagt start: <input id="createStartTime" type="time" required>
         </li>
         <li>
-            Vælg vagt slut: <input id="createEndTime" type="time">
+            Vælg vagt slut: <input id="createEndTime" type="time" required>
         </li>
         <li>
             Antal timer: <label id="createTotalHours"> 00:00 </label>
         </li>
         <br>
 
-        <button type="submit" class="btn" onclick="okCreateShift()">Opret</button>
+        <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
         <button type="button" class="btn cancel" onclick="closeForm()">Annuller</button>
     </form>
 </div>
