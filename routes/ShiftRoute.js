@@ -17,15 +17,6 @@ router
         let getOneShift = await controller.getOneShift(request.params.shiftID);
         response.send(getOneShift);
     })
-    .post('/', async (request, response) => {
-        const {start, end} = request.body;
-        let shift = controller.createShift(start, end);
-        if (shift === undefined) {
-            response.sendStatus(403);
-        } else {
-            response.sendStatus(201);
-        }
-    })
     .post('/updateShift', async (request, response) => {
         let updates = request.body;
         let failures = await controller.manageIncomingUpdates(updates);

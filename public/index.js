@@ -239,29 +239,53 @@ populateEmployeeSelection();
 
 
 function createShiftAction() {
-    let popup = document.getElementById("popup")
-    popup.style.display = "block";
+    document.getElementById("popup").style.display = "block";
     select.value = "";
-    document.querySelector("#date").value = "";
-
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
     start.addEventListener("click", async function(){
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
     });
     end.addEventListener("click", async function(){
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2)
     });
 }
 
+async function POST(data, url) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status !== CREATED)
+        throw new Error("POST status code " + response.status);
+    return await response.text();
+};
+
 function closeForm() {
-    let popup = document.getElementById("popup")
-    popup.style.display = "none"
+    document.getElementById("popup").style.display = "none";
+    select.value = "";
+    document.querySelector("#date").value = "";
+    document.querySelector("#createStartTime").value = "";
+    document.querySelector("#createEndTime").value = "";
+    document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
-function okCreateShift(){
-    document.getElementById("popup").style.display = "none";
+async function okCreateShift(){
+    try {
+        let thisShift = undefined;
+        let newStart = document.querySelector("#createStartTime").value;
+        let newEnd = document.querySelector("#createEndTime").value;
+        let newEmployee = select.value;
+        updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
+        closeForm()
+        alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
+    }catch (e){
+        console.log(e.name + ": " + e.message);
+    }
 }
+
 
 
