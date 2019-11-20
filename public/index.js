@@ -1,3 +1,5 @@
+let update = require('../models/Update');
+let updates = [];
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
@@ -13,7 +15,6 @@ let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
-
 
 
 
@@ -172,7 +173,12 @@ async function shiftSelected(shiftID, employeeName) {
 }
 
 function okAction(shift) {
-    console.log(datePicker.value);
+    let newEmployee = employeeSelect.value;
+    let newStart = startTimePicker.value;
+    let newEnd = endTimePicker.value;
+    updates.push(update.createUpdate(shift, newStart, newEnd, newEmployee));
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
 }
 
 
