@@ -16,7 +16,6 @@ let daysArray = [];
 let month;
 
 
-
 let date = new Date(Date.now());
 let year = date.getFullYear();
 
@@ -73,7 +72,9 @@ async function chooseDate() {
     shiftUpdate.style.display = "none";
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
-    allDates.forEach(date => {date.style.backgroundColor = "#eee"});
+    allDates.forEach(date => {
+        date.style.backgroundColor = "#eee"
+    });
     this.style.backgroundColor = "cornflowerblue";
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
@@ -134,18 +135,30 @@ async function GET(url) {
     return await response.json();
 }
 
+async function POST(url, data) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status !== CREATED)
+        throw new Error("POST status code " + response.status);
+    return await response.text();
+}
+
 async function generateShifts(shifts) {
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
 }
 
-Handlebars.registerHelper("formatDate", function(date) {
+Handlebars.registerHelper("formatDate", function (date) {
     date = date.toString();
     return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
 });
 
-Handlebars.registerHelper("formatTime", function(date) {
+Handlebars.registerHelper("formatTime", function (date) {
     date = date.toString();
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
@@ -196,6 +209,18 @@ function deleteAction() {
     shiftUpdate.style.display = "none";
 }
 
+async function saveAction() {
+    try {
+        let url = "/api/updateShift";
+        let data = {
+            "updates": updates
+        };
+        await POST(url, data);
+    } catch (e) {
+        console.log(e.getMessage);
+    }
+}
+
 function hourCalculation(start, end) {
     let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
     if (start.getMinutes() < end.getMinutes()) {
@@ -216,7 +241,7 @@ populateEmployeeSelection();
 
 
 function createShiftAction() {
-    let popup = document.getElementById("popup")
+    let popup = document.getElementById("popup");
     popup.style.display = "block";
     select.value = "";
     document.querySelector("#date").value = "";
@@ -224,21 +249,19 @@ function createShiftAction() {
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
-    start.addEventListener("click", async function(){
+    start.addEventListener("click", async function () {
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
     });
-    end.addEventListener("click", async function(){
+    end.addEventListener("click", async function () {
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate);
     });
 }
 
 function closeForm() {
-    let popup = document.getElementById("popup")
+    let popup = document.getElementById("popup");
     popup.style.display = "none"
 }
 
-function okCreateShift(){
+function okCreateShift() {
     document.getElementById("popup").style.display = "none";
 }
-
-
