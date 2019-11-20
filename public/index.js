@@ -1,5 +1,6 @@
 let updates = [];
 let shift;
+let currentShift;
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
@@ -160,9 +161,10 @@ async function populateEmployeeSelection() {
     select.innerHTML += "<option></option>";
 }
 
-async function shiftSelected(shiftID, employeeName) {
+async function shiftSelected(shiftID, employeeName, divID) {
     dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
+
     shift = await GET("/api/shifts/getOneShift/" + shiftID)
     employeeSelect.value = employeeName;
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
@@ -171,17 +173,36 @@ async function shiftSelected(shiftID, employeeName) {
     totalHours.value = shift.totalHours;
     let shiftOK = document.querySelector("#shiftOK");
     shiftOK.onclick = okAction
+    currentShift = document.querySelector("#shift"+divID);
 
 
 }
 
 function okAction() {
+    let oldEmployee;
+    if (shift.employee) {
+        oldEmployee = shift.employee.name;
+    }
+    else {
+        oldEmployee = "";
+    }
+    let oldStart = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
+    let oldEnd = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     let newEmployee = employeeSelect.value;
-    let newStart = startTimePicker.value;
+    let newStart = startTimePicker.value
     let newEnd = endTimePicker.value;
-    updates.push(createUpdate(shift, newStart, newEnd, newEmployee));
-    dayShift.style.display = "inline-block";
-    shiftUpdate.style.display = "none";
+
+    if (oldEmployee == newEmployee && oldStart == newStart && oldEnd == newEnd) {
+        dayShift.style.display = "inline-block";
+        shiftUpdate.style.display = "none";
+        currentShift.style.backgroundColor = "cornflowerblue";
+    } else {
+        updates.push(createUpdate(shift, newStart, newEnd, newEmployee));
+        dayShift.style.display = "inline-block";
+        shiftUpdate.style.display = "none";
+        currentShift.style.backgroundColor = "yellow";
+    }
+
 }
 
 
@@ -194,6 +215,8 @@ function deleteAction() {
     updates.push(createUpdate(shift, undefined, undefined, undefined));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
+    currentShift.style.backgroundColor = "red";
+
 }
 
 function hourCalculation(start, end) {
