@@ -259,8 +259,21 @@ async function okCreateShift(){
         updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
         closeForm()
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
+        console.log(updates)
     }catch (e){
         console.log(e.name + ": " + e.message);
+    }
+}
+
+async function saveAction() {
+    try {
+        let url = "/api/shifts/updateShift";
+        let data = {
+            "updates": updates
+        }
+        await POST(data, url);
+    } catch (e) {
+        console.log(e.getMessage);
     }
 }
 
