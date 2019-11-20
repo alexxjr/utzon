@@ -1,5 +1,4 @@
-
-exports.createUpdate = function (shift, newStart, newEnd, newEmployee){
+function createUpdate(shift, newStart, newEnd, newEmployee){
     let oldStart = shift.start;
     let oldEnd = shift.end;
     let oldEmployee = shift.employee;
