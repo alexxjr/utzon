@@ -28,7 +28,6 @@ let deleteBtn = document.querySelector("#deleteBtn");
 deleteBtn.onclick = deleteAction;
 
 
-
 update();
 
 function update() {
