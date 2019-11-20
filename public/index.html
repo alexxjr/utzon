@@ -68,13 +68,16 @@
             Vælg ansat:<select id="select"></select>
         </li>
         <li>
-            Vælg dato:<input id="date" type="date">
+            Vælg dato:<input id="date" type="date" name="shiftDate" required>
+            <span class="validity"></span>
         </li>
         <li>
-            Vælg vagt start: <input id="createStartTime" type="time">
+            Vælg vagt start: <input id="createStartTime" type="time" name="start" required>
+            <span class="validity"></span>
         </li>
         <li>
-            Vælg vagt slut: <input id="createEndTime" type="time">
+            Vælg vagt slut: <input id="createEndTime" type="time" name="end" required>
+            <span class="validity"></span>
         </li>
         <li>
             Antal timer: <label id="createTotalHours"> 00:00 </label>
