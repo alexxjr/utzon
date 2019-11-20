@@ -8,8 +8,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "",
-        pass: ""
+        user: "utzonsend@gmail.com",
+        pass: "projekt3semester"
     }
 });
 
@@ -153,18 +153,50 @@ exports.manageIncomingUpdates = async function (updates) {
         try {
             await updateShift(updates[i]);
 
+
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
-            updates.splice(i,1);
+            updates.splice(i, 1);
             i--;
         }
     }
+    sendUpdateMail(updates);
     return failures;
 };
 
-async function sendUpdateMail(update) {
-
+async function sendUpdateMail(updates) {
+    let mails = new Map();
+    for (let update of updates) {
+        if (update.newEmployee !== undefined) {
+            if (mails.has(update.newEmployee)) {
+                mails.set(update.newEmployee, mails.get(update.newEmployee).context += update.type + "\n");
+            } else {
+                mails.set(update.newEmployee, {employee: update.newEmployee, context: update.type + "\n"});
+            }
+        }
+        if (update.shift.employee !== undefined) {
+            if (mails.has(update.shift.employee)) {
+                mails.set(update.shift.employee, mails.get(update.shift.employee).context += update.type + "\n");
+            } else {
+                mails.set(update.shift.employee, {employee: update.shift.employee, context: update.type + "\n"});
+            }
+        }
+    }
+    await sendMails(mails);
 }
+
+async function sendMails(mails) {
+    for (let mail of mails) {
+    let mailOptions = {
+        from: 'utzonsend@gmail.com',
+        to: mail.employee.email,
+        subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
+        text: 'Ændringer: ' + mail
+    };
+    await transporter.sendMail(mailOptions);
+    }
+}
+
 async function updateShift(update) {
     if (update === undefined) {
         throw new Error("One of the param variables are undefined");
