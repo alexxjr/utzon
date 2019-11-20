@@ -1,3 +1,5 @@
+let updates = [];
+let shift;
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
@@ -13,8 +15,6 @@ let select = document.querySelector("#select");
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
-
-createUpdate()
 
 
 
@@ -163,30 +163,25 @@ async function populateEmployeeSelection() {
 async function shiftSelected(shiftID, employeeName) {
     dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
-    let shift = await GET("/api/shifts/getOneShift/" + shiftID);
+    shift = await GET("/api/shifts/getOneShift/" + shiftID)
     employeeSelect.value = employeeName;
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
     startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
     endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     totalHours.value = shift.totalHours;
+    let shiftOK = document.querySelector("#shiftOK");
+    shiftOK.onclick = okAction
+
 
 }
 
-function okAction(shift) {
-    console.log(datePicker.value);
+function okAction() {
     let newEmployee = employeeSelect.value;
     let newStart = startTimePicker.value;
     let newEnd = endTimePicker.value;
-
-    if(shift !== undefined) {
-        console.log("test");
-
-        dayShift.style.display = "inline-block";
-        shiftUpdate.style.display = "none";
-
-    } else {
-       shiftUpdate.style.display = "inline-block";
-    }
+    updates.push(createUpdate(shift, newStart, newEnd, newEmployee));
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
 }
 
 
@@ -267,4 +262,5 @@ async function okCreateShift(){
         console.log(e.name + ": " + e.message);
     }
 }
+
 
