@@ -252,17 +252,7 @@ function createShiftAction() {
     });
 }
 
-async function POST(data, url) {
-    const CREATED = 201;
-    let response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {'Content-Type': 'application/json'}
-    });
-    if (response.status !== CREATED)
-        throw new Error("POST status code " + response.status);
-    return await response.text();
-};
+
 
 function closeForm() {
     document.getElementById("popup").style.display = "none";
@@ -289,16 +279,20 @@ async function okCreateShift(){
 }
 
 async function saveAction() {
-    try {
-        let url = "/api/shifts/updateShift";
-        let data = {
-            "updates": updates
-        }
-        await POST(data, url);
-    } catch (e) {
-        console.log(e.getMessage);
-    }
+        let url = "/api/shifts/updateShift/";
+        await POST(updates, url);
+
 }
+
+async function POST(data, url) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    return await response.json();
+};
 
 
 
