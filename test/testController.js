@@ -246,9 +246,16 @@ describe('Test af controllerfunktioner', function(){
              , new Date(2018, 11, 15,18,55));
          await controller.manageIncomingUpdates([testUpdate]);
          let shift = await controller.getShiftsOnDate(testUpdate.newStart);
-         expect(shift[0].end.toDateString()).to.equal(new Date(2018, 11, 15,18,55).toDateString());
+         expect(shift[0].end.getTime()).to.equal(new Date(2018, 11, 15,18,55).getTime());
     });
 
+
+    // it('login as admin', async () => {
+    //     let username = "admin";
+    //     let password = "birgitte";
+    //     let login = controller.login(username, password);
+    //
+    // });
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
