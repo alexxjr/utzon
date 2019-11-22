@@ -1,13 +1,15 @@
 function createUpdate(shift, newStart, newEnd, newEmployee){
     let type = "";
-    if (shift === undefined) {
+    let newStartString = newStart.toISOString();
+    let newEndString = newEnd.toISOString();
+    if (!shift) {
         type = "createShift"
     } else {
-        let oldStart = shift.start;
-        let oldEnd = shift.end;
-        let oldEmployee = shift.employee;
+        let oldStart = new Date(shift.start).toISOString();
+        let oldEnd = new Date(shift.end).toISOString();
+        let oldEmployee = shift.employee.name;
 
-        if (newStart === undefined && newEnd === undefined && newEmployee === undefined) {
+        if (newStartString === undefined && newEndString === undefined && newEmployee === undefined) {
             type = "deleteShift";
         }
         if (oldEmployee === undefined && newEmployee !== undefined) {
@@ -16,29 +18,29 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
         if (oldEmployee !== undefined && newEmployee === undefined) {
             type = "removeEmployeeFromShift";
         }
-        if (oldStart !== newStart || oldEnd !== newEnd && newStart !== undefined && newEnd !== undefined) {
+        if (oldStart !== newStartString || oldEnd !== newEndString && newStartString !== undefined && newEndString !== undefined) {
             type = "changeShiftTimes";
         }
         if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined) {
             type = "changeShiftEmployee";
         }
-        if (oldStart !== newStart || oldEnd !== newEnd && oldEmployee !== newEmployee
+        if (oldStart !== newStartString || oldEnd !== newEndString && oldEmployee !== newEmployee
             && oldEmployee !== undefined && newEmployee !== undefined) {
             type = "changeShiftTimesAndEmployee";
         }
-        if (oldStart !== newStart || oldEnd !== newEnd && oldEmployee === undefined && newEmployee !== undefined) {
+        if (oldStart !== newStartString || oldEnd !== newEndString && oldEmployee === undefined && newEmployee !== undefined) {
             type = "changeShiftTimesAndAddEmployee";
         }
-        if (oldStart !== newStart || oldEnd !== newEnd && oldEmployee !== undefined
-            && newEmployee === undefined && newStart !== undefined && newEnd !== undefined) {
+        if (oldStart !== newStartString || oldEnd !== newEndString && oldEmployee !== undefined
+            && newEmployee === undefined && newStartString !== undefined && newEndString !== undefined) {
             type = "changeShiftTimesAndRemoveEmployee";
         }
     }
     return {
         shift,
-        newStart,
-        newEnd,
-        newEmployee,
+        newStart: newStartString,
+        newEnd: newEndString,
+        newEmployee: newEmployee,
         type
     }
 
