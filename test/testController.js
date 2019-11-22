@@ -248,7 +248,7 @@ describe('Test af controllerfunktioner', function(){
          let shift = await controller.getShiftsOnDate(testUpdate.newStart);
          expect(shift[0].end.toDateString()).to.equal(new Date(2018, 11, 15,18,55).toDateString());
     });
-
+    
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
