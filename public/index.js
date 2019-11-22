@@ -293,14 +293,15 @@ function closeForm2() {
 
 async function okCreateEmployee() {
     try {
-        let navn = document.querySelector("#empNavn").value;
-        let telNr = document.querySelector("#empNr").value;
-        let email = document.querySelector("#empMail").value;
-        let cpr = document.querySelector("#empCPR").value;
-        employees.push(createEmployee(cpr, navn, email, telNr));
+        let name = document.querySelector("#empNavn").value + "";
+        let phoneNo = document.querySelector("#empNr").value + "";
+        let email = document.querySelector("#empMail").value + "";
+        let CPR = document.querySelector("#empCPR").value + "";
+        await POST({CPR, name, email, phoneNo}, "/api/employees/");
     } catch(e) {
         console.log(e.name + ": " + e.message);
     }
+    closeForm2();
 }
 
 function closeForm() {
@@ -332,11 +333,6 @@ async function saveAction() {
         location.reload();
 }
 
-async function saveAction2() {
-    let url = "/api/employees/";
-    await POST(employees, url);
-    location.reload();
-}
 
 async function POST(data, url) {
     const CREATED = 201;
