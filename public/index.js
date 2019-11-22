@@ -72,7 +72,7 @@ function insertDays() {
     }
 }
 
-async function createDate() {
+function createDate() {
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -80,7 +80,7 @@ async function createDate() {
     let allDates = document.querySelectorAll(".date");
     let date;
     allDates.forEach(d => {
-       if (date.style.backgroundColor === "cornflowerblue") {
+       if (d.style.backgroundColor === "cornflowerblue") {
            date = d;
        }
     });
@@ -250,8 +250,6 @@ populateEmployeeSelection();
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
-    document.querySelector("#createStartTime").value = "00:00";
-    document.querySelector("#createEndTime").value = "00:00";
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
