@@ -212,6 +212,19 @@ input[type="date"]::-webkit-inner-spin-button {
     width: 220px;
 }
 
+.createButton2 {
+    background-color: cornflowerblue;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    left: 100px;
+    width: 220px;
+}
+
 .form-popup {
     display: none;
     position: fixed;

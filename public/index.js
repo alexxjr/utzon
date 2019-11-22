@@ -251,6 +251,13 @@ endTimePicker.addEventListener("click", async function () {
 populateEmployeeSelection();
 siteInit();
 
+function createEmployeeAction() {
+    document.getElementById("popup2").style.display = "block";
+    document.querySelector("#empNavn").value = "";
+    document.querySelector("#empNr").value = "";
+    document.querySelector("#empMail").value = "";
+    document.querySelector("#empCPR").value = "";
+}
 
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
@@ -280,7 +287,21 @@ function siteInit() {
     }
 }
 
+function closeForm2() {
+    document.getElementById("popup2").style.display = "none";
+}
 
+async function okCreateEmployee() {
+    try {
+        let navn = document.querySelector("#empNavn").value;
+        let telNr = document.querySelector("#empNr").value;
+        let email = document.querySelector("#empMail").value;
+        let cpr = document.querySelector("#empCPR").value;
+        employees.push(createEmployee(cpr, navn, email, telNr));
+    } catch(e) {
+        console.log(e.name + ": " + e.message);
+    }
+}
 
 function closeForm() {
     document.getElementById("popup").style.display = "none";
@@ -309,6 +330,12 @@ async function saveAction() {
         let url = "/api/shifts/updateShift/";
         await POST(updates, url);
         location.reload();
+}
+
+async function saveAction2() {
+    let url = "/api/employees/";
+    await POST(employees, url);
+    location.reload();
 }
 
 async function POST(data, url) {
