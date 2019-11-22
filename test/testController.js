@@ -1,4 +1,5 @@
 const controller = require('../controllers/controller');
+const update = require('../public/Update');
 const chai = require('chai');
 let expect = chai.expect;
 chai.use(require('chai-as-promised'));
@@ -240,15 +241,13 @@ describe('Test af controllerfunktioner', function(){
         testShift = await controller.getOneShift(testShift._id);
         expect(testShift).to.equal(null);
     });
-
-    // it('try to actually update and send a mail with ', async () => {
-    //     testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
-    //         , new Date(2018, 11, 15,18,55));
-    //     await controller.addEmployeeToShift(testEmployee1, testShift);
-    //     let update = {shift: testShift, type: "removeEmployeeFromShift"};
-    //     await controller.manageIncomingUpdates([update]);
-    //
-    // });
+     it('create a shift through the update method', async () => {
+         let testUpdate = update.createUpdate(undefined, new Date(2018, 11, 15,10,25)
+             , new Date(2018, 11, 15,18,55));
+         await controller.manageIncomingUpdates([testUpdate]);
+         let shift = await controller.getShiftsOnDate(testUpdate.newStart);
+         expect(shift[0].end.toDateString()).to.equal(new Date(2018, 11, 15,18,55).toDateString());
+    });
 
     after(async () => {
         await controller.deleteEmployee(testEmployee2);

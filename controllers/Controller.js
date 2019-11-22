@@ -37,7 +37,9 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
     return await employee.save();
 };
 
-exports.createShift = async function (start, end) {
+exports.createShift = createShift;
+
+async function createShift(start, end) {
     if (Object.prototype.toString.call(start) !== '[object Date]' || Object.prototype.toString.call(end) !== '[object Date]') {
         return undefined;
     }
@@ -161,7 +163,8 @@ exports.manageIncomingUpdates = async function (updates) {
     for (let i = 0; i < updates.length; i++) {
         try {
             let updateInfo;
-            if (updates[i].shift !== undefined) {
+            let isShift = updates[i].shift !== undefined;
+            if (isShift) {
                 updateInfo = {
                     oldEmployee: updates[i].shift.employee,
                     newEmployee: updates[i].newEmployee,
@@ -169,9 +172,12 @@ exports.manageIncomingUpdates = async function (updates) {
                 };
             }
             await updateShift(updates[i]);
-            succes.push(updateInfo);
+            if (isShift) {
+                succes.push(updateInfo);
+            }
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
+            console.log(failures);
             updates.splice(i, 1);
             i--;
         }
@@ -258,6 +264,14 @@ async function updateShift(update) {
             } else {
                 await removeEmployeeFromShift(update.shift);
                 await deleteShift(update.shift);
+            }
+            break;
+        case "createShift":
+            if(update.newEmployee === ""){
+                await createShift(update.newStart, update.newEnd);
+            }else{
+                let s = await createShift(update.newStart, update.newEnd);
+                await addEmployeeToShift(update.newEmployee, s);
             }
             break;
         default:

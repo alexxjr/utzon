@@ -72,19 +72,32 @@ function insertDays() {
     }
 }
 
+function createDate() {
+    let monthNo = month + 1 + "";
+    if (monthNo.length === 1) {
+        monthNo = "0" + monthNo;
+    }
+    let allDates = document.querySelectorAll(".date");
+    let date;
+    allDates.forEach(d => {
+       if (d.style.backgroundColor === "cornflowerblue") {
+           date = d;
+       }
+    });
+    if (date === undefined) {
+        alert("no date selected");
+    }
+    return year + "-" + monthNo + "-" + date.innerText;
+}
+
 async function chooseDate() {
     shiftUpdate.style.display = "none";
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
     allDates.forEach(date => {date.style.backgroundColor = "#eee"});
     this.style.backgroundColor = "cornflowerblue";
-    let monthNo = month + 1 + "";
-    if (monthNo.length === 1) {
-        monthNo = "0" + monthNo;
-    }
-    let date = year + "-" + monthNo + "-" + this.innerText;
-    let shifts = await GET("/api/shifts/" + date);
-    dayShift.innerHTML = await generateShifts(shifts);
+    let date = createDate();
+    dayShift.innerHTML = await generateShifts(date);
 
 }
 
@@ -137,7 +150,8 @@ async function GET(url) {
     return await response.json();
 }
 
-async function generateShifts(shifts) {
+async function generateShifts(date) {
+    let shifts = await GET("/api/shifts/" + date);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -240,6 +254,8 @@ populateEmployeeSelection();
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
+    document.querySelector("#createStartTime").value = "00:00"
+    document.querySelector("#createEndTime").value = "00:00"
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -256,22 +272,21 @@ function createShiftAction() {
 function closeForm() {
     document.getElementById("popup").style.display = "none";
     select.value = "";
-    document.querySelector("#date").value = "";
-    document.querySelector("#createStartTime").value = "";
-    document.querySelector("#createEndTime").value = "";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
 async function okCreateShift(){
     try {
         let thisShift = undefined;
+        let mydate = createDate();
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
+        let startDate = new date(mydate + "T" + newStart);
+        let endDate = new date(mydate + "T" + newEnd);
         let newEmployee = select.value;
-        updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
-        closeForm()
+        updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
+        closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
-        console.log(updates)
     }catch (e){
         console.log(e.name + ": " + e.message);
     }
