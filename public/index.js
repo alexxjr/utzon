@@ -80,9 +80,9 @@ function createDate() {
     }
     let date;
     allDates.forEach(d => {
-       if (d.style.backgroundColor === "cornflowerblue") {
-           date = d;
-       }
+        if (d.style.backgroundColor === "cornflowerblue") {
+            date = d;
+        }
     });
     if (date === undefined) {
         alert("no date selected");
@@ -94,7 +94,9 @@ async function chooseDate() {
     shiftUpdate.style.display = "none";
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
-    allDates.forEach(date => {date.style.backgroundColor = "#eee"});
+    allDates.forEach(date => {
+        date.style.backgroundColor = "#eee"
+    });
     this.style.backgroundColor = "cornflowerblue";
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
@@ -157,12 +159,12 @@ async function generateShifts(date) {
     return compiledTemplate({shifts});
 }
 
-Handlebars.registerHelper("formatDate", function(date) {
+Handlebars.registerHelper("formatDate", function (date) {
     date = date.toString();
     return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
 });
 
-Handlebars.registerHelper("formatTime", function(date) {
+Handlebars.registerHelper("formatTime", function (date) {
     date = date.toString();
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
@@ -184,8 +186,7 @@ async function shiftSelected(shiftID, employeeID, divID) {
     selectedShiftEmployee = selectedShift.employee;
     if (selectedShift.employee) {
         employeeSelect.value = selectedShiftEmployee.name;
-    }
-    else {
+    } else {
         employeeSelect.value = "";
     }
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(selectedShift.start);
@@ -194,28 +195,29 @@ async function shiftSelected(shiftID, employeeID, divID) {
     totalHours.value = selectedShift.totalHours;
     let shiftOK = document.querySelector("#shiftOK");
     shiftOK.onclick = okAction;
-    selectedShiftDiv = document.querySelector("#shift"+divID);
+    selectedShiftDiv = document.querySelector("#shift" + divID);
 
 
 }
+
 //WRONG CHECK FOR EMPLOYEES HERE
 function okAction() {
     let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
     let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
     let newEmployee = undefined;
-    if(employeeSelect.value !== "") {
+    if (employeeSelect.value !== "") {
         for (let i = 0; i < employees.length; i++) {
             if (employeeSelect.value === employees[i].name) {
                 newEmployee = employees[i].name;
             }
         }
     }
-        updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
-        dayShift.style.display = "inline-block";
-        shiftUpdate.style.display = "none";
-        selectedShiftDiv.style.backgroundColor = "yellow";
-        console.log(updates[0]);
+    updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
+    dayShift.style.display = "inline-block";
+    shiftUpdate.style.display = "none";
+    selectedShiftDiv.style.backgroundColor = "yellow";
+    console.log(updates[0]);
 }
 
 
@@ -225,7 +227,13 @@ function cancelAction() {
 }
 
 function deleteAction() {
-    updates.push({shift: selectedShift, newStart: undefined, newEnd: undefined, newEmployee: undefined, type: "deleteShift"});
+    updates.push({
+        shift: selectedShift,
+        newStart: undefined,
+        newEnd: undefined,
+        newEmployee: undefined,
+        type: "deleteShift"
+    });
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "red";
@@ -261,10 +269,10 @@ function createShiftAction() {
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
-    start.addEventListener("click", async function(){
+    start.addEventListener("click", async function () {
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
     });
-    end.addEventListener("click", async function(){
+    end.addEventListener("click", async function () {
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2)
     });
 }
@@ -273,13 +281,12 @@ function siteInit() {
     allDates = document.querySelectorAll(".date");
     let today = new Date();
     for (let i = 0; i < allDates.length; i++) {
-    if (allDates[i].innerText === (today.getDate() + "")){
-        allDates[i].style.backgroundColor = "cornflowerblue";
-    }
+        if (allDates[i].innerText === (today.getDate() + "")) {
+            allDates[i].style.backgroundColor = "cornflowerblue";
+        }
 
     }
 }
-
 
 
 function closeForm() {
@@ -288,27 +295,35 @@ function closeForm() {
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
-async function okCreateShift(){
+async function okCreateShift() {
     try {
         let mydate = createDate();
         let thisShift = undefined;
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
-        let startDate = new Date(mydate + "T" + newStart+ "Z");
+        let startDate = new Date(mydate + "T" + newStart + "Z");
         let endDate = new Date(mydate + "T" + newEnd + "Z");
         let newEmployee = select.value;
-        updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
+        let update = createUpdate(thisShift, startDate, endDate, newEmployee);
+        updates.push(update);
         closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
-    }catch (e){
+    } catch (e) {
         console.log(e.name + ": " + e.message);
     }
 }
 
 async function saveAction() {
-        let url = "/api/shifts/updateShift/";
-        await POST(updates, url);
-        location.reload();
+    let url = "/api/shifts/updateShift/";
+    let errors = "";
+    let response = await POST(updates, url);
+    if(response !== undefined) {
+        for (let i = 0; i < response.length; i++) {
+            errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
+        }
+        alert(errors);
+    }
+    location.reload();
 }
 
 async function POST(data, url) {
@@ -318,8 +333,8 @@ async function POST(data, url) {
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     });
-    if (response.status === 201) {
-        alert("All changes succefully made to database");
+    if (response.status === CREATED) {
+        alert("Alle ændringer er lavet i databasen");
         return;
     }
     return await response.json();

@@ -66,14 +66,17 @@ async function createShift(start, end) {
         totalHours
     });
     return await shift.save();
-};
+}
 
 async function addEmployeeToShift(employee, shift) {
     checkShift(shift);
+
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
+        Employee.hydrate(employee);
+        Shift.hydrate(shift);
         employee.shifts.push(shift);
         shift.employee = employee;
         return Promise.all([employee.save(), shift.save()]);
@@ -91,6 +94,8 @@ async function removeEmployeeFromShift(shift) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWIthID(shift.employee);
+    Shift.hydrate(shift);
+
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
@@ -148,6 +153,17 @@ exports.getShiftsOnDate = async function (date) {
     return result;
 };
 
+function changeStringToDate(update) {
+    if (update.shift !== undefined) {
+        update.shift.start = new Date(update.shift.start);
+        update.shift.end = new Date(update.shift.end);
+    }
+    if (update.newStart !== undefined) {
+        update.newStart = new Date(update.newStart);
+        update.newEnd = new Date(update.newEnd);
+    }
+}
+
 exports.manageIncomingUpdates = async function (updates) {
     if (updates === undefined) {
         throw new Error("The param updates are undefined");
@@ -162,6 +178,7 @@ exports.manageIncomingUpdates = async function (updates) {
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
+            changeStringToDate(updates[i]);
             let updateInfo;
             let isShift = updates[i].shift !== undefined;
             if (isShift) {
@@ -220,10 +237,6 @@ async function sendMails(mails) {
 }
 
 async function updateShift(update) {
-    if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
-        throw new Error("One of the date objects are undefined");
-    }
-
     if (update.type === undefined) {
         throw new Error("No update type is given for this update");
     }
@@ -292,6 +305,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
     if (newEnd <= newStart) {
         throw new Error("The enddate is before the startdate or they are equal");
     }
+    shift = Shift.hydrate(shift);
     shift.start = newStart;
     shift.end = newEnd;
 
