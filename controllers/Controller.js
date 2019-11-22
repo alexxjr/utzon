@@ -128,9 +128,11 @@ exports.getEmployees = async function () {
     return Employee.find().populate('shifts').exec();
 };
 
-exports.getShifts = async function () {
+async function getShifts() {
     return Shift.find().populate('employee').exec();
-};
+}
+
+exports.getShifts = getShifts;
 
 exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
@@ -148,12 +150,13 @@ exports.deleteShift = deleteShift;
 
 exports.getShiftsOnDate = async function (date) {
     let result = [];
-    let shifts = await this.getShifts();
+    let shifts = await getShifts();
     for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].start.getTime() === date.getTime()) {
+        if (shifts[i].start.toDateString() === date.toDateString()) {
             result.push(shifts[i]);
         }
     }
+    console.log(result);
     return result;
 };
 
