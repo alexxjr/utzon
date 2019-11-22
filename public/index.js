@@ -250,6 +250,8 @@ populateEmployeeSelection();
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
+    document.querySelector("#createStartTime").value = "00:00"
+    document.querySelector("#createEndTime").value = "00:00"
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
