@@ -2,6 +2,7 @@
 
 const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
+const Login = require('../models/Login');
 const mongoose = require("../app");
 const nodemailer = require('nodemailer');
 
@@ -330,6 +331,18 @@ function checkShift(shift) {
         throw new Error("The shift object is not a shift");
     }
 }
+
+
+exports.getLoginRole = async function (username) {
+    let users = await Login.find().exec();
+    for (let i = 0; i < users.length; i++) {
+        if(users[i].username === username){
+            return users[i].role;
+        }
+    }
+};
+
+
 exports.login = login;
 async function login(username, password) {
 
