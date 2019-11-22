@@ -1,3 +1,4 @@
+exports.createUpdate = createUpdate;
 function createUpdate(shift, newStart, newEnd, newEmployee){
     let type = "";
     if (!shift) {
