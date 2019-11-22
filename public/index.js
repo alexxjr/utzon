@@ -80,7 +80,7 @@ function createDate() {
     let allDates = document.querySelectorAll(".date");
     let date;
     allDates.forEach(d => {
-       if (date.style.backgroundColor === "cornflowerblue") {
+       if (d.style.backgroundColor === "cornflowerblue") {
            date = d;
        }
     });
@@ -275,7 +275,7 @@ function closeForm() {
 async function okCreateShift(){
     try {
         let thisShift = undefined;
-        //let date = createDate();
+        let date = createDate();
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
         let startDate = new date(mydate + "T" + newStart);
