@@ -1,4 +1,3 @@
-exports.createUpdate = createUpdate;
 function createUpdate(shift, newStart, newEnd, newEmployee){
     let type = "";
     let newStartString = newStart.toISOString();
@@ -11,10 +10,6 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
         let oldEnd = new Date(shift.end).toISOString();
         if (shift.employee) {
             oldEmployee = shift.employee.name;
-        }
-
-        if (newStartString === undefined && newEndString === undefined && newEmployee === undefined) {
-            type = "deleteShift";
         }
         if (oldEmployee === undefined && newEmployee !== undefined) {
             type = "addEmployeeToShift";
@@ -48,9 +43,9 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
     }
     return {
         shift,
-        newStart: newStartString,
-        newEnd: newEndString,
-        newEmployee: newEmployee,
+        newStart,
+        newEnd,
+        newEmployee,
         type
     }
 

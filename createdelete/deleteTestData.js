@@ -7,8 +7,8 @@ async function dostuff() {
             await controller.deleteEmployee(employee)
         }
     }
-    let date1 = new Date("2018-11-01T00:00:00Z");
-    let date2 = new Date("2018-11-30T23:59:59Z");
+    let date1 = new Date("2018-12-01T00:00:00Z");
+    let date2 = new Date("2018-12-30T23:59:59Z");
     let shifts = await controller.getShifts();
     for (let shift of shifts) {
         if (shift.start.getTime() >= date1.getTime() && shift.end.getTime() <= date2.getTime()) {
