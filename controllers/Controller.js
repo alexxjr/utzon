@@ -139,10 +139,10 @@ exports.getOneShift = async function (objectid) {
 };
 
 exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
-    let allShifts = getShifts();
+    let allShifts = await getShifts();
     let results = [];
     for (let i = 0; i < allShifts.length; i++) {
-       if(allShifts[i].start >= fromDate.toDateString() && allShifts[i].end <= toDate.toDateString()){
+       if(allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime() ){
            results.push(allShifts[i]);
        }
     }
