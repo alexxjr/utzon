@@ -268,8 +268,8 @@ describe('Test af controllerfunktioner', function(){
     });
 */
      it('return all shifts between two dates', async () =>{
-        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2019,1,1)
-            ,new Date(2019,12,31));
+        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
+            ,new Date(2017,12,31));
         expect(shiftsList.length).to.equal(1);
      });
     it('return total hours for all shifts between two dates', async () => {
