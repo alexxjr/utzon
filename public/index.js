@@ -182,7 +182,12 @@ async function shiftSelected(shiftID, employeeID, divID) {
     shiftUpdate.style.display = "inline-block";
     selectedShift = await GET("/api/shifts/getOneShift/" + shiftID);
     selectedShiftEmployee = selectedShift.employee;
-    employeeSelect.value = selectedShiftEmployee.name;
+    if (selectedShift.employee) {
+        employeeSelect.value = selectedShiftEmployee.name;
+    }
+    else {
+        employeeSelect.value = "";
+    }
     datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(selectedShift.start);
     startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.start);
     endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.end);
@@ -198,13 +203,12 @@ function okAction() {
     let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
     let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
-    let newEmployee;
-    for (let i = 0; i < employees.length; i++) {
-        if (employeeSelect.value = employees[i].name) {
-            newEmployee = employees[i].name;
-        }
-        else {
-            newEmployee = undefined;
+    let newEmployee = undefined;
+    if(employeeSelect.value !== "") {
+        for (let i = 0; i < employees.length; i++) {
+            if (employeeSelect.value === employees[i].name) {
+                newEmployee = employees[i].name;
+            }
         }
     }
         updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
