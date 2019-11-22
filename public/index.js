@@ -11,6 +11,7 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
+let allDates;
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
@@ -77,7 +78,6 @@ function createDate() {
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
     }
-    let allDates = document.querySelectorAll(".date");
     let date;
     allDates.forEach(d => {
        if (d.style.backgroundColor === "cornflowerblue") {
@@ -249,6 +249,7 @@ endTimePicker.addEventListener("click", async function () {
 });
 
 populateEmployeeSelection();
+siteInit();
 
 
 function createShiftAction() {
@@ -256,6 +257,7 @@ function createShiftAction() {
     select.value = "";
     document.querySelector("#createStartTime").value = "00:00"
     document.querySelector("#createEndTime").value = "00:00"
+    document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -265,6 +267,17 @@ function createShiftAction() {
     end.addEventListener("click", async function(){
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2)
     });
+}
+
+function siteInit() {
+    allDates = document.querySelectorAll(".date");
+    let today = new Date();
+    for (let i = 0; i < allDates.length; i++) {
+    if (allDates[i].innerText === (today.getDate() + "")){
+        allDates[i].style.backgroundColor = "cornflowerblue";
+    }
+
+    }
 }
 
 
@@ -277,12 +290,12 @@ function closeForm() {
 
 async function okCreateShift(){
     try {
-        let thisShift = undefined;
         let mydate = createDate();
+        let thisShift = undefined;
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
-        let startDate = new date(mydate + "T" + newStart);
-        let endDate = new date(mydate + "T" + newEnd);
+        let startDate = new Date(mydate + "T" + newStart+ "Z");
+        let endDate = new Date(mydate + "T" + newEnd + "Z");
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
         closeForm();
@@ -295,7 +308,7 @@ async function okCreateShift(){
 async function saveAction() {
         let url = "/api/shifts/updateShift/";
         await POST(updates, url);
-
+        location.reload();
 }
 
 async function POST(data, url) {
@@ -305,8 +318,12 @@ async function POST(data, url) {
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     });
+    if (response.status === 201) {
+        alert("All changes succefully made to database");
+        return;
+    }
     return await response.json();
-};
+}
 
 
 
