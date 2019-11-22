@@ -1,6 +1,5 @@
 let updates = [];
-let shift;
-let currentShift;
+let employees = [];
 let monthDisplay = document.querySelector("#monthDisplay");
 let yearDisplay = document.querySelector("#yearDisplay");
 let daysList = document.querySelector(".daysList");
@@ -16,7 +15,10 @@ let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", 
 let daysArray = [];
 let month;
 
-
+// Selected items
+let selectedShift;
+let selectedShiftDiv;
+let selectedShiftEmployee;
 
 let date = new Date(Date.now());
 let year = date.getFullYear();
@@ -70,19 +72,32 @@ function insertDays() {
     }
 }
 
+function createDate() {
+    let monthNo = month + 1 + "";
+    if (monthNo.length === 1) {
+        monthNo = "0" + monthNo;
+    }
+    let allDates = document.querySelectorAll(".date");
+    let date;
+    allDates.forEach(d => {
+       if (date.style.backgroundColor === "cornflowerblue") {
+           date = d;
+       }
+    });
+    if (date === undefined) {
+        alert("no date selected");
+    }
+    return year + "-" + monthNo + "-" + date.innerText;
+}
+
 async function chooseDate() {
     shiftUpdate.style.display = "none";
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
     allDates.forEach(date => {date.style.backgroundColor = "#eee"});
     this.style.backgroundColor = "cornflowerblue";
-    let monthNo = month + 1 + "";
-    if (monthNo.length === 1) {
-        monthNo = "0" + monthNo;
-    }
-    let date = year + "-" + monthNo + "-" + this.innerText;
-    let shifts = await GET("/api/shifts/" + date);
-    dayShift.innerHTML = await generateShifts(shifts);
+    let date = createDate();
+    dayShift.innerHTML = await generateShifts(date);
 
 }
 
@@ -135,7 +150,8 @@ async function GET(url) {
     return await response.json();
 }
 
-async function generateShifts(shifts) {
+async function generateShifts(date) {
+    let shifts = await GET("/api/shifts/" + date);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -152,7 +168,7 @@ Handlebars.registerHelper("formatTime", function(date) {
 });
 
 async function populateEmployeeSelection() {
-    let employees = await GET("/api/employees/");
+    employees = await GET("/api/employees/");
     for (let e of employees) {
         employeeSelect.innerHTML += "<option>" + e.name + "</option>";
         select.innerHTML += "<option>" + e.name + "</option>";
@@ -161,48 +177,41 @@ async function populateEmployeeSelection() {
     select.innerHTML += "<option></option>";
 }
 
-async function shiftSelected(shiftID, employeeName, divID) {
+async function shiftSelected(shiftID, employeeID, divID) {
     dayShift.style.display = "none";
     shiftUpdate.style.display = "inline-block";
-
-    shift = await GET("/api/shifts/getOneShift/" + shiftID);
-    employeeSelect.value = employeeName;
-    datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(shift.start);
-    startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
-    endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
-    totalHours.value = shift.totalHours;
+    selectedShift = await GET("/api/shifts/getOneShift/" + shiftID);
+    selectedShiftEmployee = selectedShift.employee;
+    employeeSelect.value = selectedShiftEmployee.name;
+    datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(selectedShift.start);
+    startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.start);
+    endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.end);
+    totalHours.value = selectedShift.totalHours;
     let shiftOK = document.querySelector("#shiftOK");
     shiftOK.onclick = okAction;
-    currentShift = document.querySelector("#shift"+divID);
+    selectedShiftDiv = document.querySelector("#shift"+divID);
 
 
 }
-
+//WRONG CHECK FOR EMPLOYEES HERE
 function okAction() {
-    let oldEmployee;
-    if (shift.employee) {
-        oldEmployee = shift.employee.name;
-    }
-    else {
-        oldEmployee = "";
-    }
-    let oldStart = /[0-9]{2}:[0-9]{2}/g.exec(shift.start);
-    let oldEnd = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
-    let newEmployee = employeeSelect.value;
-    let newStart = startTimePicker.value;
-    let newEnd = endTimePicker.value;
+    let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
-    if (oldEmployee == newEmployee && oldStart == newStart && oldEnd == newEnd) {
+    let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
+    let newEmployee;
+    for (let i = 0; i < employees.length; i++) {
+        if (employeeSelect.value = employees[i].name) {
+            newEmployee = employees[i].name;
+        }
+        else {
+            newEmployee = undefined;
+        }
+    }
+        updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
-        currentShift.style.backgroundColor = "cornflowerblue";
-    } else {
-        updates.push(createUpdate(shift, newStart, newEnd, newEmployee));
-        dayShift.style.display = "inline-block";
-        shiftUpdate.style.display = "none";
-        currentShift.style.backgroundColor = "yellow";
-    }
-
+        selectedShiftDiv.style.backgroundColor = "yellow";
+        console.log(updates[0]);
 }
 
 
@@ -212,10 +221,10 @@ function cancelAction() {
 }
 
 function deleteAction() {
-    updates.push(createUpdate(shift, undefined, undefined, undefined));
+    updates.push(createUpdate(selectedShift, undefined, undefined, undefined));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
-    currentShift.style.backgroundColor = "red";
+    selectedShiftDiv.style.backgroundColor = "red";
 
 }
 
@@ -281,17 +290,18 @@ async function okCreateShift(){
 async function saveAction() {
         let url = "/api/shifts/updateShift/";
         await POST(updates, url);
-        location.reload()
+
 }
 
 async function POST(data, url) {
+    const CREATED = 201;
     let response = await fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     });
     return await response.json();
-}
+};
 
 
 
