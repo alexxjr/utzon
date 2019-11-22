@@ -20,13 +20,13 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
     let emailType = typeof email;
     let phoneNoType = typeof phoneNo;
     if (CPRType !== "string" || nameType !== "string" || emailType !== "string" || phoneNoType !== "string") {
-        return undefined;
+        throw new Error("One of the variables for the employee is not a string")
     }
     if (CPR.length !== 10 || name.length < 1 || email.length < 1 || phoneNo.length < 1) {
-        return undefined;
+        throw new Error("One or more of the variable strings are the wrong length")
     }
     if (await getEmployee(CPR) !== null) {
-        return undefined;
+        throw new Error("The employee already exists in the database")
     }
     const employee = new Employee({
         CPR,
@@ -41,10 +41,10 @@ exports.createShift = createShift;
 
 async function createShift(start, end) {
     if (Object.prototype.toString.call(start) !== '[object Date]' || Object.prototype.toString.call(end) !== '[object Date]') {
-        return undefined;
+        throw new Error("The date objects are not objects");
     }
     if (end <= start) {
-        return undefined;
+        throw new Error("The end date+time is before or equal to the start date+time");
     }
 
     // Calculates the amount of time (in decimal hours) a shift lasts
@@ -268,7 +268,7 @@ async function updateShift(update) {
             break;
         case "createShift":
             if(update.newEmployee === ""){
-                await createShift(update.newStart, update.newEnd);
+                let shift = await createShift(update.newStart, update.newEnd);
             }else{
                 let s = await createShift(update.newStart, update.newEnd);
                 await addEmployeeToShift(update.newEmployee, s);
