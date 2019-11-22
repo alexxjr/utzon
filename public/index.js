@@ -101,6 +101,7 @@ async function chooseDate() {
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
 
+
 }
 
 function setCurrentMonth() {
@@ -154,6 +155,7 @@ async function GET(url) {
 
 async function generateShifts(date) {
     let shifts = await GET("/api/shifts/" + date);
+    console.log(shifts);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -172,7 +174,11 @@ Handlebars.registerHelper("formatTime", function (date) {
 async function populateEmployeeSelection() {
     employees = await GET("/api/employees/");
     for (let e of employees) {
-        employeeSelect.innerHTML += "<option>" + e.name + "</option>";
+            let data = JSON.stringify(e);
+            let option = document.createElement("option");
+            option.innerText = e.name;
+            option.setAttribute("data-employee", data);
+            employeeSelect.append(option);
         select.innerHTML += "<option>" + e.name + "</option>";
     }
     employeeSelect.innerHTML += "<option></option>";
@@ -207,17 +213,12 @@ function okAction() {
     let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
     let newEmployee = undefined;
     if (employeeSelect.value !== "") {
-        for (let i = 0; i < employees.length; i++) {
-            if (employeeSelect.value === employees[i].name) {
-                newEmployee = employees[i].name;
-            }
-        }
+        newEmployee = JSON.parse(employeeSelect[employeeSelect.selectedIndex].getAttribute('data-employee'))
     }
     updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "yellow";
-    console.log(updates[0]);
 }
 
 
