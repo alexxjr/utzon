@@ -258,12 +258,16 @@ describe('Test af controllerfunktioner', function(){
          let testShift = await controller.createShift(new Date(2019,11,22,10,0)
              ,new Date(2019,11,22,15,30));
          expect(testShift.totalHours).to.equal(5)
-     })
+     });
      it('create a shift with total hours <= 5', async () =>{
          let testShift = await controller.createShift(new Date(2019,11,22,10,0)
              ,new Date(2019,11,22,15,0));
          expect(testShift.totalHours).to.equal(5);
-     })
+     });
+
+     it('return all shifts between two dates', async () =>{
+         
+     });
 
      // it('login as admin', async () => {
     //     let username = "admin";

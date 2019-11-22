@@ -131,6 +131,25 @@ exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
 };
 
+exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
+    let allShifts = getShifts();
+    let shifts = [];
+    for (let i = 0; i < allShifts.size; i++) {
+       if(allShifts[i].start >= fromDate && allShifts[i] <= toDate){
+           shifts.push(Shift.find().populate('employee').exec());
+       }
+    }
+    return shifts;
+};
+
+exports.getTotalhoursBetween = async function(shifts){
+    let total;
+    for (let i = 0; i < shifts.length; i++) {
+        total += shifts[i].totalHours;
+    }
+    return total;
+}
+
 async function deleteShift(shift) {
     return Shift.findByIdAndDelete(shift._id);
 }
@@ -344,7 +363,6 @@ exports.getLoginRole = async function (username) {
         }
     }
 };
-
 
 exports.login = login;
 async function login(username, password) {
