@@ -273,16 +273,19 @@ function closeForm() {
 
 async function okCreateShift(){
     try {
-        let thisShift = undefined;
         let mydate = createDate();
+        let thisShift = undefined;
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
-        let startDate = new date(mydate + "T" + newStart);
-        let endDate = new date(mydate + "T" + newEnd);
+        let startDate = new Date(mydate + "T" + newStart);
+        let endDate = new Date(mydate + "T" + newEnd);
+        console.log(startDate);
+        console.log(endDate);
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
         closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
+        console.log(updates);
     }catch (e){
         console.log(e.name + ": " + e.message);
     }
@@ -291,7 +294,7 @@ async function okCreateShift(){
 async function saveAction() {
         let url = "/api/shifts/updateShift/";
         await POST(updates, url);
-
+        location.reload();
 }
 
 async function POST(data, url) {
