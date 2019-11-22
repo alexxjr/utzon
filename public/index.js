@@ -332,6 +332,12 @@ async function saveAction() {
         location.reload();
 }
 
+async function saveAction2() {
+    let url = "/api/employees/";
+    await POST(employees, url);
+    location.reload();
+}
+
 async function POST(data, url) {
     const CREATED = 201;
     let response = await fetch(url, {
