@@ -234,6 +234,15 @@ input[type="date"]::-webkit-inner-spin-button {
     z-index: 9;
 }
 
+.form-popup2 {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 87px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
 .form-container {
     max-width: 300px;
     padding: 10px;
