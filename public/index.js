@@ -225,7 +225,7 @@ function cancelAction() {
 }
 
 function deleteAction() {
-    updates.push(createUpdate(selectedShift, undefined, undefined, undefined));
+    updates.push({shift: selectedShift, newStart: undefined, newEnd: undefined, newEmployee: undefined, type: "deleteShift"});
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "red";
