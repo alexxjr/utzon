@@ -283,13 +283,10 @@ async function okCreateShift(){
         let newEnd = document.querySelector("#createEndTime").value;
         let startDate = new Date(mydate + "T" + newStart);
         let endDate = new Date(mydate + "T" + newEnd);
-        console.log(startDate);
-        console.log(endDate);
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
         closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
-        console.log(updates);
     }catch (e){
         console.log(e.name + ": " + e.message);
     }
