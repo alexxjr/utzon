@@ -249,6 +249,21 @@ describe('Test af controllerfunktioner', function(){
          testShift = shift[0];
          expect(testShift.end.getTime()).to.equal(new Date(2020, 11, 15,18,55).getTime());
     });
+     it('create a shift with total hours > 5', async  () =>{
+       let testShift = await controller.createShift(new Date(2019,11,22,10,0)
+            ,new Date(2019,11,22,18,0));
+        expect(testShift.totalHours).to.equal(7.5)
+     });
+     it('create a shift woth total hours === 5 hours and 30 minutes', async () =>{
+         let testShift = await controller.createShift(new Date(2019,11,22,10,0)
+             ,new Date(2019,11,22,15,30));
+         expect(testShift.totalHours).to.equal(5)
+     })
+     it('create a shift with total hours <= 5', async () =>{
+         let testShift = await controller.createShift(new Date(2019,11,22,10,0)
+             ,new Date(2019,11,22,15,0));
+         expect(testShift.totalHours).to.equal(5);
+     })
 
      // it('login as admin', async () => {
     //     let username = "admin";

@@ -57,7 +57,7 @@ async function createShift(start, end) {
         } else {
             time = (end.getHours() - start.getHours()) - minutes / 60;
         }
-        if(time < 5){
+        if(time > 5){
             time -= 0.5;
         }
         return time;
