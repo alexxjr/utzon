@@ -11,6 +11,7 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
+let allDates;
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
 let month;
@@ -77,7 +78,6 @@ function createDate() {
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
     }
-    let allDates = document.querySelectorAll(".date");
     let date;
     allDates.forEach(d => {
        if (d.style.backgroundColor === "cornflowerblue") {
@@ -249,6 +249,7 @@ endTimePicker.addEventListener("click", async function () {
 });
 
 populateEmployeeSelection();
+siteInit();
 
 
 function createShiftAction() {
@@ -266,6 +267,17 @@ function createShiftAction() {
     end.addEventListener("click", async function(){
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2)
     });
+}
+
+function siteInit() {
+    allDates = document.querySelectorAll(".date");
+    let today = new Date();
+    for (let i = 0; i < allDates.length; i++) {
+    if (allDates[i].innerText === (today.getDate() + "")){
+        allDates[i].style.backgroundColor = "cornflowerblue";
+    }
+
+    }
 }
 
 
