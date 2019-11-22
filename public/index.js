@@ -251,6 +251,13 @@ endTimePicker.addEventListener("click", async function () {
 populateEmployeeSelection();
 siteInit();
 
+function createEmployeeAction() {
+    document.getElementById("popup2").style.display = "block";
+    document.querySelector("#empNavn").value = "";
+    document.querySelector("#empNr").value = "";
+    document.querySelector("#empMail").value = "";
+    document.querySelector("#empCPR").value = "";
+}
 
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
@@ -280,7 +287,22 @@ function siteInit() {
     }
 }
 
+function closeForm2() {
+    document.getElementById("popup2").style.display = "none";
+}
 
+async function okCreateEmployee() {
+    try {
+        let name = document.querySelector("#empNavn").value + "";
+        let phoneNo = document.querySelector("#empNr").value + "";
+        let email = document.querySelector("#empMail").value + "";
+        let CPR = document.querySelector("#empCPR").value + "";
+        await POST({CPR, name, email, phoneNo}, "/api/employees/");
+    } catch(e) {
+        console.log(e.name + ": " + e.message);
+    }
+    closeForm2();
+}
 
 function closeForm() {
     document.getElementById("popup").style.display = "none";
@@ -310,6 +332,7 @@ async function saveAction() {
         await POST(updates, url);
         location.reload();
 }
+
 
 async function POST(data, url) {
     const CREATED = 201;
