@@ -1,6 +1,6 @@
 function createUpdate(shift, newStart, newEnd, newEmployee){
     let type = "";
-    if (!shift) {
+    if (shift === undefined) {
         type = "createShift"
     } else {
         let oldStart = shift.start;

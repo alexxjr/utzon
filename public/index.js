@@ -241,6 +241,8 @@ populateEmployeeSelection();
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -258,22 +260,27 @@ function closeForm() {
     document.getElementById("popup").style.display = "none";
     select.value = "";
     document.querySelector("#date").value = "";
-    document.querySelector("#createStartTime").value = "";
-    document.querySelector("#createEndTime").value = "";
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
+
+let mydate = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
 async function okCreateShift(){
     try {
         let thisShift = undefined;
+        //let date = createDate();
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
+        let startDate = new date(mydate + "T" + newStart);
+        let endDate = new date(mydate + "T" + newEnd);
         let newEmployee = select.value;
-        updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
+        updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
         closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
-        console.log(updates)
     }catch (e){
+        console.log(mydate + " asdasd");
         console.log(e.name + ": " + e.message);
     }
 }
@@ -292,6 +299,3 @@ async function POST(data, url) {
     });
     return await response.json();
 }
-
-
-
