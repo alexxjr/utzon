@@ -249,21 +249,32 @@ describe('Test af controllerfunktioner', function(){
          testShift = shift[0];
          expect(testShift.end.getTime()).to.equal(new Date(2020, 11, 15,18,55).getTime());
     });
-     it('create a shift with total hours > 5', async  () =>{
-       let testShift = await controller.createShift(new Date(2019,11,22,10,0)
-            ,new Date(2019,11,22,18,0));
-        expect(testShift.totalHours).to.equal(7.5)
+    /*
+    it('create a shift with total hours > 5', async  () =>{
+      testShift = await controller.createShift(new Date(2019,11,22,10,0)
+           ,new Date(2019,11,22,18,0));
+       expect(testShift.totalHours).to.equal(7.5)
+    });
+
+    it('create a shift woth total hours === 5 hours and 30 minutes', async () =>{
+        testShift = await controller.createShift(new Date(2019,11,22,10,0)
+            ,new Date(2019,11,22,15,30));
+        expect(testShift.totalHours).to.equal(5)
+    });
+    it('create a shift with total hours <= 5', async () =>{
+        testShift = await controller.createShift(new Date(2019,11,22,10,0)
+            ,new Date(2019,11,22,15,0));
+        expect(testShift.totalHours).to.equal(5);
+    });
+*/
+     it('return all shifts between two dates', async () =>{
+        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        expect(shiftsList.length).to.equal(1);
      });
-     it('create a shift woth total hours === 5 hours and 30 minutes', async () =>{
-         let testShift = await controller.createShift(new Date(2019,11,22,10,0)
-             ,new Date(2019,11,22,15,30));
-         expect(testShift.totalHours).to.equal(5)
-     })
-     it('create a shift with total hours <= 5', async () =>{
-         let testShift = await controller.createShift(new Date(2019,11,22,10,0)
-             ,new Date(2019,11,22,15,0));
-         expect(testShift.totalHours).to.equal(5);
-     })
+    it('return total hours for all shifts between two dates', async () => {
+        
+    })
 
      // it('login as admin', async () => {
     //     let username = "admin";
