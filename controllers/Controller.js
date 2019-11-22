@@ -2,6 +2,7 @@
 
 const Employee = require('../models/Employee');
 const Shift = require('../models/Shift');
+const Login = require('../models/Login');
 const mongoose = require("../app");
 const nodemailer = require('nodemailer');
 
@@ -55,6 +56,9 @@ async function createShift(start, end) {
             time = (end.getHours() - start.getHours()) + minutes / 60;
         } else {
             time = (end.getHours() - start.getHours()) - minutes / 60;
+        }
+        if(time > 5){
+            time -= 0.5;
         }
         return time;
     }
@@ -146,7 +150,7 @@ exports.getShiftsOnDate = async function (date) {
     let result = [];
     let shifts = await this.getShifts();
     for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].start.toDateString() === date.toDateString()) {
+        if (shifts[i].start.getTime() === date.getTime()) {
             result.push(shifts[i]);
         }
     }
@@ -343,6 +347,22 @@ function checkShift(shift) {
     if (!("start" in shift) || !("end" in shift) || !("totalHours"  in shift)) {
         throw new Error("The shift object is not a shift");
     }
+}
+
+
+exports.getLoginRole = async function (username) {
+    let users = await Login.find().exec();
+    for (let i = 0; i < users.length; i++) {
+        if(users[i].username === username){
+            return users[i].role;
+        }
+    }
+};
+
+
+exports.login = login;
+async function login(username, password) {
+
 }
 
 exports.changeShiftEmployee = changeShiftEmployee;

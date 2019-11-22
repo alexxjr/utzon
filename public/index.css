@@ -31,6 +31,7 @@ body {
     letter-spacing: 3px;
 }
 
+
 /* Previous button inside month header */
 .month .prev {
     float: left;
@@ -127,8 +128,9 @@ body {
     margin: 20px;
     font-family: Verdana, sans-serif;
     display: none;
-
 }
+
+
 
 input::-webkit-clear-button{
     display: none;
@@ -185,6 +187,14 @@ input[type="date"]::-webkit-inner-spin-button {
    padding: 3px;
 }
 
+#seeEmployeesBtn {
+    float: left;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    margin: 5px;
+    padding: 3px;
+}
+
 #shiftUpdateInfo {
     text-align: left;
 }
@@ -202,11 +212,33 @@ input[type="date"]::-webkit-inner-spin-button {
     width: 220px;
 }
 
+.createButton2 {
+    background-color: cornflowerblue;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    left: 100px;
+    width: 220px;
+}
+
 .form-popup {
     display: none;
     position: fixed;
     bottom: 0;
     right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+.form-popup2 {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 87px;
     border: 3px solid #f1f1f1;
     z-index: 9;
 }
