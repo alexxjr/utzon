@@ -305,8 +305,12 @@ async function POST(data, url) {
         body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'}
     });
+    if (response.status === 201) {
+        alert("All changes succefully made to database");
+        return;
+    }
     return await response.json();
-};
+}
 
 
 
