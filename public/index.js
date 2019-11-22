@@ -256,6 +256,7 @@ function createShiftAction() {
     select.value = "";
     document.querySelector("#createStartTime").value = "00:00"
     document.querySelector("#createEndTime").value = "00:00"
+    document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -281,8 +282,8 @@ async function okCreateShift(){
         let thisShift = undefined;
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
-        let startDate = new Date(mydate + "T" + newStart);
-        let endDate = new Date(mydate + "T" + newEnd);
+        let startDate = new Date(mydate + "T" + newStart+ "Z");
+        let endDate = new Date(mydate + "T" + newEnd + "Z");
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, startDate, endDate, newEmployee));
         closeForm();
