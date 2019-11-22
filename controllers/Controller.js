@@ -79,8 +79,8 @@ async function addEmployeeToShift(employee, shift) {
         throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
-        Employee.hydrate(employee);
-        Shift.hydrate(shift);
+        employee = Employee.hydrate(employee);
+        shift = Shift.hydrate(shift);
         employee.shifts.push(shift);
         shift.employee = employee;
         return Promise.all([employee.save(), shift.save()]);
@@ -98,7 +98,7 @@ async function removeEmployeeFromShift(shift) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWIthID(shift.employee);
-    Shift.hydrate(shift);
+    shift = Shift.hydrate(shift);
 
 
     for (let i = 0; i < employee.shifts.length; i++) {
