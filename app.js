@@ -20,7 +20,6 @@ const employeeRoute = require('./routes/EmployeeRoute');
 const shiftRoute = require('./routes/Shiftroute');
 app.use('/api/employees', employeeRoute);
 app.use('/api/shifts', shiftRoute);
-app.use('/api/updateShift', shiftRoute);
 
 
 // START THE SERVER

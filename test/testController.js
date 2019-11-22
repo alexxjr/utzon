@@ -36,7 +36,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('testing for invalid variables on addEmployeeToShift (No shift in param)', async () => {
-        await expect(controller.addEmployeeToShift(testEmployee1)).to.be.rejectedWith("Shift or employee variable is empty");
+        await expect(controller.addEmployeeToShift(testEmployee1)).to.be.rejectedWith("Shift is not defined");
     });
 
     it('an employee should not be able to be assigned to a shift occupied by an employee already', async () => {
@@ -44,7 +44,7 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('testing for invalid variables on removeEmployeeFromShift (No shift in param)', async () => {
-        await expect(controller.removeEmployeeFromShift()).to.be.rejectedWith("Shift variable is empty");
+        await expect(controller.removeEmployeeFromShift()).to.be.rejectedWith("Shift is not defined");
     });
 
     it('remove an employee from a shift', async () => {
@@ -115,14 +115,14 @@ describe('Test af controllerfunktioner', function(){
         let response = await controller.manageIncomingUpdates([update]);
         expect(response.length).to.equal(1);
         expect(response[0].update).to.equal(update);
-        expect(response[0].error).to.equal("Shift is not defined in the update object");
+        expect(response[0].error).to.equal("No update type is given for this update");
     });
 
 
 
-    it('checking param object for not having a valid shift attribute', async () => {
+    it('checking param object for not having a valid type attribute', async () => {
         let update = "hej";
-        await expect(controller.updateShift(update)).to.be.rejectedWith("Shift is not defined in the update object");
+        await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
     });
 
     it('checking for param object for not having a valid dates', async () => {
@@ -130,13 +130,13 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
     });
 
-    it('checking for param object for having a valid dates, but (without) a proper shift object', async () => {
-        let update = {shift: "Hej", newStart: startDate, newEnd: endDate};
+    it('checking for param object for having a valid dates, but using a string as shift', async () => {
+        let update = {shift: "Hej", newStart: startDate, newEnd: endDate, type: "changeShiftTimesAndRemoveEmployee"};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not an object");
     });
 
     it('checking for param object for having a valid dates, but (without) a proper shift object', async () => {
-        let update = {shift: testEmployee1, newStart: startDate, newEnd: endDate};
+        let update = {shift: testEmployee1, newStart: startDate, newEnd: endDate, type: "changeShiftTimesAndRemoveEmployee"};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not a shift");
     });
 
@@ -241,19 +241,18 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift).to.equal(null);
     });
 
-    it('try to actually update and send a mail with ', async () => {
-        testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
-            , new Date(2018, 11, 15,18,55));
-        await controller.addEmployeeToShift(testEmployee1, testShift);
-        let update = {shift: testShift, type: "removeEmployeeFromShift"};
-        await controller.manageIncomingUpdates([update]);
-
-    });
+    // it('try to actually update and send a mail with ', async () => {
+    //     testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
+    //         , new Date(2018, 11, 15,18,55));
+    //     await controller.addEmployeeToShift(testEmployee1, testShift);
+    //     let update = {shift: testShift, type: "removeEmployeeFromShift"};
+    //     await controller.manageIncomingUpdates([update]);
+    //
+    // });
 
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
-        await controller.deleteShift(testShift);
     });
 });
 

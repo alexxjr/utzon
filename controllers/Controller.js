@@ -67,8 +67,9 @@ exports.createShift = async function (start, end) {
 };
 
 async function addEmployeeToShift(employee, shift) {
-    if (shift === undefined || employee === undefined) {
-        throw new Error("Shift or employee variable is empty");
+    checkShift(shift);
+    if (employee === undefined) {
+        throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
@@ -83,9 +84,7 @@ async function addEmployeeToShift(employee, shift) {
 exports.addEmployeeToShift = addEmployeeToShift;
 
 async function removeEmployeeFromShift(shift) {
-    if (shift === undefined) {
-        throw new Error("Shift variable is empty");
-    }
+    checkShift(shift);
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
@@ -157,19 +156,27 @@ exports.manageIncomingUpdates = async function (updates) {
     if(!Array.isArray(updates)) {
         throw new Error("The updates variable is not an array")
     }
+    let succes = [];
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
+            let updateInfo;
+            if (updates[i].shift !== undefined) {
+                updateInfo = {
+                    oldEmployee: updates[i].shift.employee,
+                    newEmployee: updates[i].newEmployee,
+                    type: updates[i].type
+                };
+            }
             await updateShift(updates[i]);
-
-
+            succes.push(updateInfo);
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
             updates.splice(i, 1);
             i--;
         }
     }
-    sendUpdateMail(updates);
+    await sendUpdateMail(succes);
     return failures;
 };
 
@@ -183,11 +190,11 @@ async function sendUpdateMail(updates) {
                 mails.set(update.newEmployee, {employee: update.newEmployee, context: update.type + "\n"});
             }
         }
-        if (update.shift.employee !== undefined) {
-            if (mails.has(update.shift.employee)) {
-                mails.set(update.shift.employee, mails.get(update.shift.employee).context += update.type + "\n");
+        if (update.oldEmployee !== undefined) {
+            if (mails.has(update.oldEmployee)) {
+                mails.set(update.oldEmployee, mails.get(update.oldEmployee).context += update.type + "\n");
             } else {
-                mails.set(update.shift.employee, {employee: update.shift.employee, context: update.type + "\n"});
+                mails.set(update.oldEmployee, {employee: update.oldEmployee, context: update.type + "\n"});
             }
         }
     }
@@ -195,32 +202,20 @@ async function sendUpdateMail(updates) {
 }
 
 async function sendMails(mails) {
-    for (let mail of mails) {
+    for (let mail of mails.values()) {
     let mailOptions = {
         from: 'utzonsend@gmail.com',
-        to: mail.employee.email,
+        to: mail.employee.email + '',
         subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
-        text: 'Ændringer: ' + mail
+        text: 'Ændringer: ' + mail.context
     };
     await transporter.sendMail(mailOptions);
     }
 }
 
 async function updateShift(update) {
-    if (update.shift === undefined) {
-        throw new Error("Shift is not defined in the update object");
-    }
     if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
         throw new Error("One of the date objects are undefined");
-    }
-
-    let type = typeof update.shift;
-    if (type !== 'object') {
-        throw new Error("The shift object is not an object");
-    }
-
-    if (update.shift.constructor.modelName !== 'Shift') {
-        throw new Error("The shift object is not a shift");
     }
 
     if (update.type === undefined) {
@@ -273,6 +268,7 @@ async function updateShift(update) {
 exports.updateShift = updateShift;
 
 async function changeShiftTime(shift, newStart, newEnd) {
+    checkShift(shift);
     if (shift === undefined || newStart === undefined || newEnd === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -292,6 +288,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
 exports.changeShiftTime = changeShiftTime;
 
 async function changeShiftEmployee(shift, newEmployee) {
+    checkShift(shift);
     if (shift === undefined || newEmployee === undefined) {
         throw new Error("One of the param variables are undefined");
     }
@@ -304,6 +301,20 @@ async function changeShiftEmployee(shift, newEmployee) {
     await removeEmployeeFromShift(shift);
     await addEmployeeToShift(newEmployee, shift);
 
+}
+
+function checkShift(shift) {
+    if (shift === undefined) {
+        throw new Error("Shift is not defined");
+    }
+    let type = typeof shift;
+    if (type !== 'object') {
+        throw new Error("The shift object is not an object");
+    }
+
+    if (!("start" in shift) || !("end" in shift) || !("totalHours"  in shift)) {
+        throw new Error("The shift object is not a shift");
+    }
 }
 
 exports.changeShiftEmployee = changeShiftEmployee;
