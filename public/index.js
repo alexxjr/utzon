@@ -72,7 +72,7 @@ function insertDays() {
     }
 }
 
-function createDate() {
+async function createDate() {
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -250,6 +250,8 @@ populateEmployeeSelection();
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.querySelector("#createTotalHours");
@@ -266,16 +268,13 @@ function createShiftAction() {
 function closeForm() {
     document.getElementById("popup").style.display = "none";
     select.value = "";
-    document.querySelector("#date").value = "";
-    document.querySelector("#createStartTime").value = "00:00";
-    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
 async function okCreateShift(){
     try {
         let thisShift = undefined;
-        //let date = createDate();
+        let mydate = createDate();
         let newStart = document.querySelector("#createStartTime").value;
         let newEnd = document.querySelector("#createEndTime").value;
         let startDate = new date(mydate + "T" + newStart);
