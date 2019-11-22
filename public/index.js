@@ -70,19 +70,32 @@ function insertDays() {
     }
 }
 
+function createDate() {
+    let monthNo = month + 1 + "";
+    if (monthNo.length === 1) {
+        monthNo = "0" + monthNo;
+    }
+    let allDates = document.querySelectorAll(".date");
+    let date;
+    allDates.forEach(d => {
+       if (date.style.backgroundColor === "cornflowerblue") {
+           date = d;
+       }
+    });
+    if (date === undefined) {
+        alert("no date selected");
+    }
+    return year + "-" + monthNo + "-" + date.innerText;
+}
+
 async function chooseDate() {
     shiftUpdate.style.display = "none";
     dayShift.style.display = 'inline-block';
     let allDates = document.querySelectorAll(".date");
     allDates.forEach(date => {date.style.backgroundColor = "#eee"});
     this.style.backgroundColor = "cornflowerblue";
-    let monthNo = month + 1 + "";
-    if (monthNo.length === 1) {
-        monthNo = "0" + monthNo;
-    }
-    let date = year + "-" + monthNo + "-" + this.innerText;
-    let shifts = await GET("/api/shifts/" + date);
-    dayShift.innerHTML = await generateShifts(shifts);
+    let date = createDate();
+    dayShift.innerHTML = await generateShifts(date);
 
 }
 
@@ -135,7 +148,8 @@ async function GET(url) {
     return await response.json();
 }
 
-async function generateShifts(shifts) {
+async function generateShifts(date) {
+    let shifts = await GET("/api/shifts/" + date);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -172,7 +186,7 @@ async function shiftSelected(shiftID, employeeName, divID) {
     endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(shift.end);
     totalHours.value = shift.totalHours;
     let shiftOK = document.querySelector("#shiftOK");
-    shiftOK.onclick = okAction
+    shiftOK.onclick = okAction;
     currentShift = document.querySelector("#shift"+divID);
 
 
@@ -262,7 +276,7 @@ async function POST(data, url) {
     if (response.status !== CREATED)
         throw new Error("POST status code " + response.status);
     return await response.text();
-};
+}
 
 function closeForm() {
     document.getElementById("popup").style.display = "none";
@@ -280,7 +294,7 @@ async function okCreateShift(){
         let newEnd = document.querySelector("#createEndTime").value;
         let newEmployee = select.value;
         updates.push(createUpdate(thisShift, newStart, newEnd, newEmployee));
-        closeForm()
+        closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
         console.log(updates)
     }catch (e){
@@ -293,7 +307,7 @@ async function saveAction() {
         let url = "/api/shifts/updateShift";
         let data = {
             "updates": updates
-        }
+        };
         await POST(data, url);
     } catch (e) {
         console.log(e.getMessage);
