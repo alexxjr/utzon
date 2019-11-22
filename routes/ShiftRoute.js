@@ -20,12 +20,11 @@ router
     .post('/updateShift', async (request, response) => {
         let updates = request.body;
         let failures = await controller.manageIncomingUpdates(updates);
-
         if (failures.length === 0) {
             response.sendStatus(201);
         }
         else {
-            response.status(400).send(failures);
+            response.send(failures);
         }
 
     });
