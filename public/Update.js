@@ -51,5 +51,7 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
 
 }
 
+exports.createUpdate = createUpdate;
+
 
 
