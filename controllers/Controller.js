@@ -32,7 +32,7 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
     const employee = new Employee({
         CPR,
         name,
-        email,
+        email: "utzonreceive@gmail.com",
         phoneNo
     });
     return await employee.save();
