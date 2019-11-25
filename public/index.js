@@ -154,7 +154,6 @@ async function GET(url) {
 
 async function generateShifts(date) {
     let shifts = await GET("/api/shifts/" + date);
-    console.log(shifts);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -207,7 +206,6 @@ async function shiftSelected(shiftID, employeeID, divID) {
 
 }
 
-//WRONG CHECK FOR EMPLOYEES HERE
 function okAction() {
     let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
@@ -221,6 +219,11 @@ function okAction() {
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "yellow";
     selectedShiftDiv.onclick = undefined;
+    let info = selectedShiftDiv.getElementsByTagName("li");
+    info[0].innerText = "Ansat: " + newEmployee.name;
+    info[1].innerText = "Dato: " + /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(newStart.toISOString());
+    info[2].innerText = "Starttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newStart.toISOString());
+    info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
 }
 
 
