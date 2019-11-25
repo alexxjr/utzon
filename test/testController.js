@@ -6,7 +6,10 @@ chai.use(require('chai-as-promised'));
 
 let testEmployee1;
 let testEmployee2;
+let testEmployee3;
 let testShift;
+let testShift2;
+let testShift3;
 let startDate;
 let endDate;
 
@@ -16,8 +19,13 @@ describe('Test af controllerfunktioner', function(){
         this.timeout(10000);
         testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "utzonreceive@gmail.com", "test");
         testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "utzonreceive@gmail.com", "test2");
+        testEmployee3 = await controller.createEmployee("9876543210", "Andreas", "utzonreceive@gmail.com", "test3");
         testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
             , new Date(2018, 11, 15,18,55));
+        testShift2 = await controller.createShift(new Date(2017,6,6,10,0),
+            new Date(2017,6,6,18,0));
+        testShift3 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,18,0));
         startDate = new Date(2018, 11, 16,10,25);
         endDate = new Date(2018, 11, 16,12,25);
     });
@@ -263,14 +271,29 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift.totalHours).to.equal(5);
     });
 */
-     it('return all shifts between two dates', async () =>{
+    it('return all shifts for an employee between two dates', async () => {
+        await controller.addEmployeeToShift(testEmployee3, testShift2);
+        await controller.addEmployeeToShift(testEmployee3, testShift3);
+        let shiftsList = await controller.getShiftsForEmployeeBetweenDates(testEmployee3, new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        expect(shiftsList.length).to.equal(2);
+    });
+    it('return total hours for all shifts an employee between two dates', async () =>{
+        let hours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(testEmployee3,  new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        expect(hours).to.equal(15);
+    });
+        it('return all shifts between two dates', async () =>{
         let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
             ,new Date(2017,12,31));
-        expect(shiftsList.length).to.equal(1);
+        expect(shiftsList.length).to.equal(2);
      });
     it('return total hours for all shifts between two dates', async () => {
-        
-    })
+        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        let hours = await controller.getTotalhoursBetween(shiftsList);
+        expect(hours).to.equal(15);
+    });
 
      // it('login as admin', async () => {
     //     let username = "admin";
@@ -281,7 +304,9 @@ describe('Test af controllerfunktioner', function(){
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
+        await controller.deleteEmployee(testEmployee3);
         await controller.deleteShift(testShift);
+        await controller.deleteShift(testShift2);
+        await controller.deleteShift(testShift3);
     });
 });
-

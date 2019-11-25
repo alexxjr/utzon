@@ -84,7 +84,7 @@ async function addEmployeeToShift(employee, shift) {
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
         shift.employee = employee;
-        return await Promise.all([employee.save(), shift.save()]);
+        return Promise.all([employee.save(), shift.save()]);
     } else {
         throw new Error("An employee is already attached to this shift");
     }
@@ -106,7 +106,7 @@ async function removeEmployeeFromShift(shift) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
             employee.shifts.splice(i, 1);
             shift.employee = undefined;
-            return await Promise.all([employee.save(), shift.save()]);
+            return Promise.all([employee.save(), shift.save()]);
         }
     }
 }
@@ -135,11 +135,34 @@ async function getShifts() {
 
 exports.getShifts = getShifts;
 
-async function getOneShift(objectid) {
+exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
+};
+
+async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
+    let allShifts = employee.shifts;
+    let results = [];
+    for (let i = 0; i < allShifts.length; i++) {
+        if(allShifts[i].start.getTime() >= fromDate.getTime() && allShifts[i].start.getTime() <= toDate.getTime()){
+            results.push(allShifts[i]);
+        }
+    }
+    return results;
 }
 
-exports.getOneShift = getOneShift;
+exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
+
+async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
+    let total = 0;
+    for (let i = 0; i < employee.shifts.length; i++) {
+        if(employee.shifts[i].start.getTime() >= fromDate.getTime() && employee.shifts[i].end.getTime() <= toDate.getTime()){
+            total += employee.shifts[i].totalHours;
+        }
+    }
+    return total;
+}
+
+exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 
 exports.getShiftBetweenTwoDates = async function (fromDate, toDate) {
     let allShifts = await getShifts();

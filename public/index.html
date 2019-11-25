@@ -10,7 +10,20 @@
 </head>
 <body>
     <button type="button" id="saveBtn" onclick="saveAction()">Gem ændringer</button>
-    <button type="button" id="seeEmployeesBtn">Ansatte</button>
+    <button type="button" id="seeEmployeesBtn" onclick="modalAction()">Ansatte</button>
+
+    <div id="empModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalAction()">&times;</span>
+            <li> Vælg ansat:<select id="select2" required></select></li>
+            <li> Fra: <input id="fromDatePicker" type="date" required></li>
+            <li> Til: <input id="toDatePicker" type="date"required></li>
+            <li> Antal timer: <input id="ansatTid" type="text"></li>
+
+            <button type="button" id="beregn" onclick="">Beregn timer</button>
+        </div>
+    </div>
+
 <div class="month">
     <ul>
         </li>
