@@ -135,41 +135,30 @@ async function getShifts() {
 
 exports.getShifts = getShifts;
 
-exports.getOneShift = async function (objectid) {
+async function getOneShift(objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
 };
 
+exports.getOneShift = getOneShift;
+
 async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
-    let allShifts = employee.shifts;
-    let results = [];
-    for (let i = 0; i < allShifts.length; i++) {
-        if(allShifts[i].start.getTime() >= fromDate.getTime() && allShifts[i].start.getTime() <= toDate.getTime()){
-            results.push(allShifts[i]);
-        }
-    }
-    return results;
+    return getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
 
 exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
 
 async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
-    let total = 0;
-    for (let i = 0; i < employee.shifts.length; i++) {
-        if(employee.shifts[i].start.getTime() >= fromDate.getTime() && employee.shifts[i].end.getTime() <= toDate.getTime()){
-            total += employee.shifts[i].totalHours;
-        }
-    }
-    return total;
+    let shifts = getShiftsForEmployeeBetweenDates(employee, fromDate, toDate);
+    return getTotalhoursBetween(shifts);
 }
 
 exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 
-exports.getShiftBetweenTwoDates = async function (fromDate, toDate) {
-    let allShifts = await getShifts();
+exports.getShiftsBetweenTwoDates = async function (shifts, fromDate, toDate) {
     let results = [];
-    for (let i = 0; i < allShifts.length; i++) {
-        if (allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime()) {
-            results.push(allShifts[i]);
+    for (let i = 0; i < shifts.length; i++) {
+        if (shifts[i].start.getTime() >= fromDate.getTime() && shifts[i].start.getTime() <= toDate.getTime()) {
+            results.push(shifts[i]);
         }
     }
     return results;
