@@ -75,15 +75,16 @@ async function createShift(start, end) {
 async function addEmployeeToShift(employee, shift) {
     checkShift(shift);
 
+    employee = await getEmployeeWIthID(employee._id);
+    shift = await getOneShift(shift._id);
+
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
-        employee = Employee.hydrate(employee);
-        shift = Shift.hydrate(shift);
         employee.shifts.push(shift);
         shift.employee = employee;
-        return Promise.all([employee.save(), shift.save()]);
+        return await Promise.all([employee.save(), shift.save()]);
     } else {
         throw new Error("An employee is already attached to this shift");
     }
@@ -98,14 +99,14 @@ async function removeEmployeeFromShift(shift) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWIthID(shift.employee);
-    shift = Shift.hydrate(shift);
+    shift = await getOneShift(shift._id);
 
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
             employee.shifts.splice(i, 1);
             shift.employee = undefined;
-            return Promise.all([employee.save(), shift.save()]);
+            return await Promise.all([employee.save(), shift.save()]);
         }
     }
 }
@@ -134,9 +135,11 @@ async function getShifts() {
 
 exports.getShifts = getShifts;
 
-exports.getOneShift = async function (objectid) {
+async function getOneShift(objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
-};
+}
+
+exports.getOneShift = getOneShift;
 
 exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
     let allShifts = await getShifts();
@@ -150,12 +153,12 @@ exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
 };
 
 exports.getTotalhoursBetween = async function(shifts){
-    let total;
+    let total = 0;
     for (let i = 0; i < shifts.length; i++) {
         total += shifts[i].totalHours;
     }
     return total;
-}
+};
 
 async function deleteShift(shift) {
     return Shift.findByIdAndDelete(shift._id);
@@ -175,7 +178,6 @@ exports.getShiftsOnDate = async function (date) {
             result.push(shifts[i]);
         }
     }
-    console.log(result);
     return result;
 };
 
@@ -307,7 +309,7 @@ async function updateShift(update) {
             break;
         case "createShift":
             if(update.newEmployee === ""){
-                let shift = await createShift(update.newStart, update.newEnd);
+                await createShift(update.newStart, update.newEnd);
             }else{
                 let s = await createShift(update.newStart, update.newEnd);
                 await addEmployeeToShift(update.newEmployee, s);
