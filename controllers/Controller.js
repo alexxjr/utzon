@@ -57,7 +57,7 @@ async function createShift(start, end) {
         } else {
             time = (end.getHours() - start.getHours()) - minutes / 60;
         }
-        if(time > 5){
+        if (time > 5) {
             time -= 0.5;
         }
         return time;
@@ -82,8 +82,6 @@ async function addEmployeeToShift(employee, shift) {
         throw new Error("Employee variable is empty");
     }
     if (shift.employee === undefined) {
-        Employee.hydrate(employee);
-        Shift.hydrate(shift);
         employee.shifts.push(shift);
         shift.employee = employee;
         return Promise.all([employee.save(), shift.save()]);
@@ -101,7 +99,7 @@ async function removeEmployeeFromShift(shift) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWIthID(shift.employee);
-    Shift.hydrate(shift);
+    shift = await getOneShift(shift._id);
 
 
     for (let i = 0; i < employee.shifts.length; i++) {
@@ -166,23 +164,23 @@ async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toD
 
 exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 
-exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
+exports.getShiftBetweenTwoDates = async function (fromDate, toDate) {
     let allShifts = await getShifts();
     let results = [];
     for (let i = 0; i < allShifts.length; i++) {
-       if(allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime() ){
-           results.push(allShifts[i]);
-       }
+        if (allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime()) {
+            results.push(allShifts[i]);
+        }
     }
     return results;
 };
 
-exports.getTotalhoursBetween = async function(arrayShifts){
-    let total2 = 0;
-    for (let i = 0; i < arrayShifts.length; i++) {
-        total2 += arrayShifts[i].totalHours;
+exports.getTotalhoursBetween = async function (shifts) {
+    let total = 0;
+    for (let i = 0; i < shifts.length; i++) {
+        total += shifts[i].totalHours;
     }
-    return total2;
+    return total;
 };
 
 async function deleteShift(shift) {
@@ -203,7 +201,6 @@ exports.getShiftsOnDate = async function (date) {
             result.push(shifts[i]);
         }
     }
-    console.log(result);
     return result;
 };
 
@@ -225,7 +222,7 @@ exports.manageIncomingUpdates = async function (updates) {
     if (updates.length === 0) {
         throw new Error("The update array is empty");
     }
-    if(!Array.isArray(updates)) {
+    if (!Array.isArray(updates)) {
         throw new Error("The updates variable is not an array")
     }
     let succes = [];
@@ -280,13 +277,13 @@ async function sendUpdateMail(updates) {
 
 async function sendMails(mails) {
     for (let mail of mails.values()) {
-    let mailOptions = {
-        from: 'utzonsend@gmail.com',
-        to: mail.employee.email + '',
-        subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
-        text: 'Ændringer: ' + mail.context
-    };
-    await transporter.sendMail(mailOptions);
+        let mailOptions = {
+            from: 'utzonsend@gmail.com',
+            to: mail.employee.email + '',
+            subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
+            text: 'Ændringer: ' + mail.context
+        };
+        await transporter.sendMail(mailOptions);
     }
 }
 
@@ -334,12 +331,7 @@ async function updateShift(update) {
             }
             break;
         case "createShift":
-            if(update.newEmployee === ""){
-                let shift = await createShift(update.newStart, update.newEnd);
-            }else{
-                let s = await createShift(update.newStart, update.newEnd);
-                await addEmployeeToShift(update.newEmployee, s);
-            }
+            await createShift(update.newStart, update.newEnd);
             break;
         default:
             throw new Error("The update type is unknown")
@@ -359,7 +351,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
     if (newEnd <= newStart) {
         throw new Error("The enddate is before the startdate or they are equal");
     }
-    shift = Shift.hydrate(shift);
+    shift = await getOneShift(shift._id);
     shift.start = newStart;
     shift.end = newEnd;
 
@@ -394,7 +386,7 @@ function checkShift(shift) {
         throw new Error("The shift object is not an object");
     }
 
-    if (!("start" in shift) || !("end" in shift) || !("totalHours"  in shift)) {
+    if (!("start" in shift) || !("end" in shift) || !("totalHours" in shift)) {
         throw new Error("The shift object is not a shift");
     }
 }
@@ -403,13 +395,14 @@ function checkShift(shift) {
 exports.getLoginRole = async function (username) {
     let users = await Login.find().exec();
     for (let i = 0; i < users.length; i++) {
-        if(users[i].username === username){
+        if (users[i].username === username) {
             return users[i].role;
         }
     }
 };
 
 exports.login = login;
+
 async function login(username, password) {
 
 }

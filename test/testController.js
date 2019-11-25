@@ -100,6 +100,7 @@ describe('Test af controllerfunktioner', function(){
         testEmployee1 = await controller.getEmployee(testEmployee1.CPR);
         testEmployee2 = await controller.getEmployee(testEmployee2.CPR);
         await controller.addEmployeeToShift(testEmployee1, testShift);
+        testShift = await controller.getOneShift(testShift._id);
         await controller.changeShiftEmployee(testShift, testEmployee2);
         testShift = await controller.getOneShift(testShift._id);
         expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
@@ -138,11 +139,6 @@ describe('Test af controllerfunktioner', function(){
     it('checking param object for not having a valid type attribute', async () => {
         let update = "hej";
         await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
-    });
-
-    it('checking for param object for not having a valid dates', async () => {
-        let update = {shift: "hej", newStart: startDate};
-        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
     });
 
     it('checking for param object for having a valid dates, but using a string as shift', async () => {
@@ -256,8 +252,8 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift).to.equal(null);
     });
      it('create a shift through the update method', async () => {
-         let testUpdate = update.createUpdate(undefined, new Date(2020, 11, 15,10,25)
-             , new Date(2020, 11, 15,18,55));
+         let testUpdate = {shift: undefined, newStart: new Date(2020, 11, 15,10,25)
+             , newEnd: new Date(2020, 11, 15,18,55), type: "createShift"};
          await controller.manageIncomingUpdates([testUpdate]);
          let shift = await controller.getShiftsOnDate(testUpdate.newStart);
          testShift = shift[0];
