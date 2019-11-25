@@ -356,6 +356,9 @@ async function okCreateShift() {
 }
 
 async function saveAction() {
+    if (updates.length === 0) {
+        return;
+    }
     let url = "/api/shifts/updateShift/";
     let errors = "";
     let response = await POST(updates, url);
