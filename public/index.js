@@ -177,12 +177,19 @@ async function populateEmployeeSelection() {
             option.innerText = e.name;
             option.setAttribute("data-employee", data);
             employeeSelect.append(option);
+            let option2 = document.createElement("option");
+            option2.innerText = e.name;
+            option2.setAttribute("data-employee", data);
+            select2.append(option2);
+
+
         select.innerHTML += "<option>" + e.name + "</option>";
-        select2.innerHTML += "<option>" + e.name + "</option>";
+            console.log(employeeSelect);
+            console.log(select2);
+
     }
     employeeSelect.innerHTML += "<option></option>";
     select.innerHTML += "<option></option>";
-    select2.innerHTML += "<option></option>";
 }
 
 async function shiftSelected(shiftID, employeeID, divID) {
@@ -290,6 +297,18 @@ function modalAction() {
     document.getElementById("ansatTid").value = "";
 }
 
+async function totalHoursBetweenTwoDates() {
+    let startDate = document.querySelector("#fromDatePicker").value;
+    let toDate = document.querySelector("#toDatePicker").value;
+    let selectedEmployee = select2.value;
+    if (selectedEmployee) {
+        selectedEmployee = JSON.parse(select2[select2.selectedIndex].getAttribute('data-employee'))
+    }
+    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
+    document.querySelector("#ansatTid").value = hours;
+
+}
+
 function closeModalAction() {
     document.getElementById("empModal").style.display = "none";
 }
@@ -311,8 +330,8 @@ function createEmployeeAction() {
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
-    document.querySelector("#createStartTime").value = "00:00"
-    document.querySelector("#createEndTime").value = "00:00"
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
