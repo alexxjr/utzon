@@ -138,24 +138,49 @@ exports.getOneShift = async function (objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
 };
 
+async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
+    let allShifts = employee.shifts;
+    let results = [];
+    for (let i = 0; i < allShifts.length; i++) {
+        if(allShifts[i].start.getTime() >= fromDate.getTime() && allShifts[i].start.getTime() <= toDate.getTime()){
+            results.push(allShifts[i]);
+        }
+    }
+    return results;
+}
+
+exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
+
+async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
+    let total = 0;
+    for (let i = 0; i < employee.shifts.length; i++) {
+        if(employee.shifts[i].start.getTime() >= fromDate.getTime() && employee.shifts[i].end.getTime() <= toDate.getTime()){
+            total += employee.shifts[i].totalHours;
+        }
+    }
+    return total;
+}
+
+exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
+
 exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
     let allShifts = await getShifts();
     let results = [];
     for (let i = 0; i < allShifts.length; i++) {
-       if(allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime() ){
+       if(allShifts[i].start.getTime() >= fromDate.getTime() && allShifts[i].start.getTime() <= toDate.getTime()){
            results.push(allShifts[i]);
        }
     }
     return results;
 };
 
-exports.getTotalhoursBetween = async function(shifts){
-    let total;
-    for (let i = 0; i < shifts.length; i++) {
-        total += shifts[i].totalHours;
+exports.getTotalhoursBetween = async function(arrayShifts){
+    let total2 = 0;
+    for (let i = 0; i < arrayShifts.length; i++) {
+        total2 += arrayShifts[i].totalHours;
     }
-    return total;
-}
+    return total2;
+};
 
 async function deleteShift(shift) {
     return Shift.findByIdAndDelete(shift._id);
