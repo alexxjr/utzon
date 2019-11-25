@@ -255,12 +255,29 @@ function hourCalculation(start, end) {
     }
 }
 
-startTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+endTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
-endTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+startTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
+
+function timeChanged() {
+    if (hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate) <= 0) {
+        let endTime = parseInt(/[0-9]{2}/.exec(endTimePicker.value)[0]);
+        console.log(endTime);
+        if (endTime.length === 1) {
+            endTime = "0" + (endTime - 1) + ":00";
+        }
+        else {
+            endTime = (endTime - 1) + ":00";
+        }
+        startTimePicker.value = (endTime);
+    }
+    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+}
 
 populateEmployeeSelection();
 siteInit();
