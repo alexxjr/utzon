@@ -154,6 +154,9 @@ exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
 
 async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
     let total = 0;
+    if (!employee.shifts) {
+        return total;
+    }
     for (let i = 0; i < employee.shifts.length; i++) {
         if(employee.shifts[i].start.getTime() >= fromDate.getTime() && employee.shifts[i].end.getTime() <= toDate.getTime()){
             total += employee.shifts[i].totalHours;
