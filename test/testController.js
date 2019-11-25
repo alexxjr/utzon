@@ -10,6 +10,8 @@ let testEmployee3;
 let testShift;
 let testShift2;
 let testShift3;
+let testShift4;
+let testShift5;
 let startDate;
 let endDate;
 
@@ -26,6 +28,10 @@ describe('Test af controllerfunktioner', function(){
             new Date(2017,6,6,18,0));
         testShift3 = await controller.createShift(new Date(2017,6,7,10,0),
             new Date(2017,6,7,18,0));
+        testShift4 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,15,30));
+        testShift5 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,15,0));
         startDate = new Date(2018, 11, 16,10,25);
         endDate = new Date(2018, 11, 16,12,25);
     });
@@ -253,24 +259,15 @@ describe('Test af controllerfunktioner', function(){
          testShift = shift[0];
          expect(testShift.end.getTime()).to.equal(new Date(2020, 11, 15,18,55).getTime());
     });
-    /*
     it('create a shift with total hours > 5', async  () =>{
-      testShift = await controller.createShift(new Date(2019,11,22,10,0)
-           ,new Date(2019,11,22,18,0));
-       expect(testShift.totalHours).to.equal(7.5)
+       expect(testShift3.totalHours).to.equal(7.5)
     });
-
     it('create a shift woth total hours === 5 hours and 30 minutes', async () =>{
-        testShift = await controller.createShift(new Date(2019,11,22,10,0)
-            ,new Date(2019,11,22,15,30));
-        expect(testShift.totalHours).to.equal(5)
+        expect(testShift4.totalHours).to.equal(5)
     });
     it('create a shift with total hours <= 5', async () =>{
-        testShift = await controller.createShift(new Date(2019,11,22,10,0)
-            ,new Date(2019,11,22,15,0));
-        expect(testShift.totalHours).to.equal(5);
+        expect(testShift5.totalHours).to.equal(5);
     });
-*/
     it('return all shifts for an employee between two dates', async () => {
         await controller.addEmployeeToShift(testEmployee3, testShift2);
         await controller.addEmployeeToShift(testEmployee3, testShift3);
@@ -308,5 +305,7 @@ describe('Test af controllerfunktioner', function(){
         await controller.deleteShift(testShift);
         await controller.deleteShift(testShift2);
         await controller.deleteShift(testShift3);
+        await controller.deleteShift(testShift4);
+        await controller.deleteShift(testShift5);
     });
 });

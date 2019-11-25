@@ -11,6 +11,7 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
+let select2 = document.querySelector("#select2");
 let allDates;
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
@@ -180,9 +181,11 @@ async function populateEmployeeSelection() {
             option.setAttribute("data-employee", data);
             employeeSelect.append(option);
         select.innerHTML += "<option>" + e.name + "</option>";
+        select2.innerHTML += "<option>" + e.name + "</option>";
     }
     employeeSelect.innerHTML += "<option></option>";
     select.innerHTML += "<option></option>";
+    select2.innerHTML += "<option></option>";
 }
 
 async function shiftSelected(shiftID, employeeID, divID) {
