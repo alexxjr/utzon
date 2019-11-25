@@ -239,7 +239,6 @@ exports.manageIncomingUpdates = async function (updates) {
             }
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
-            console.log(failures);
             updates.splice(i, 1);
             i--;
         }

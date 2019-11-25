@@ -17,13 +17,11 @@ let expect = require('chai').expect;
 describe('unittest shift', ()  => {
 
     it('Make a shift with only one date', async () => {
-        let firsttry = await controller.createShift(testStartDate);
-        expect(firsttry).to.equal(undefined);
+        await expect(controller.createShift(testStartDate)).to.be.rejectedWith("The date objects are not objects");
     });
 
     it('make a shift with no parameters', async () => {
-        let secondtry = await controller.createShift();
-        expect(secondtry).to.equal(undefined);
+        await expect(controller.createShift(testStartDate)).to.be.rejectedWith("The date objects are not objects");
     });
 
     it('make a shift with normal parameters', async () => {
@@ -39,23 +37,21 @@ describe('unittest shift', ()  => {
         expect(thirdtry.end.getDate()).to.equal(15);
         expect(thirdtry.end.getHours()).to.equal(18);
         expect(thirdtry.end.getMinutes()).to.equal(55);
-        expect(thirdtry.totalHours).to.equal(8.5);
+        expect(thirdtry.totalHours).to.equal(8.0);
         expect(thirdtry.employee).to.equal(undefined);
     }).timeout(10000);
 
     it('Make a shift with end date before startdate', async () => {
-        let fourthtry = await controller.createShift(testEndDate, testStartDate);
-        expect(fourthtry).to.equal(undefined);
+        await expect(controller.createShift(testEndDate, testStartDate)).to.be.rejectedWith("The end date+time is before or equal to the start date+time");
     });
 
     it('Create a shift with reversed minutes to check for hour calculation', async () => {
         fifthtry = await controller.createShift(testStartDate1, testEndDate1);
-        expect(fifthtry.totalHours).to.equal(7.5);
+        expect(fifthtry.totalHours).to.equal(7.0);
     }).timeout(10000);
 
     it('exact same date', async () => {
-        let sixthtry = await controller.createShift(testStartDate, testStartDate);
-        expect(sixthtry).to.equal(undefined);
+        await expect(controller.createShift(testStartDate, testStartDate)).to.be.rejectedWith("The end date+time is before or equal to the start date+time");
     });
 
     after(async () =>  {
