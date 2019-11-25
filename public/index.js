@@ -101,8 +101,6 @@ async function chooseDate() {
     this.style.backgroundColor = "cornflowerblue";
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
-
-
 }
 
 function setCurrentMonth() {
@@ -222,6 +220,7 @@ function okAction() {
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "yellow";
+    selectedShiftDiv.onclick = undefined;
 }
 
 
@@ -306,7 +305,8 @@ function createShiftAction() {
     });
 }
 
-function siteInit() {
+async function siteInit() {
+
     allDates = document.querySelectorAll(".date");
     let today = new Date();
     for (let i = 0; i < allDates.length; i++) {
@@ -315,6 +315,8 @@ function siteInit() {
         }
 
     }
+    let date = createDate();
+    dayShift.innerHTML = await generateShifts(date);
 }
 
 function closeForm2() {
