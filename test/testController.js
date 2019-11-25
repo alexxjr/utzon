@@ -271,6 +271,7 @@ describe('Test af controllerfunktioner', function(){
     it('return all shifts for an employee between two dates', async () => {
         await controller.addEmployeeToShift(testEmployee3, testShift2);
         await controller.addEmployeeToShift(testEmployee3, testShift3);
+        testEmployee3 = await controller.getEmployeeWithId(testEmployee3._id);
         let shiftsList = await controller.getShiftsForEmployeeBetweenDates(testEmployee3, new Date(2017,1,1)
             ,new Date(2017,12,31));
         expect(shiftsList.length).to.equal(2);
@@ -278,17 +279,6 @@ describe('Test af controllerfunktioner', function(){
     it('return total hours for all shifts an employee between two dates', async () =>{
         let hours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(testEmployee3,  new Date(2017,1,1)
             ,new Date(2017,12,31));
-        expect(hours).to.equal(15);
-    });
-        it('return all shifts between two dates', async () =>{
-        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
-            ,new Date(2017,12,31));
-        expect(shiftsList.length).to.equal(2);
-     });
-    it('return total hours for all shifts between two dates', async () => {
-        let shiftsList = await controller.getShiftBetweenTwoDates(new Date(2017,1,1)
-            ,new Date(2017,12,31));
-        let hours = await controller.getTotalhoursBetween(shiftsList);
         expect(hours).to.equal(15);
     });
 

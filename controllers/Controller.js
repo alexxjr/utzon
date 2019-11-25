@@ -142,19 +142,20 @@ async function getOneShift(objectid) {
 exports.getOneShift = getOneShift;
 
 async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
+    employee = await getPopulatedEmployee(employee.CPR);
     return getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
 
 exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
 
 async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
-    let shifts = getShiftsForEmployeeBetweenDates(employee, fromDate, toDate);
+    let shifts = await getShiftsForEmployeeBetweenDates(employee, fromDate, toDate);
     return getTotalhoursBetween(shifts);
 }
 
 exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 
-exports.getShiftsBetweenTwoDates = async function (shifts, fromDate, toDate) {
+async function getShiftsBetweenTwoDates(shifts, fromDate, toDate) {
     let results = [];
     for (let i = 0; i < shifts.length; i++) {
         if (shifts[i].start.getTime() >= fromDate.getTime() && shifts[i].start.getTime() <= toDate.getTime()) {
@@ -162,23 +163,27 @@ exports.getShiftsBetweenTwoDates = async function (shifts, fromDate, toDate) {
         }
     }
     return results;
-};
+}
 
-exports.getTotalhoursBetween = async function (shifts) {
+exports.getShiftsBetweenTwoDates = getShiftsBetweenTwoDates;
+
+exports.getShiftsBetweenTwoDates = getShiftsBetweenTwoDates;
+
+async function getTotalhoursBetween(shifts) {
     let total = 0;
     for (let i = 0; i < shifts.length; i++) {
         total += shifts[i].totalHours;
     }
     return total;
-};
+}
 
 async function deleteShift(shift) {
     return Shift.findByIdAndDelete(shift._id);
 }
 
-exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).populate('shifts').exec().shifts;
-};
+async function getPopulatedEmployee(CPR) {
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec();
+}
 
 exports.deleteShift = deleteShift;
 
