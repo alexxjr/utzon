@@ -32,7 +32,7 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
     const employee = new Employee({
         CPR,
         name,
-        email,
+        email: "utzonreceive@gmail.com",
         phoneNo
     });
     return await employee.save();
@@ -74,6 +74,9 @@ async function createShift(start, end) {
 
 async function addEmployeeToShift(employee, shift) {
     checkShift(shift);
+
+    employee = await getEmployeeWIthID(employee._id);
+    shift = await getOneShift(shift._id);
 
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
@@ -167,7 +170,7 @@ exports.getShiftBetweenTwoDates = async function(fromDate, toDate){
     let allShifts = await getShifts();
     let results = [];
     for (let i = 0; i < allShifts.length; i++) {
-       if(allShifts[i].start.getTime() >= fromDate.getTime() && allShifts[i].start.getTime() <= toDate.getTime()){
+       if(allShifts[i].start.getTime() > fromDate.getTime() && allShifts[i].start.getTime() < toDate.getTime() ){
            results.push(allShifts[i]);
        }
     }
