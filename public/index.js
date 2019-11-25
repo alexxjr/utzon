@@ -260,6 +260,24 @@ endTimePicker.addEventListener("click", async function () {
 populateEmployeeSelection();
 siteInit();
 
+function modalAction() {
+    document.getElementById("empModal").style.display = "block";
+    document.getElementById("select2").value = "";
+    document.getElementById("fromDatePicker").value = "0000-00-00";
+    document.getElementById("toDatePicker").value = "0000-00-00";
+    document.getElementById("ansatTid").value = "";
+}
+
+function closeModalAction() {
+    document.getElementById("empModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    if(event.target === document.getElementById("empModal")) {
+        document.getElementById("empModal").style.display = "none";
+    }
+}
+
 function createEmployeeAction() {
     document.getElementById("popup2").style.display = "block";
     document.querySelector("#empNavn").value = "";
