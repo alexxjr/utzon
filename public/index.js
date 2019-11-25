@@ -177,8 +177,15 @@ async function populateEmployeeSelection() {
             option.innerText = e.name;
             option.setAttribute("data-employee", data);
             employeeSelect.append(option);
-        select2.append(option);
+            let option2 = document.createElement("option");
+            option2.innerText = e.name;
+            option2.setAttribute("data-employee", data);
+            select2.append(option2);
+
+
         select.innerHTML += "<option>" + e.name + "</option>";
+            console.log(employeeSelect);
+            console.log(select2);
 
     }
     employeeSelect.innerHTML += "<option></option>";
@@ -280,27 +287,9 @@ async function totalHoursBetweenTwoDates() {
     if (selectedEmployee) {
         selectedEmployee = JSON.parse(select2[select2.selectedIndex].getAttribute('data-employee'))
     }
-    console.log(selectedEmployee._id)
-    let employee = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
-
-
-
-
+    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
     document.querySelector("#ansatTid").value = hours;
-    console.log(selectedEmployee.name);
 
-
-    /*
-    let allShifts = employee.shifts;
-    let result = [];
-    let total = 0;
-    for (let i = 0; i < allShifts.length; i++) {
-        if(allShifts[i].start.getTime() >= startDate.value.getTime() && allShifts[i].start.getTime() <= toDate.value.getTime()) {
-            result.push(allShifts[i]);
-        }
-    }
-    for (let i = 0; i < result.length)
-     */
 }
 
 function closeModalAction() {

@@ -14,8 +14,8 @@ router
     .get('/getOneEmployeeHours/:employeeID/:startTime/:endTime', async (request, response) => {
         let startDate = new Date(request.params.startTime);
         let toDate = new Date(request.params.endTime);
-        let employee = await controller.getEmployeeWithId(request.params.employeeID)
-        let totalHours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate);
+        let employee = await controller.getEmployeeWithId(request.params.employeeID);
+        let totalHours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
         response.send(totalHours);
     })
     .post('/', async (request, response) => {
