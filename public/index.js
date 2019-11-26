@@ -11,6 +11,7 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let employeeSelect = document.querySelector("#employeeSelect");
 let select = document.querySelector("#select");
+let select2 = document.querySelector("#select2");
 let allDates;
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
 let daysArray = [];
@@ -100,8 +101,6 @@ async function chooseDate() {
     this.style.backgroundColor = "cornflowerblue";
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
-
-
 }
 
 function setCurrentMonth() {
@@ -155,7 +154,6 @@ async function GET(url) {
 
 async function generateShifts(date) {
     let shifts = await GET("/api/shifts/" + date);
-    console.log(shifts);
     let template = await GETtext('/shifts.handlebars');
     let compiledTemplate = Handlebars.compile(template);
     return compiledTemplate({shifts});
@@ -179,7 +177,16 @@ async function populateEmployeeSelection() {
             option.innerText = e.name;
             option.setAttribute("data-employee", data);
             employeeSelect.append(option);
+            let option2 = document.createElement("option");
+            option2.innerText = e.name;
+            option2.setAttribute("data-employee", data);
+            select2.append(option2);
+
+
         select.innerHTML += "<option>" + e.name + "</option>";
+            console.log(employeeSelect);
+            console.log(select2);
+
     }
     employeeSelect.innerHTML += "<option></option>";
     select.innerHTML += "<option></option>";
@@ -206,7 +213,6 @@ async function shiftSelected(shiftID, employeeID, divID) {
 
 }
 
-//WRONG CHECK FOR EMPLOYEES HERE
 function okAction() {
     let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
@@ -219,6 +225,12 @@ function okAction() {
     dayShift.style.display = "inline-block";
     shiftUpdate.style.display = "none";
     selectedShiftDiv.style.backgroundColor = "yellow";
+    selectedShiftDiv.onclick = undefined;
+    let info = selectedShiftDiv.getElementsByTagName("li");
+    info[0].innerText = "Ansat: " + newEmployee.name;
+    info[1].innerText = "Dato: " + /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(newStart.toISOString());
+    info[2].innerText = "Starttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newStart.toISOString());
+    info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
 }
 
 
@@ -250,12 +262,29 @@ function hourCalculation(start, end) {
     }
 }
 
-startTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+endTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
-endTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+startTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
+
+function timeChanged() {
+    if (hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate) <= 0) {
+        let endTime = parseInt(/[0-9]{2}/.exec(endTimePicker.value)[0]);
+        console.log(endTime);
+        if (endTime.length === 1) {
+            endTime = "0" + (endTime - 1) + ":00";
+        }
+        else {
+            endTime = (endTime - 1) + ":00";
+        }
+        startTimePicker.value = (endTime);
+    }
+    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+}
 
 populateEmployeeSelection();
 siteInit();
@@ -266,6 +295,18 @@ function modalAction() {
     document.getElementById("fromDatePicker").value = "0000-00-00";
     document.getElementById("toDatePicker").value = "0000-00-00";
     document.getElementById("ansatTid").value = "";
+
+}
+
+async function totalHoursBetweenTwoDates() {
+    let startDate = document.querySelector("#fromDatePicker").value;
+    let toDate = document.querySelector("#toDatePicker").value;
+    let selectedEmployee = select2.value;
+    if (selectedEmployee) {
+        selectedEmployee = JSON.parse(select2[select2.selectedIndex].getAttribute('data-employee'))
+    }
+    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
+    document.querySelector("#ansatTid").value = hours;
 
 }
 
@@ -290,8 +331,8 @@ function createEmployeeAction() {
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
-    document.querySelector("#createStartTime").value = "00:00"
-    document.querySelector("#createEndTime").value = "00:00"
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
@@ -304,7 +345,8 @@ function createShiftAction() {
     });
 }
 
-function siteInit() {
+async function siteInit() {
+
     allDates = document.querySelectorAll(".date");
     let today = new Date();
     for (let i = 0; i < allDates.length; i++) {
@@ -313,6 +355,8 @@ function siteInit() {
         }
 
     }
+    let date = createDate();
+    dayShift.innerHTML = await generateShifts(date);
 }
 
 function closeForm2() {
