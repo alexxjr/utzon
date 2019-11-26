@@ -23,7 +23,7 @@ async function createShift(start, end) {
     }
 
 
-    let totalHours = hourCalculation(start, end);
+    let totalHours = controller.hourCalculation(start, end);
     const shift = new Shift({
         start,
         end,
@@ -55,6 +55,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
         throw new Error("The enddate is before the startdate or they are equal");
     }
     shift = await getOneShift(shift._id);
+    shift.totalHours = controller.hourCalculation(newStart, newEnd);
     shift.start = newStart;
     shift.end = newEnd;
 

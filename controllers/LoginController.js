@@ -1,19 +1,22 @@
+//crypto for making hashes using PBKDF2
 const crypto = require('crypto');
+//Login Schema for making logins and saving them in the database
 const Login = require("../models/Login");
+//Mongoose import that enables saving to the right database.
 const mongoose = require("../app");
 
 
 /**
  * Function to find the role of a user in the database.
  */
-exports.getLoginRole = async function (username) {
+async function getLoginRole(username) {
     let user = findOneLogin(username);
     if (user === undefined) {
         throw new Error("User does not exist in the system");
     }
     return user.role;
 
-};
+}
 
 /**
  * Find one user in the database.
@@ -21,9 +24,6 @@ exports.getLoginRole = async function (username) {
 async function findOneLogin(username) {
     return Login.findOne({username}).exec();
 }
-
-
-exports.createLogin = createLogin;
 
 /**
  * Create a new Login for a user. Saves the login to the database.
@@ -34,7 +34,6 @@ async function createLogin(username, password, role) {
     return await newLogin.save();
 }
 
-exports.valiteDateLogin = validateLogin;
 
 /**
  * Validate the password for a user for login purposes
@@ -91,3 +90,12 @@ async function validatePassword(typedPassword, storedPassword) {
 
     return hash === parts[0];
 }
+
+/**
+ * Exports for use in routes.
+ */
+module.exports = {
+    createLogin,
+    validateLogin,
+    getLoginRole
+};
