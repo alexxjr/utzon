@@ -118,7 +118,7 @@ async function getEmployees() {
 Gets all shifts for an employee between two dates
  */
 async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
-    employee = await shiftController.getShiftsBetweenTwoDates(employee.CPR);
+    employee = await getEmployee(employee.CPR);
     return shiftController.getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
 
