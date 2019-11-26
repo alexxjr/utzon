@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Utzon vagtplan</title>
+    <script src="handlebars-v4.4.3.js" defer></script>
+    <link rel="stylesheet" href="index.css">
+    <script src="Update.js" defer></script>
+    <script src="adminAccess.js" defer></script>
+</head>
+<body>
+    <button type="button" id="saveBtn" onclick="saveAction()">Gem ændringer</button>
+<div class="month">
+    <ul>
+        <li class="prev">
+            <button type="button" id="prevBtn">&#10094;</button>
+        </li>
+        <li class="next">
+            <button type="button" id="nextBtn">&#10095;</button>
+        </li>
+        <li>
+            <div id="monthDisplay"></div>
+            <br>
+            <div id="yearDisplay"></div>
+        </li>
+    </ul>
+</div>
+
+<ul class="weekdays">
+    <li>Mandag</li>
+    <li>Tirsdag</li>
+    <li>Onsdag</li>
+    <li>Torsdag</li>
+    <li>Fredag</li>
+    <li>Lørdag</li>
+    <li>Søndag</li>
+</ul>
+
+<ul class="daysList">
+</ul>
+
+<div class="shifts">
+    <ul id="hover">
+
+    </ul>
+</div>
+<div id="shiftUpdate">
+    <ul id="shiftUpdateInfo">
+        <li>Ansat:
+            <select id="employeeSelect"></select>
+        </li>
+        <li>Dato: <input id="datePicker" type="date"></li>
+        <li>Starttid: <input id="startTimePicker" type="time" name="appt" required></li>
+        <li>Sluttid: <input id="endTimePicker" type="time"></li>
+        <li>Antal timer: <input id="totalHours"></li>
+    </ul>
+    <button id="shiftOK">Ok</button>
+    <button id="shiftCancel" onclick="cancelAction()">Annuller</button>
+    <button id="deleteBtn">Delete</button>
+</div>
+
+<button class="createButton" onclick="createShiftAction()">Opret vagt</button>
+
+<div class="form-popup" id="popup">
+    <form action="/action_page.php" class="form-container">
+        <h2>Opret ny vagt</h2>
+        <li>
+            Vælg ansat:<select id="select"></select>
+        </li>
+        <li>
+            Vagt dato: <label id="createStartDate"></label>
+        </li>
+        <li>
+            Vælg vagt start: <input id="createStartTime" type="time" name="start" required>
+            <span class="validity"></span>
+        </li>
+        <li>
+            Vælg vagt slut: <input id="createEndTime" type="time" name="end" required>
+            <span class="validity"></span>
+        </li>
+        <li>
+            Antal timer: <label id="createTotalHours"> 00:00 </label>
+        </li>
+        <br>
+
+        <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Annuller</button>
+    </form>
+</div>
+
+</body>
+</html>

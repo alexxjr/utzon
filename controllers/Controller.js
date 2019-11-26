@@ -156,7 +156,7 @@ exports.manageIncomingUpdates = async function (updates) {
     if (updates.length === 0) {
         throw new Error("The update array is empty");
     }
-    if(!Array.isArray(updates)) {
+    if (!Array.isArray(updates)) {
         throw new Error("The updates variable is not an array")
     }
     let succes = [];
@@ -210,13 +210,13 @@ async function sendUpdateMail(updates) {
 
 async function sendMails(mails) {
     for (let mail of mails.values()) {
-    let mailOptions = {
-        from: 'utzonsend@gmail.com',
-        to: mail.employee.email + '',
-        subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
-        text: 'Ændringer: ' + mail.context
-    };
-    await transporter.sendMail(mailOptions);
+        let mailOptions = {
+            from: 'utzonsend@gmail.com',
+            to: mail.employee.email + '',
+            subject: 'Der er blevet lavet ændringer i din vagtplan (Sending Email using Node.js)',
+            text: 'Ændringer: ' + mail.context
+        };
+        await transporter.sendMail(mailOptions);
     }
 }
 
@@ -268,9 +268,9 @@ async function updateShift(update) {
             }
             break;
         case "createShift":
-            if(update.newEmployee === ""){
+            if (update.newEmployee === "") {
                 let shift = await createShift(update.newStart, update.newEnd);
-            }else{
+            } else {
                 let s = await createShift(update.newStart, update.newEnd);
                 await addEmployeeToShift(update.newEmployee, s);
             }
@@ -327,7 +327,7 @@ function checkShift(shift) {
         throw new Error("The shift object is not an object");
     }
 
-    if (!("start" in shift) || !("end" in shift) || !("totalHours"  in shift)) {
+    if (!("start" in shift) || !("end" in shift) || !("totalHours" in shift)) {
         throw new Error("The shift object is not a shift");
     }
 }
@@ -336,17 +336,35 @@ function checkShift(shift) {
 exports.getLoginRole = async function (username) {
     let users = await Login.find().exec();
     for (let i = 0; i < users.length; i++) {
-        if(users[i].username === username){
+        if (users[i].username === username) {
             return users[i].role;
         }
     }
 };
 
 
-exports.login = login;
-async function login(username, password) {
+exports.createLogin = createLogin;
 
+async function createLogin(username, password, role) {
+    const newLogin = new Login({username, password, role});
+    return await newLogin.save();
+};
+
+exports.valiteDateLogin = validateLogin;
+
+async function validateLogin(username, password) {
+    let found = false;
+    let i = 0;
+    let logins = await Login.find().exec();
+    while (!found && i < logins.length) {
+        if (logins[i].username === username && logins[i].password === password) {
+            found = true;
+        }
+        i++;
+    }
+    return found;
 }
+
 
 exports.changeShiftEmployee = changeShiftEmployee;
 
