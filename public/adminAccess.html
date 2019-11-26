@@ -6,12 +6,27 @@
     <script src="handlebars-v4.4.3.js" defer></script>
     <link rel="stylesheet" href="index.css">
     <script src="Update.js" defer></script>
-    <script src="adminAccess.js" defer></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
-    <button type="button" id="saveBtn" onclick="saveAction()">Gem ændringer</button>
+<button type="button" id="saveBtn" onclick="saveAction()">Gem ændringer</button>
+<button type="button" id="seeEmployeesBtn" onclick="modalAction()">Ansatte</button>
+
+<div id="empModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModalAction()">&times;</span>
+        <li> Vælg ansat:<select id="select2" required></select></li>
+        <li> Fra: <input id="fromDatePicker" type="date" required></li>
+        <li> Til: <input id="toDatePicker" type="date"required></li>
+        <li> Antal timer: <input id="ansatTid" type="text" disabled></li>
+
+        <button type="button" id="beregn" onclick="totalHoursBetweenTwoDates()">Beregn timer</button>
+    </div>
+</div>
+
 <div class="month">
     <ul>
+        </li>
         <li class="prev">
             <button type="button" id="prevBtn">&#10094;</button>
         </li>
@@ -61,6 +76,8 @@
 
 <button class="createButton" onclick="createShiftAction()">Opret vagt</button>
 
+<button class="createButton2" onclick="createEmployeeAction()">Opret ansat</button>
+
 <div class="form-popup" id="popup">
     <form action="/action_page.php" class="form-container">
         <h2>Opret ny vagt</h2>
@@ -85,6 +102,31 @@
 
         <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
         <button type="button" class="btn cancel" onclick="closeForm()">Annuller</button>
+    </form>
+</div>
+<div class="form-popup2" id="popup2">
+    <form action="/action_page.php" class="form-container">
+        <h2>Opret ny ansat</h2>
+        <li>
+            Navn:
+            <input id="empNavn" type="text" required>
+        </li>
+        <li>
+            Telefonnummer:
+            <input id="empNr" type="text" required>
+        </li>
+        <li>
+            Email:
+            <input id="empMail" type="text" required>
+        </li>
+        <li>
+            CPR:
+            <input id="empCPR" type="text" required>
+        </li>
+        <br>
+
+        <button type="button" class="btn" onclick="okCreateEmployee()">Opret</button>
+        <button type="button" class="btn cancel" onclick="closeForm2()">Annuller</button>
     </form>
 </div>
 
