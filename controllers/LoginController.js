@@ -28,9 +28,9 @@ async function findOneLogin(username) {
 /**
  * Create a new Login for a user. Saves the login to the database.
  */
-async function createLogin(username, password, role) {
-    let hash = await generateHash(password);
-    const newLogin = new Login({username, hash, role});
+async function createLogin(username, secret, role) {
+    let password = await generateHash(secret);
+    let newLogin = new Login({username, password, role});
     return await newLogin.save();
 }
 
@@ -63,12 +63,10 @@ async function generateHash(password) {
 
     
     let hash;
-    await crypto.pbkdf2(password, salt, iterations, 64, "sha512", (err, buf) => {
-        if (err) throw err;
-        hash = buf.toString('hex');
-    });
+    hash = crypto.pbkdf2Sync(password, salt, iterations, 64, "sha512").toString('hex');
 
     return [hash, salt, iterations].join(":");
+
 }
 
 /**
@@ -82,11 +80,7 @@ async function validatePassword(typedPassword, storedPassword) {
 
     let parts = storedPassword.split(":");
 
-    let hash;
-    await crypto.pbkdf2(typedPassword, parts[1], parts[2], 64, "sha512", (err, buf) => {
-        if (err) throw err;
-        hash = buf.toString('hex');
-    });
+    let hash = crypto.pbkdf2Sync(typedPassword, parts[1], Number.parseInt(parts[2]), 64, "sha512").toString('hex');
 
     return hash === parts[0];
 }

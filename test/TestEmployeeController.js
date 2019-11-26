@@ -21,9 +21,9 @@ describe('Test af controllerfunktioner', function(){
         testEmployee3 = await employeeController.createEmployee("9876543210", "Andreas", "utzonreceive@gmail.com", "test3");
         testShift = await shiftController.createShift(new Date(2018, 11, 15,10,25)
             , new Date(2018, 11, 15,18,55));
-        testShift2 = await employeeController.createShift(new Date(2017,6,6,10,0),
+        testShift2 = await shiftController.createShift(new Date(2017,6,6,10,0),
             new Date(2017,6,6,18,0));
-        testShift3 = await employeeController.createShift(new Date(2017,6,7,10,0),
+        testShift3 = await shiftController.createShift(new Date(2017,6,7,10,0),
             new Date(2017,6,7,18,0));
     });
 
@@ -65,7 +65,7 @@ describe('Test af controllerfunktioner', function(){
     it('return all shifts for an employee between two dates', async () => {
         await employeeController.addEmployeeToShift(testEmployee3, testShift2);
         await employeeController.addEmployeeToShift(testEmployee3, testShift3);
-        testEmployee3 = await employeeController.getEmployeeWithId(testEmployee3._id);
+        testEmployee3 = await employeeController.getEmployeeWithID(testEmployee3._id);
         let shiftsList = await employeeController.getShiftsForEmployeeBetweenDates(testEmployee3, new Date(2017,1,1)
             ,new Date(2017,12,31));
         expect(shiftsList.length).to.equal(2);

@@ -9,7 +9,6 @@ const login = new Schema({
     },
     password: {
         type: String,
-        minlength: 64,
         required: true
     },
     role: {
