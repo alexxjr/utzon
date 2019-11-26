@@ -10,7 +10,13 @@ const Login = require('../models/Login');
 const mongoose = require("../app");
 // Import of nodemailer, to be used for notifications over email
 const nodemailer = require('nodemailer');
+// Import of the shift controller
+const shiftController = require('./shiftController');
 
+/**
+ * Methods for creatings the transporter that enables emails to be sent out.
+ * Login for the sender address.
+ */
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -67,6 +73,13 @@ function changeStringToDateInUpdate(update) {
     }
 }
 
+/**
+ * Checks if the updates coming in are properly formed.
+ * Goes through each updates and saves info needed when sending out emails.
+ * Then passes on the individual updates to the updateShift method.
+ * Catches any error thrown when updating the database and passes it back to
+ * the calling method.
+ */
 async function manageIncomingUpdates(updates) {
     if (updates === undefined) {
         throw new Error("The param updates are undefined");
@@ -77,7 +90,9 @@ async function manageIncomingUpdates(updates) {
     if (!Array.isArray(updates)) {
         throw new Error("The updates variable is not an array")
     }
-    let succes = [];
+    //Array for storing information about successful updates.
+    let success = [];
+    //Array for failed updates as well as their error info.
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
@@ -91,20 +106,22 @@ async function manageIncomingUpdates(updates) {
                     type: updates[i].type
                 };
             }
-            await updateShift(updates[i]);
+            await shiftController.updateShift(updates[i]);
             if (isShift) {
-                succes.push(updateInfo);
+                success.push(updateInfo);
             }
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
-            updates.splice(i, 1);
             i--;
         }
     }
-    await sendUpdateMail(succes);
+    await sendUpdateMail(success);
     return failures;
-};
+}
 
+/**
+ * Genereate the text needed in the mails, as well as the list of recipents for each mail.
+ */
 async function sendUpdateMail(updates) {
     let mails = new Map();
     for (let update of updates) {
@@ -126,6 +143,9 @@ async function sendUpdateMail(updates) {
     await sendMails(mails);
 }
 
+/**
+ * Actually send the mails to the intended recipents with the info from the updates.
+ */
 async function sendMails(mails) {
     for (let mail of mails.values()) {
         let mailOptions = {
@@ -138,6 +158,9 @@ async function sendMails(mails) {
     }
 }
 
+/**
+ * Exports for use in the routes and the other controllers.
+ */
 module.exports = {
     hourCalculation,
     getTotalHoursBetween,
