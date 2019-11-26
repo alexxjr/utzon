@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 
 const router = express.Router();
-const controller = require('../controllers/Controller');
+const loginController = require('../controllers/LoginController');
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.use(session({secret: 'Utzon secret', saveUninitialized: true, resave: true})
 router
     .post('/', async (request, response) => {
         const {username, password} = request.body;
-        if (await controller.valiteDateLogin(username, password)) {
+        if (await loginController.validateLogin(username, password)) {
             request.session.username = username;
             response.send({ok: true});
         } else {
@@ -21,9 +21,8 @@ router
     })
     .get('/session', async (request, response) => {
         const username = request.session.username;
-        let role = await controller.getLoginRole(username);
-        // husk at ændre efter "Admin" til role ved pull
-        request.session.role = "Admin";
+        let role = await loginController.getLoginRole(username);
+        request.session.role = role;
         if (role === "Admin") {
             response.send(JSON.stringify(role));
         } else if(!username) {
