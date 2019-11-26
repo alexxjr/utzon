@@ -18,7 +18,6 @@ router
         }
     })
     .get('/:date', async (request, response) => {
-        console.log(request.session.role);
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let date = new Date(request.params.date);
             let shiftOnDate = await controller.getShiftsOnDate(date);
