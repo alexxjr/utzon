@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const employeeRoute = require('./routes/EmployeeRoute');
-const shiftRoute = require('./routes/Shiftroute');
+const shiftRoute = require('./routes/ShiftRoute');
 const loginRoute = require('./routes/LoginRoute');
 app.use('/api/employees', employeeRoute);
 app.use('/api/shifts', shiftRoute);
