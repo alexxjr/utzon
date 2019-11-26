@@ -32,7 +32,7 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
     const employee = new Employee({
         CPR,
         name,
-        email,
+        email: "utzonreceive@gmail.com",
         phoneNo
     });
     return await employee.save();
@@ -57,6 +57,9 @@ async function createShift(start, end) {
         } else {
             time = (end.getHours() - start.getHours()) - minutes / 60;
         }
+        if (time > 5) {
+            time -= 0.5;
+        }
         return time;
     }
 
@@ -67,10 +70,15 @@ async function createShift(start, end) {
         totalHours
     });
     return await shift.save();
-};
+}
 
 async function addEmployeeToShift(employee, shift) {
     checkShift(shift);
+
+    employee = await getEmployeeWIthID(employee._id);
+    shift = await getOneShift(shift._id);
+
+
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
     }
@@ -92,6 +100,8 @@ async function removeEmployeeFromShift(shift) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWIthID(shift.employee);
+    shift = await getOneShift(shift._id);
+
 
     for (let i = 0; i < employee.shifts.length; i++) {
         if (employee.shifts[i]._id.toString() === shift._id.toString()) {
@@ -105,7 +115,7 @@ async function removeEmployeeFromShift(shift) {
 exports.removeEmployeeFromShift = removeEmployeeFromShift;
 
 async function getEmployeeWIthID(objectid) {
-    return Employee.findOne({_id: objectid});
+    return Employee.findOne({_id: objectid}).populate('shifts').exec();
 }
 
 async function getEmployee(CPR) {
@@ -120,34 +130,85 @@ exports.getEmployees = async function () {
     return Employee.find().populate('shifts').exec();
 };
 
-exports.getShifts = async function () {
+async function getShifts() {
     return Shift.find().populate('employee').exec();
-};
+}
 
-exports.getOneShift = async function (objectid) {
+exports.getShifts = getShifts;
+
+async function getOneShift(objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
-};
+}
+
+exports.getOneShift = getOneShift;
+
+async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
+    employee = await getPopulatedEmployee(employee.CPR);
+    return getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
+}
+
+exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
+
+async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
+    let shifts = await getShiftsForEmployeeBetweenDates(employee, fromDate, toDate);
+    return getTotalhoursBetween(shifts);
+}
+
+exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
+
+async function getShiftsBetweenTwoDates(shifts, fromDate, toDate) {
+    let results = [];
+    for (let i = 0; i < shifts.length; i++) {
+        if (shifts[i].start.getTime() >= fromDate.getTime() && shifts[i].start.getTime() <= toDate.getTime()) {
+            results.push(shifts[i]);
+        }
+    }
+    return results;
+}
+
+exports.getShiftsBetweenTwoDates = getShiftsBetweenTwoDates;
+
+exports.getShiftsBetweenTwoDates = getShiftsBetweenTwoDates;
+
+async function getTotalhoursBetween(shifts) {
+    let total = 0;
+    for (let i = 0; i < shifts.length; i++) {
+        total += shifts[i].totalHours;
+    }
+    return total;
+}
 
 async function deleteShift(shift) {
     return Shift.findByIdAndDelete(shift._id);
 }
 
-exports.getShiftsForEmployee = async function (CPR) {
-    return Employee.findOne({CPR: CPR}).populate('shifts').exec().shifts;
-};
+async function getPopulatedEmployee(CPR) {
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec();
+}
 
 exports.deleteShift = deleteShift;
 
 exports.getShiftsOnDate = async function (date) {
     let result = [];
-    let shifts = await this.getShifts();
+    let shifts = await getShifts();
     for (let i = 0; i < shifts.length; i++) {
-        if (shifts[i].start.getTime() === date.getTime()) {
+        if (shifts[i].start.toDateString() === date.toDateString()) {
             result.push(shifts[i]);
         }
     }
     return result;
 };
+
+function changeStringToDate(update) {
+    if (update.shift !== undefined) {
+        update.shift.start = new Date(update.shift.start);
+        update.shift.end = new Date(update.shift.end);
+    }
+    if (update.newStart !== undefined) {
+        update.newStart = new Date(update.newStart);
+        update.newEnd = new Date(update.newEnd);
+    }
+}
 
 exports.manageIncomingUpdates = async function (updates) {
     if (updates === undefined) {
@@ -163,6 +224,7 @@ exports.manageIncomingUpdates = async function (updates) {
     let failures = [];
     for (let i = 0; i < updates.length; i++) {
         try {
+            changeStringToDate(updates[i]);
             let updateInfo;
             let isShift = updates[i].shift !== undefined;
             if (isShift) {
@@ -178,7 +240,6 @@ exports.manageIncomingUpdates = async function (updates) {
             }
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
-            console.log(failures);
             updates.splice(i, 1);
             i--;
         }
@@ -221,10 +282,6 @@ async function sendMails(mails) {
 }
 
 async function updateShift(update) {
-    if ((update.newStart !== undefined && update.newEnd === undefined) || (update.newStart === undefined && update.newEnd !== undefined)) {
-        throw new Error("One of the date objects are undefined");
-    }
-
     if (update.type === undefined) {
         throw new Error("No update type is given for this update");
     }
@@ -268,12 +325,7 @@ async function updateShift(update) {
             }
             break;
         case "createShift":
-            if (update.newEmployee === "") {
-                let shift = await createShift(update.newStart, update.newEnd);
-            } else {
-                let s = await createShift(update.newStart, update.newEnd);
-                await addEmployeeToShift(update.newEmployee, s);
-            }
+            await createShift(update.newStart, update.newEnd);
             break;
         default:
             throw new Error("The update type is unknown")
@@ -293,6 +345,7 @@ async function changeShiftTime(shift, newStart, newEnd) {
     if (newEnd <= newStart) {
         throw new Error("The enddate is before the startdate or they are equal");
     }
+    shift = await getOneShift(shift._id);
     shift.start = newStart;
     shift.end = newEnd;
 

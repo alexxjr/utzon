@@ -6,7 +6,12 @@ chai.use(require('chai-as-promised'));
 
 let testEmployee1;
 let testEmployee2;
+let testEmployee3;
 let testShift;
+let testShift2;
+let testShift3;
+let testShift4;
+let testShift5;
 let startDate;
 let endDate;
 
@@ -16,8 +21,17 @@ describe('Test af controllerfunktioner', function(){
         this.timeout(10000);
         testEmployee1 = await controller.createEmployee("0123456789", "Anders00000", "utzonreceive@gmail.com", "test");
         testEmployee2 = await controller.createEmployee("2013456789", "Andersine", "utzonreceive@gmail.com", "test2");
+        testEmployee3 = await controller.createEmployee("9876543210", "Andreas", "utzonreceive@gmail.com", "test3");
         testShift = await controller.createShift(new Date(2018, 11, 15,10,25)
             , new Date(2018, 11, 15,18,55));
+        testShift2 = await controller.createShift(new Date(2017,6,6,10,0),
+            new Date(2017,6,6,18,0));
+        testShift3 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,18,0));
+        testShift4 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,15,30));
+        testShift5 = await controller.createShift(new Date(2017,6,7,10,0),
+            new Date(2017,6,7,15,0));
         startDate = new Date(2018, 11, 16,10,25);
         endDate = new Date(2018, 11, 16,12,25);
     });
@@ -86,6 +100,7 @@ describe('Test af controllerfunktioner', function(){
         testEmployee1 = await controller.getEmployee(testEmployee1.CPR);
         testEmployee2 = await controller.getEmployee(testEmployee2.CPR);
         await controller.addEmployeeToShift(testEmployee1, testShift);
+        testShift = await controller.getOneShift(testShift._id);
         await controller.changeShiftEmployee(testShift, testEmployee2);
         testShift = await controller.getOneShift(testShift._id);
         expect(testShift.employee._id.toString()).to.equal(testEmployee2._id.toString());
@@ -126,11 +141,6 @@ describe('Test af controllerfunktioner', function(){
         await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
     });
 
-    it('checking for param object for not having a valid dates', async () => {
-        let update = {shift: "hej", newStart: startDate};
-        await expect(controller.updateShift(update)).to.be.rejectedWith("One of the date objects are undefined");
-    });
-
     it('checking for param object for having a valid dates, but using a string as shift', async () => {
         let update = {shift: "Hej", newStart: startDate, newEnd: endDate, type: "changeShiftTimesAndRemoveEmployee"};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The shift object is not an object");
@@ -142,15 +152,11 @@ describe('Test af controllerfunktioner', function(){
     });
 
     it('checking for param object for having a valid dates, but (with) a proper shift object, but no updatetype', async () => {
-        // startDate = new Date(2018, 11, 17,10,25);
-        // endDate = new Date(2018, 11, 17,12,25);
         let update = {shift: testShift, newStart: startDate, newEnd: endDate};
         await expect(controller.updateShift(update)).to.be.rejectedWith("No update type is given for this update");
     });
 
     it('checking for param object for having a valid dates, but (with) a proper shift object, but updatetype is not a string', async () => {
-        // startDate = new Date(2018, 11, 17,10,25);
-        // endDate = new Date(2018, 11, 17,12,25);
         let update = {shift: testShift, newStart: startDate, newEnd: endDate, type: 2};
         await expect(controller.updateShift(update)).to.be.rejectedWith("The type variable is not a string");
     });
@@ -242,12 +248,34 @@ describe('Test af controllerfunktioner', function(){
         expect(testShift).to.equal(null);
     });
      it('create a shift through the update method', async () => {
-         let testUpdate = update.createUpdate(undefined, new Date(2020, 11, 15,10,25)
-             , new Date(2020, 11, 15,18,55));
+         let testUpdate = {shift: undefined, newStart: new Date(2020, 11, 15,10,25)
+             , newEnd: new Date(2020, 11, 15,18,55), type: "createShift"};
          await controller.manageIncomingUpdates([testUpdate]);
          let shift = await controller.getShiftsOnDate(testUpdate.newStart);
          testShift = shift[0];
          expect(testShift.end.getTime()).to.equal(new Date(2020, 11, 15,18,55).getTime());
+    });
+    it('create a shift with total hours > 5', async  () =>{
+       expect(testShift3.totalHours).to.equal(7.5)
+    });
+    it('create a shift woth total hours === 5 hours and 30 minutes', async () =>{
+        expect(testShift4.totalHours).to.equal(5)
+    });
+    it('create a shift with total hours <= 5', async () =>{
+        expect(testShift5.totalHours).to.equal(5);
+    });
+    it('return all shifts for an employee between two dates', async () => {
+        await controller.addEmployeeToShift(testEmployee3, testShift2);
+        await controller.addEmployeeToShift(testEmployee3, testShift3);
+        testEmployee3 = await controller.getEmployeeWithId(testEmployee3._id);
+        let shiftsList = await controller.getShiftsForEmployeeBetweenDates(testEmployee3, new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        expect(shiftsList.length).to.equal(2);
+    });
+    it('return total hours for all shifts an employee between two dates', async () =>{
+        let hours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(testEmployee3,  new Date(2017,1,1)
+            ,new Date(2017,12,31));
+        expect(hours).to.equal(15);
     });
 
      // it('login as admin', async () => {
@@ -259,7 +287,11 @@ describe('Test af controllerfunktioner', function(){
     after(async () => {
         await controller.deleteEmployee(testEmployee2);
         await controller.deleteEmployee(testEmployee1);
+        await controller.deleteEmployee(testEmployee3);
         await controller.deleteShift(testShift);
+        await controller.deleteShift(testShift2);
+        await controller.deleteShift(testShift3);
+        await controller.deleteShift(testShift4);
+        await controller.deleteShift(testShift5);
     });
 });
-
