@@ -94,8 +94,6 @@ async function validatePassword(typedPassword, storedPassword) {
 /**
  * Exports for use in routes.
  */
-module.exports = {
-    createLogin,
-    validateLogin,
-    getLoginRole
-};
+exports.createLogin = createLogin;
+exports.validateLogin = validateLogin;
+exports.getLoginRole = getLoginRole;
