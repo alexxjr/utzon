@@ -3,14 +3,18 @@ const Employee = require('../models/Employee');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of general controller
-const controller = require("../controllers/Controller")
+const controller = require("/controllers/Controller");
+// Import of shift controller
+const shiftController = require("/controllers/shiftController");
 
-/*
-Function that creates and employee with a CPR, name, email and phoneNo.
+// ********** SETTERS ********** //
+
+/**
+Function that creates an employee with a CPR, name, email and phoneNo.
 Currently the email will always be set to "utzonreceive@gmail.com".
 After creation of the employee object, it will be saved in mongoDB
  */
-exports.createEmployee = async function (CPR, name, email, phoneNo) {
+async function createEmployee(CPR, name, email, phoneNo) {
     let CPRType = typeof CPR;
     let nameType = typeof name;
     let emailType = typeof email;
@@ -31,18 +35,18 @@ exports.createEmployee = async function (CPR, name, email, phoneNo) {
         phoneNo
     });
     return await employee.save();
-};
+}
 
-/*
+/**
 Function for adding an employee to a shift and vice versa
 If both employee and shift are of correct types and format,
 the links will be set, and the updated objects will be saved in mongoDB
  */
 async function addEmployeeToShift(employee, shift) {
-    checkShift(shift);
+    shiftController.checkShift(shift);
 
     employee = await getEmployeeWithID(employee._id);
-    shift = await getOneShift(shift._id);
+    shift = await shiftController.getOneShift(shift._id);
 
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
@@ -57,18 +61,18 @@ async function addEmployeeToShift(employee, shift) {
 
 }
 
-/*
+/**
 Function for removing an employee to a shift and vice versa
 If both employee and shift are of correct types and format,
 the links will be removed, and the updated objects will be saved in mongoDB
  */
 async function removeEmployeeFromShift(shift) {
-    checkShift(shift);
+    shiftController.checkShift(shift);
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWithID(shift.employee);
-    shift = await getOneShift(shift._id);
+    shift = await shiftController.getOneShift(shift._id);
 
 
     for (let i = 0; i < employee.shifts.length; i++) {
@@ -80,51 +84,64 @@ async function removeEmployeeFromShift(shift) {
     }
 }
 
-/*
+/**
+ Deletes an employee from mongoDB using the database ID
+ */
+async function deleteEmployee(employee) {
+    return Employee.findByIdAndDelete(employee._id);
+}
+
+// ********** GETTERS ********** //
+
+/**
 Gets an employee from mongoDB using the database ID
  */
 async function getEmployeeWithID(objectid) {
     return Employee.findOne({_id: objectid});
 }
 
-/*
+/**
 Gets an employee from mongoDB using the CPR-number
  */
 async function getEmployee(CPR) {
     return Employee.findOne({CPR: CPR}).exec();
 }
 
-/*
-Deletes an employee from mongoDB using the database ID
- */
-exports.deleteEmployee = async function (employee) {
-    return Employee.findByIdAndDelete(employee._id);
-};
-
-/*
+/**
 Gets all employees from mongoDB
  */
-exports.getEmployees = async function () {
+async function getEmployees() {
     return Employee.find().populate('shifts').exec();
-};
-
-/*
-
- */
-async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
-    employee = await controller.getShiftsBetweenTwoDates(employee.CPR);
-    return controller.getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
 
+/**
+Gets all shifts for an employee between two dates
+ */
+async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
+    employee = await shiftController.getShiftsBetweenTwoDates(employee.CPR);
+    return shiftController.getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
+}
 
+/**
+Gets a sum of the total working hours between two dates for and employee
+ */
 async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toDate){
     let shifts = await getShiftsForEmployeeBetweenDates(employee, fromDate, toDate);
     return controller.getTotalHoursBetween(shifts);
 }
 
+/**
+ * Exporting methods used in other places
+ */
 
-
-exports.removeEmployeeFromShift = removeEmployeeFromShift;
-exports.addEmployeeToShift = addEmployeeToShift;
-exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
-exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
+module.exports = {
+    removeEmployeeFromShift,
+    addEmployeeToShift,
+    getShiftsForEmployeeBetweenDates,
+    getTotalHoursBetweenTwoDatesForAnEmployee,
+    getEmployee,
+    getEmployeeWithID,
+    getEmployees,
+    deleteEmployee,
+    createEmployee
+};
