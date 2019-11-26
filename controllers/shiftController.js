@@ -3,9 +3,9 @@ const Shift = require('../models/Shift');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of general controller
-const controller = require("/controllers/Controller");
+const controller = require("../controllers/Controller");
 // Import of employee controller
-const employeeController = require("/controllers/employeeController");
+const employeeController = require("../controllers/employeeController");
 
 // ********** SETTERS ********** //
 
