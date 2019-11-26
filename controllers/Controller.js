@@ -43,7 +43,7 @@ function hourCalculation(start, end) {
  Calculates the total amount of decimal hours for an array of shifts
  */
 
-async function getTotalhoursBetween(shifts) {
+async function getTotalHoursBetween(shifts) {
     let total = 0;
     for (let i = 0; i < shifts.length; i++) {
         total += shifts[i].totalHours;
