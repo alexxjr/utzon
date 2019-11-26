@@ -266,6 +266,7 @@ function modalAction() {
     document.getElementById("fromDatePicker").value = "0000-00-00";
     document.getElementById("toDatePicker").value = "0000-00-00";
     document.getElementById("ansatTid").value = "";
+
 }
 
 function closeModalAction() {
