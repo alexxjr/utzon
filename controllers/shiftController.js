@@ -210,14 +210,12 @@ function checkShift(shift) {
 /**
  * Exporting methods used in other places
  */
-module.exports = {
-updateShift,
-deleteShift,
-getShiftsBetweenTwoDates,
-getOneShift,
-createShift,
-getShifts,
-changeShiftTime,
-changeShiftEmployee,
-checkShift
-};
+exports.updateShift = updateShift;
+exports.deleteShift = deleteShift;
+exports.getShiftsBetweenTwoDates = getShiftsBetweenTwoDates;
+exports.getOneShift = getOneShift;
+exports.createShift = createShift;
+exports.getShifts = getShifts;
+exports.changeShiftTime = changeShiftTime;
+exports.changeShiftEmployee = changeShiftEmployee;
+exports.checkShift = checkShift;

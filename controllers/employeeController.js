@@ -134,14 +134,13 @@ async function getTotalHoursBetweenTwoDatesForAnEmployee(employee, fromDate, toD
  * Exporting methods used in other places
  */
 
-module.exports = {
-    removeEmployeeFromShift,
-    addEmployeeToShift,
-    getShiftsForEmployeeBetweenDates,
-    getTotalHoursBetweenTwoDatesForAnEmployee,
-    getEmployee,
-    getEmployeeWithID,
-    getEmployees,
-    deleteEmployee,
-    createEmployee
-};
+exports.removeEmployeeFromShift = removeEmployeeFromShift;
+exports.addEmployeeToShift = addEmployeeToShift;
+exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
+exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
+exports.getEmployee = getEmployee;
+exports.getEmployeeWithID = getEmployeeWithID;
+exports.getEmployees = getEmployees;
+exports.deleteEmployee = deleteEmployee;
+exports.createEmployee = createEmployee;
+
