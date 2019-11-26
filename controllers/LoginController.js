@@ -2,6 +2,10 @@ const crypto = require('crypto');
 const Login = require("../models/Login");
 const mongoose = require("../app");
 
+
+/**
+ * Function to find the role of a user in the database.
+ */
 exports.getLoginRole = async function (username) {
     let user = findOneLogin(username);
     if (user === undefined) {
@@ -11,6 +15,9 @@ exports.getLoginRole = async function (username) {
 
 };
 
+/**
+ * Find one user in the database.
+ */
 async function findOneLogin(username) {
     return Login.findOne({username}).exec();
 }
@@ -18,6 +25,9 @@ async function findOneLogin(username) {
 
 exports.createLogin = createLogin;
 
+/**
+ * Create a new Login for a user. Saves the login to the database.
+ */
 async function createLogin(username, password, role) {
     let hash = await generateHash(password);
     const newLogin = new Login({username, hash, role});
@@ -26,12 +36,29 @@ async function createLogin(username, password, role) {
 
 exports.valiteDateLogin = validateLogin;
 
+/**
+ * Validate the password for a user for login purposes
+ */
 async function validateLogin(username, password) {
+
+    if ((typeof username) !== "string" || (typeof password) !== "string") {
+        throw new Error("One of the variables for the login validation is not a string")
+    }
+
+
     let user = findOneLogin(username);
     return validatePassword(password, user.password);
 }
 
+/**
+ * Generate a hash from a password using PBKDF2. Uses randomized salting to generate unique hashes.
+ */
 async function generateHash(password) {
+
+    if ((typeof password) !== "string") {
+        throw new Error("The password when generating a hash is not a string")
+    }
+
     const salt = await crypto.randomBytes(16).toString('hex');
     let iterations = 65536;
 
@@ -45,7 +72,15 @@ async function generateHash(password) {
     return [hash, salt, iterations].join(":");
 }
 
+/**
+ * Compares the hash of the user in the database and the hash made from the newly typed password.
+ * If they match, returns true, else false.
+ */
 async function validatePassword(typedPassword, storedPassword) {
+    if ((typeof typedPassword) !== "string" || (typeof storedPassword) !== "string") {
+        throw new Error("One of the password when validating a hash is not a string")
+    }
+
     let parts = storedPassword.split(":");
 
     let hash;
