@@ -385,6 +385,7 @@ async function totalHoursBetweenTwoDates() {
 }
 
 async function siteInit() {
+    update();
     document.querySelector("#deleteBtn").onclick = deleteAction;
     document.querySelector("#nextBtn").onclick = nextMonth;
     document.querySelector("#prevBtn").onclick = prevMonth;
@@ -396,9 +397,9 @@ async function siteInit() {
         }
 
     }
-    let date = createDate();
+    date = createDate();
     dayShift.innerHTML = await generateShifts(date);
-    update();
+
     await populateEmployeeSelection();
 }
 
@@ -436,4 +437,5 @@ async function POST(data, url) {
 }
 
 siteInit();
+
 
