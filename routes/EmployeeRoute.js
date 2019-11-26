@@ -1,26 +1,26 @@
-const controller = require("../controllers/Controller");
+const employeeController = require("../controllers/employeeController");
 const express = require('express');
 const router = express.Router();
 
 router
     .get('/', async (request, response) => {
-        let employees = await controller.getEmployees();
+        let employees = await employeeController.getEmployees();
         response.send(employees);
     })
     .get('/getOneEmployee/:employeeID', async (request, response) => {
-    let employee = await controller.getEmployeeWithId(request.params.employeeID);
+    let employee = await employeeController.getEmployeeWithID(request.params.employeeID);
     response.send(employee);
 })
     .get('/getOneEmployeeHours/:employeeID/:startTime/:endTime', async (request, response) => {
         let startDate = new Date(request.params.startTime);
         let toDate = new Date(request.params.endTime);
-        let employee = await controller.getEmployeeWithId(request.params.employeeID);
-        let totalHours = await controller.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
+        let employee = await employeeController.getEmployeeWithID(request.params.employeeID);
+        let totalHours = await employeeController.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
         response.send(totalHours);
     })
     .post('/', async (request, response) => {
         const {CPR, name, email, phoneNo} = request.body;
-        let employee = controller.createEmployee(CPR, name, email, phoneNo);
+        let employee = employeeController.createEmployee(CPR, name, email, phoneNo);
         if (employee === undefined) {
             response.sendStatus(403);
         } else {
