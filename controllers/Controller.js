@@ -78,6 +78,7 @@ async function addEmployeeToShift(employee, shift) {
     employee = await getEmployeeWIthID(employee._id);
     shift = await getOneShift(shift._id);
 
+
     if (employee === undefined) {
         throw new Error("Employee variable is empty");
     }
@@ -114,7 +115,7 @@ async function removeEmployeeFromShift(shift) {
 exports.removeEmployeeFromShift = removeEmployeeFromShift;
 
 async function getEmployeeWIthID(objectid) {
-    return Employee.findOne({_id: objectid});
+    return Employee.findOne({_id: objectid}).populate('shifts').exec();
 }
 
 async function getEmployee(CPR) {
@@ -137,7 +138,7 @@ exports.getShifts = getShifts;
 
 async function getOneShift(objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
-};
+}
 
 exports.getOneShift = getOneShift;
 
