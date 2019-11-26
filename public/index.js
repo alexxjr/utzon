@@ -177,12 +177,19 @@ async function populateEmployeeSelection() {
             option.innerText = e.name;
             option.setAttribute("data-employee", data);
             employeeSelect.append(option);
+            let option2 = document.createElement("option");
+            option2.innerText = e.name;
+            option2.setAttribute("data-employee", data);
+            select2.append(option2);
+
+
         select.innerHTML += "<option>" + e.name + "</option>";
-        select2.innerHTML += "<option>" + e.name + "</option>";
+            console.log(employeeSelect);
+            console.log(select2);
+
     }
     employeeSelect.innerHTML += "<option></option>";
     select.innerHTML += "<option></option>";
-    select2.innerHTML += "<option></option>";
 }
 
 async function shiftSelected(shiftID, employeeID, divID) {
@@ -255,12 +262,29 @@ function hourCalculation(start, end) {
     }
 }
 
-startTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+endTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
-endTimePicker.addEventListener("click", async function () {
-    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+
+startTimePicker.addEventListener("click",  function () {
+    timeChanged();
 });
+
+function timeChanged() {
+    if (hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate) <= 0) {
+        let endTime = parseInt(/[0-9]{2}/.exec(endTimePicker.value)[0]);
+        console.log(endTime);
+        if (endTime.length === 1) {
+            endTime = "0" + (endTime - 1) + ":00";
+        }
+        else {
+            endTime = (endTime - 1) + ":00";
+        }
+        startTimePicker.value = (endTime);
+    }
+    totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
+}
 
 populateEmployeeSelection();
 siteInit();
@@ -271,6 +295,18 @@ function modalAction() {
     document.getElementById("fromDatePicker").value = "0000-00-00";
     document.getElementById("toDatePicker").value = "0000-00-00";
     document.getElementById("ansatTid").value = "";
+}
+
+async function totalHoursBetweenTwoDates() {
+    let startDate = document.querySelector("#fromDatePicker").value;
+    let toDate = document.querySelector("#toDatePicker").value;
+    let selectedEmployee = select2.value;
+    if (selectedEmployee) {
+        selectedEmployee = JSON.parse(select2[select2.selectedIndex].getAttribute('data-employee'))
+    }
+    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
+    document.querySelector("#ansatTid").value = hours;
+
 }
 
 function closeModalAction() {
@@ -294,8 +330,8 @@ function createEmployeeAction() {
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
     select.value = "";
-    document.querySelector("#createStartTime").value = "00:00"
-    document.querySelector("#createEndTime").value = "00:00"
+    document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
