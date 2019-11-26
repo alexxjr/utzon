@@ -45,6 +45,9 @@ function hourCalculation(start, end) {
     return time;
 }
 
+
+
+
 /**
  Calculates the total amount of decimal hours for an array of shifts
  */
@@ -161,14 +164,9 @@ async function sendMails(mails) {
 /**
  * Exports for use in the routes and the other controllers.
  */
-module.exports = {
-    hourCalculation,
-    getTotalHoursBetween,
-    manageIncomingUpdates,
-
-};
-
-
+exports.hourCalculation = hourCalculation;
+exports.getTotalHoursBetween = getTotalHoursBetween;
+exports.manageIncomingUpdates = manageIncomingUpdates;
 
 
 

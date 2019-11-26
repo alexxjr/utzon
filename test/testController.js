@@ -40,9 +40,6 @@ describe('Test af controllerfunktioner', function(){
 
     // Testing for adding/removing an employee on shifts
 
-    it('test if shift is created without employee', async () => {
-        expect(testShift.employee).to.equal(undefined);
-    });
     it('assign an employee to an empty shift', async () => {
         await controller.addEmployeeToShift(testEmployee1, testShift);
         testEmployee1 = await controller.getEmployee("0123456789");
