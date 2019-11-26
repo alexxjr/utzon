@@ -10,7 +10,7 @@ const mongoose = require("../app");
  * Function to find the role of a user in the database.
  */
 async function getLoginRole(username) {
-    let user = findOneLogin(username);
+    let user = await findOneLogin(username);
     if (user === undefined) {
         throw new Error("User does not exist in the system");
     }
@@ -45,7 +45,7 @@ async function validateLogin(username, password) {
     }
 
 
-    let user = findOneLogin(username);
+    let user = await findOneLogin(username);
     return validatePassword(password, user.password);
 }
 
