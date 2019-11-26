@@ -1,6 +1,6 @@
 const username = document.querySelector('#name');
 const password = document.querySelector('#password');
-const login = document.querySelector('#login');
+const login = document.querySelector("button");
 const fail = document.querySelector('#fail');
 
 async function POST(url, data) {
@@ -23,11 +23,16 @@ async function GET(url) {
     return await response.json();
 }
 
+
 login.onclick = async () => {
     try {
-        const response = await POST("/api/login", {username: username.value, password: password.value});
+        let response = await POST("/api/login", {username: username.value, password: password.value});
         if (response.ok) {
-            window.location.href = '/api/login/session';
+            response = await GET("/api/login/session");
+            if (response === "Admin" || response === "Employee"){
+                window.location = 'adminAccess.html';
+            }
+
         } else {
             password.value = "";
             fail.innerHTML = "Forkert password!";
