@@ -25,8 +25,8 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
         if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined) {
             type = "changeShiftEmployee";
         }
-        if (oldStart !== newStartString || oldEnd !== newEndString) {
-            if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined) {
+        if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined){
+            if (oldStart !== newStartString || oldEnd !== newEndString) {
                 type = "changeShiftTimesAndEmployee";
             }
         }
