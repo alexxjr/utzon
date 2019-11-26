@@ -1,67 +1,93 @@
-// const crypto = require('crypto');
-//
-// async function createUser(username, password) {
-//     let hash = await generateHash(password);
-//     DatabaseConnection.opretBruger(username, hash);
-// }
-//
-// async function validateUser(username, password) {
-//     let passwordFromDatabase = DatabaseConnection.getPassword(username);
-//     return validatePassword(password, passwordFromDatabase);
-// }
-//
-// async function generateHash(password) {
-//     const salt = crypto.randomBytes(16).toString('hex');
-//     let iterations = 65536;
-//
-//     const hash = crypto.pbkdf2
-// }
-//
-// private static String toHex(byte[] array) {
-//     BigInteger bi = new BigInteger(1, array);
-//     String hex = bi.toString(16);
-//     int paddingLength = (array.length * 2) - hex.length();
-//     if (paddingLength > 0) {
-//         return String.format("%0" + paddingLength + "d", 0) + hex;
-//     } else {
-//         return hex;
-//     }
-// }
-//
-// private static boolean validatePassword(String originalPassword, String storedPassword) {
-//     String[] parts = storedPassword.split(":");
-//     int iterations = Integer.parseInt(parts[0]);
-//     byte[] salt = fromHex(parts[1]);
-//     byte[] hash = fromHex(parts[2]);
-//
-//     PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(), salt, iterations, hash.length * 8);
-//     SecretKeyFactory skf;
-//     try {
-//         skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-//         byte[] testHash = skf.generateSecret(spec).getEncoded();
-//
-//         int diff = hash.length ^ testHash.length;
-//         for (int i = 0; i < hash.length && i < testHash.length; i++) {
-//             diff |= hash[i] ^ testHash[i];
-//         }
-//         return diff == 0;
-//     } catch (NoSuchAlgorithmException e) {
-//         e.printStackTrace();
-//     } catch (InvalidKeySpecException e) {
-//         e.printStackTrace();
-//     }
-//     return false;
-//
-// }
-//
-// private static byte[] fromHex(String hex) {
-//     byte[] bytes = new byte[hex.length() / 2];
-//     for (int i = 0; i < bytes.length; i++) {
-//         bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
-//     }
-//     return bytes;
-// }
-//
-// public static void init() {
-//     DatabaseConnection.openConnection();
-// }
+//crypto for making hashes using PBKDF2
+const crypto = require('crypto');
+//Login Schema for making logins and saving them in the database
+const Login = require("../models/Login");
+//Mongoose import that enables saving to the right database.
+const mongoose = require("../app");
+
+
+/**
+ * Function to find the role of a user in the database.
+ */
+async function getLoginRole(username) {
+    let user = await findOneLogin(username);
+    if (user === undefined) {
+        throw new Error("User does not exist in the system");
+    }
+    return user.role;
+
+}
+
+/**
+ * Find one user in the database.
+ */
+async function findOneLogin(username) {
+    return Login.findOne({username}).exec();
+}
+
+/**
+ * Create a new Login for a user. Saves the login to the database.
+ */
+async function createLogin(username, secret, role) {
+    let password = await generateHash(secret);
+    let newLogin = new Login({username, password, role});
+    return await newLogin.save();
+}
+
+
+/**
+ * Validate the password for a user for login purposes
+ */
+async function validateLogin(username, password) {
+
+    if ((typeof username) !== "string" || (typeof password) !== "string") {
+        throw new Error("One of the variables for the login validation is not a string")
+    }
+
+
+    let user = await findOneLogin(username);
+    return validatePassword(password, user.password);
+}
+
+/**
+ * Generate a hash from a password using PBKDF2. Uses randomized salting to generate unique hashes.
+ */
+async function generateHash(password) {
+
+    if ((typeof password) !== "string") {
+        throw new Error("The password when generating a hash is not a string")
+    }
+
+    const salt = await crypto.randomBytes(16).toString('hex');
+    let iterations = 65536;
+
+    
+    let hash;
+    hash = crypto.pbkdf2Sync(password, salt, iterations, 64, "sha512").toString('hex');
+
+    return [hash, salt, iterations].join(":");
+
+}
+
+/**
+ * Compares the hash of the user in the database and the hash made from the newly typed password.
+ * If they match, returns true, else false.
+ */
+async function validatePassword(typedPassword, storedPassword) {
+    if ((typeof typedPassword) !== "string" || (typeof storedPassword) !== "string") {
+        throw new Error("One of the password when validating a hash is not a string")
+    }
+
+    let parts = storedPassword.split(":");
+
+    let hash = crypto.pbkdf2Sync(typedPassword, parts[1], Number.parseInt(parts[2]), 64, "sha512").toString('hex');
+
+    return hash === parts[0];
+}
+
+/**
+ * Exports for use in routes.
+ */
+exports.createLogin = createLogin;
+exports.validateLogin = validateLogin;
+exports.getLoginRole = getLoginRole;
