@@ -10,17 +10,22 @@ mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {
 });
 
 const express = require('express');
+const session = require('express-session');
 
 
 const app = express();
+app.use(session({secret: 'Utzon secret', saveUninitialized: true, resave: true}));
+
 app.use(express.static('public'));
+
 app.use(express.json());
 
 const employeeRoute = require('./routes/EmployeeRoute');
 const shiftRoute = require('./routes/Shiftroute');
+const loginRoute = require('./routes/LoginRoute');
 app.use('/api/employees', employeeRoute);
 app.use('/api/shifts', shiftRoute);
-
+app.use('/api/login', loginRoute);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;

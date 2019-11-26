@@ -58,7 +58,7 @@ exports.getShifts = getShifts;
 
 async function getOneShift(objectid) {
     return Shift.findOne({_id: objectid}).populate('employee');
-};
+}
 
 exports.getOneShift = getOneShift;
 
@@ -301,11 +301,29 @@ exports.getLoginRole = async function (username) {
     }
 };
 
-exports.login = login;
 
-async function login(username, password) {
+exports.createLogin = createLogin;
 
+async function createLogin(username, password, role) {
+    const newLogin = new Login({username, password, role});
+    return await newLogin.save();
+};
+
+exports.valiteDateLogin = validateLogin;
+
+async function validateLogin(username, password) {
+    let found = false;
+    let i = 0;
+    let logins = await Login.find().exec();
+    while (!found && i < logins.length) {
+        if (logins[i].username === username && logins[i].password === password) {
+            found = true;
+        }
+        i++;
+    }
+    return found;
 }
+
 
 exports.changeShiftEmployee = changeShiftEmployee;
 
