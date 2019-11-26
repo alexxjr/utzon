@@ -1,4 +1,5 @@
 const controller = require("../controllers/Controller");
+const shiftController = require("../controllers/shiftController");
 const express = require('express');
 const router = express.Router();
 const session = require('express-session');
@@ -11,7 +12,7 @@ app.use(session({secret: 'Utzon secret', saveUninitialized: true, resave: true})
 router
     .get('/', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
-            let shifts = await controller.getShifts();
+            let shifts = await shiftController.getShifts();
             response.send(shifts);
         } else {
             response.redirect("../../noAccess.html");
@@ -20,7 +21,7 @@ router
     .get('/:date', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let date = new Date(request.params.date);
-            let shiftOnDate = await controller.getShiftsOnDate(date);
+            let shiftOnDate = await shiftController.getShiftsOnDate(date);
             response.send(shiftOnDate);
         }else {
             response.redirect("../../noAccess.html");
@@ -28,7 +29,7 @@ router
     })
     .get('/getOneShift/:shiftID', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
-            let getOneShift = await controller.getOneShift(request.params.shiftID);
+            let getOneShift = await shiftController.getOneShift(request.params.shiftID);
             response.send(getOneShift);
         }else {
             response.redirect("../../noAccess.html");
