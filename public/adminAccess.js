@@ -1,8 +1,5 @@
 let updates = [];
-let employees = [];
 let monthDisplay = document.querySelector("#monthDisplay");
-let yearDisplay = document.querySelector("#yearDisplay");
-let daysList = document.querySelector(".daysList");
 let dayShift = document.querySelector("#hover");
 let shiftUpdate = document.querySelector("#shiftUpdate");
 let datePicker = document.querySelector("#datePicker");
@@ -25,15 +22,6 @@ let selectedShiftEmployee;
 let date = new Date(Date.now());
 let year = date.getFullYear();
 
-let prevBtn = document.querySelector("#prevBtn");
-prevBtn.onclick = prevMonth;
-let nextBtn = document.querySelector("#nextBtn");
-nextBtn.onclick = nextMonth;
-let deleteBtn = document.querySelector("#deleteBtn");
-deleteBtn.onclick = deleteAction;
-
-
-update();
 
 function update() {
     setCurrentMonth();
@@ -57,6 +45,7 @@ function calculateDaysInMonth() {
 }
 
 function insertDays() {
+    let daysList = document.querySelector(".daysList");
     let days = daysArray[month];
     daysList.innerHTML = "";
     let day;
@@ -109,6 +98,7 @@ function setCurrentMonth() {
 }
 
 function setYear() {
+    let yearDisplay = document.querySelector("#yearDisplay");
     yearDisplay.innerHTML = year + "";
     calculateDaysInMonth();
 }
@@ -170,6 +160,7 @@ Handlebars.registerHelper("formatTime", function (date) {
 });
 
 async function populateEmployeeSelection() {
+    let employees = [];
     employees = await GET("/api/employees/");
     for (let e of employees) {
         let data = JSON.stringify(e);
@@ -286,9 +277,6 @@ function timeChanged() {
     totalHours.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
 }
 
-populateEmployeeSelection();
-siteInit();
-
 function modalAction() {
     document.getElementById("empModal").style.display = "block";
     document.getElementById("select2").value = "";
@@ -317,7 +305,7 @@ window.onclick = function(event) {
     if(event.target === document.getElementById("empModal")) {
         document.getElementById("empModal").style.display = "none";
     }
-}
+};
 
 function createEmployeeAction() {
     document.getElementById("popup2").style.display = "block";
@@ -345,7 +333,9 @@ function createShiftAction() {
 }
 
 async function siteInit() {
-
+    document.querySelector("#deleteBtn").onclick = deleteAction;
+    document.querySelector("#nextBtn").onclick = nextMonth;
+    document.querySelector("#prevBtn").onclick = prevMonth;
     allDates = document.querySelectorAll(".date");
     let today = new Date();
     for (let i = 0; i < allDates.length; i++) {
@@ -356,6 +346,8 @@ async function siteInit() {
     }
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
+    update();
+    populateEmployeeSelection();
 }
 
 function closeForm2() {
@@ -429,6 +421,8 @@ async function POST(data, url) {
     }
     return await response.json();
 }
+
+siteInit();
 
 
 
