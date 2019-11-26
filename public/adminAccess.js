@@ -1,8 +1,5 @@
 let updates = [];
-let employees = [];
 let monthDisplay = document.querySelector("#monthDisplay");
-let yearDisplay = document.querySelector("#yearDisplay");
-let daysList = document.querySelector(".daysList");
 let dayShift = document.querySelector("#hover");
 let shiftUpdate = document.querySelector("#shiftUpdate");
 let datePicker = document.querySelector("#datePicker");
@@ -57,6 +54,7 @@ function calculateDaysInMonth() {
 }
 
 function insertDays() {
+    let daysList = document.querySelector(".daysList");
     let days = daysArray[month];
     daysList.innerHTML = "";
     let day;
@@ -109,6 +107,7 @@ function setCurrentMonth() {
 }
 
 function setYear() {
+    let yearDisplay = document.querySelector("#yearDisplay");
     yearDisplay.innerHTML = year + "";
     calculateDaysInMonth();
 }
@@ -170,6 +169,7 @@ Handlebars.registerHelper("formatTime", function (date) {
 });
 
 async function populateEmployeeSelection() {
+    let employees = [];
     employees = await GET("/api/employees/");
     for (let e of employees) {
         let data = JSON.stringify(e);
