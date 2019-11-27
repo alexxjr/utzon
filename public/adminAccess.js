@@ -289,7 +289,7 @@ async function okCreateEmployee() {
 }
 
 function ShowPassword() {
-    var x = document.getElementById("password");
+    let x = document.getElementById("password");
     if (x.type === "password") {
         x.type = "text";
     } else {
