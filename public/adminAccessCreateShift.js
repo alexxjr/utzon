@@ -1,7 +1,7 @@
-function createShiftAction() {
-    document.getElementById("popup").style.display = "block";
-    employeeSelectCreateShift.value = "";
+function createShiftModalAction() {
+    document.getElementById("createShiftModal").style.display = "block";
     document.querySelector("#createStartTime").value = "00:00";
+    document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
@@ -9,8 +9,9 @@ function createShiftAction() {
         createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
     });
     end.addEventListener("click", async function () {
+        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
     });
-};
+}
 
 async function okCreateShift() {
     try {
@@ -20,18 +21,17 @@ async function okCreateShift() {
         let newEnd = document.querySelector("#createEndTime").value;
         let startDate = new Date(mydate + "T" + newStart + "Z");
         let endDate = new Date(mydate + "T" + newEnd + "Z");
-        let newEmployee = employeeSelectCreateShift.value;
+        let newEmployee =undefined;
         let update = createUpdate(thisShift, startDate, endDate, newEmployee);
         updates.push(update);
-        closeForm();
+        createShiftcloseModalAction();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
     } catch (e) {
         console.log(e.name + ": " + e.message);
     }
 }
 
-function closeForm() {
-    document.getElementById("popup").style.display = "none";
-    employeeSelectCreateShift.value = "";
+function createShiftcloseModalAction() {
+    document.getElementById("createShiftModal").style.display = "none";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }

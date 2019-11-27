@@ -15,7 +15,8 @@ body {
 .month {
     padding: 40px 25px;
     width: 100%;
-    background: cornflowerblue;
+    background: #bc9a5d;
+    /*color: darkkhaki;*/
     text-align: center;
     font-size: 25px;
     height: 160px;
@@ -87,7 +88,7 @@ body {
 /* Highlight the "current" day */
 .daysList li .active {
     padding: 5px;
-    background: cornflowerblue;
+    background: #d9ba83;
     color: white !important
 }
 
@@ -95,7 +96,7 @@ body {
 .shifts div {
     width: 200px;
     border: 1px solid black;
-    background: cornflowerblue;
+    background: #d9ba83;
     text-align: center;
     padding: 2px;
     margin: 2px;
@@ -124,7 +125,8 @@ body {
     width: 20%;
     height: 220px;
     border: 1px solid black;
-    background: cornflowerblue;
+    background: #333;
+    color: #d9ba83;
     text-align: center;
     alignment: center;
     padding: 2px;
@@ -185,114 +187,11 @@ input[type="date"]::-webkit-inner-spin-button {
     float: right;
     font-size: 16px;
     font-family: Verdana, sans-serif;
-    margin: 5px;
-    padding: 3px;
 }
 
-#seeEmployeesBtn {
-    float: left;
-    font-size: 16px;
-    font-family: Verdana, sans-serif;
-    margin: 5px;
-    padding: 3px;
-}
 
 #shiftUpdateInfo {
     text-align: left;
-}
-
-.createButton {
-    background-color: cornflowerblue;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    opacity: 0.8;
-    position: fixed;
-    bottom: 128px;
-    right: 23px;
-    width: 220px;
-}
-
-.createButton2 {
-    background-color: cornflowerblue;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    opacity: 0.8;
-    position: fixed;
-    bottom: 76px;
-    right: 23px;
-    width: 220px;
-}
-
-.form-popup {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    right: 18px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-}
-
-.form-popup2 {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    right: 18px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-}
-
-.form-container {
-    max-width: 300px;
-    padding: 10px;
-    background-color: #ddd;
-    color: #777;
-}
-
-.form-container .btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 10px;
-    opacity: 0.8;
-}
-
-.form-container .cancel {
-    background-color: red;
-}
-
-.form-container .btn:hover, .open-button:hover {
-    opacity: 1;
-}
-
-.form-container .show {
-    visibility: visible;
-    -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s;
-}
-
-@-webkit-keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .modal {
@@ -330,16 +229,70 @@ input[type="date"]::-webkit-inner-spin-button {
     cursor: pointer;
 }
 
-#logOutBtn {
-    background-color: cornflowerblue;
+#logoutBtn {
+    float: right;
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+}
+
+/*NAVBAR*/
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+.navbar a {
+    float: left;
+    font-size: 16px;
     color: white;
-    padding: 16px 20px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown .dropbtn {
+    font-size: 16px;
     border: none;
-    cursor: pointer;
-    opacity: 0.8;
-    position: fixed;
-    bottom: 23px;
-    right: 23px;
-    width: 220px;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+    color: grey;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: #d9ba83;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #333;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
