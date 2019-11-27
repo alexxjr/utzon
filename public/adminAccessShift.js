@@ -85,26 +85,17 @@ Handlebars.registerHelper("formatTime", function (date) {
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
 
-
-endTimePicker.addEventListener("click",  function () {
-    timeChanged();
+startTimePicker.addEventListener("input",  function () {
+    timeChanged(startTimePicker, endTimePicker, hourDisplay);
 });
 
-startTimePicker.addEventListener("click",  function () {
-    timeChanged();
+endTimePicker.addEventListener("input", function ()  {
+    timeChanged(startTimePicker, endTimePicker, hourDisplay);
+
 });
 
-function timeChanged() {
-    if (hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate) <= 0) {
-        if (endTime.length === 1) {
-            endTime = "0" + (endTime - 1) + ":00";
-        } else {
-            endTime = (endTime - 1) + ":00";
-        }
-        startTimePicker.value = (endTime);
-    }
-    hourDisplay.value = hourCalculation(startTimePicker.valueAsDate, endTimePicker.valueAsDate);
-}
+
+
 
 
 

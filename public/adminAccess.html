@@ -84,35 +84,37 @@
 
 <button class="createButton" onclick="createShiftAction()">Opret vagt</button>
 
-<button class="createButton2" onclick="createEmployeeAction()">Opret ansat</button>
+<button class="createButton2" onclick="openCreateEmployee()">Opret ansat</button>
 
 <div class="form-popup" id="popup">
     <form action="/action_page.php" class="form-container">
         <h2>Opret ny vagt</h2>
         <li>
-            Vælg ansat:<select id="select"></select>
+        Dato: <input id="createStartDate" type="date" name="start" required>
+        <span class="validity"></span>
         </li>
         <li>
-            Vagt dato: <label id="createStartDate"></label>
-        </li>
-        <li>
-            Vælg vagt start: <input id="createStartTime" type="time" name="start" required>
+            Starttid: <input id="createStartTime" type="time" name="end" required>
             <span class="validity"></span>
         </li>
         <li>
-            Vælg vagt slut: <input id="createEndTime" type="time" name="end" required>
+            Sluttid: <input id="createEndTime" type="time" name="end" required>
             <span class="validity"></span>
         </li>
         <li>
-            Antal timer: <label id="createTotalHours"> 00:00 </label>
+            Antal timer: <input id="createTotalHours" name="end" required>
+        <span class="validity"></span>
         </li>
+
+
+
         <br>
 
         <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
         <button type="button" class="btn cancel" onclick="closeForm()">Annuller</button>
     </form>
 </div>
-<div class="form-popup2" id="popup2">
+<div id="createEmployeeWindow">
     <form action="/action_page.php" class="form-container">
         <h2>Opret ny ansat</h2>
         <li>
@@ -134,7 +136,7 @@
         <br>
 
         <button type="button" class="btn" onclick="okCreateEmployee()">Opret</button>
-        <button type="button" class="btn cancel" onclick="closeForm2()">Annuller</button>
+        <button type="button" class="btn cancel" onclick="closeCreateEmployee()">Annuller</button>
     </form>
 </div>
 
