@@ -27,5 +27,13 @@ async function totalHoursBetweenTwoDates() {
     }
     let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
     document.querySelector("#ansatTid").value = hours;
+}
 
+function ShowPassword() {
+    let x = document.getElementById("password");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
 }
