@@ -3,7 +3,7 @@ const Employee = require('../models/Employee');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of general controller
-const controller = require("../controllers/Controller");
+const controller = require("../controllers/Controller.js");
 // Import of shift controller
 const shiftController = require("../controllers/shiftController");
 

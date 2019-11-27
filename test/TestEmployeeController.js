@@ -1,6 +1,5 @@
 const employeeController = require('../controllers/EmployeeController');
 const shiftController = require('../controllers/shiftController');
-const update = require('../public/Update');
 const chai = require('chai');
 let expect = chai.expect;
 chai.use(require('chai-as-promised'));
