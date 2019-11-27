@@ -23,9 +23,9 @@ async function totalHoursBetweenTwoDates() {
     let toDate = document.querySelector("#toDatePicker").value;
     let selectedEmployee = employeeSelectAdminAccessEmployee.value;
     if (selectedEmployee) {
-        selectedEmployee = JSON.parse(employeeSelectAdminAccessEmployee[employeeSelectAdminAccessEmployee.selectedIndex].getAttribute('data-employee'))
+        selectedEmployee =  employeeSelectAdminAccessEmployee[employeeSelectAdminAccessEmployee.selectedIndex].getAttribute('data-employee');
     }
-    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
+    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee + "/" + startDate + "/" + toDate);
     document.querySelector("#ansatTid").value = hours;
 
 }
