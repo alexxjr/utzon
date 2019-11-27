@@ -169,6 +169,52 @@ async function saveAction() {
     }
     location.reload();
 }
+function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
+    let startTime = startTimeHTML.valueAsDate;
+    let endTime = endTimeHTML.valueAsDate;
+    let endTimeString;
+    if (endTime.getUTCHours() < 11) {
+        endTimeString = "0" + (endTime.getUTCHours() - 1) + ":";
+    }
+    else {
+        endTimeString = (endTime.getUTCHours() - 1) + ":"
+    }
+    if (endTime.getUTCMinutes() < 11) {
+        endTimeString += "0" + endTime.getMinutes();
+    }
+    else {
+        endTimeString += endTime.getMinutes() + "";
+    }
+
+    if (startTime.getUTCHours() === 23) {
+        startTimeHTML.value = "00:00";
+        startTime.setHours(1);
+    }
+    if (endTime.getUTCHours() < 1) {
+        endTimeHTML.value = "00:00";
+        endTime.setHours(1);
+    }
+    if (endTime.getUTCHours() === 0){
+        endTimeHTML.value = "23:00";
+        endTime.setHours(22);
+    }
+    if (startTime.getUTCHours() === endTime.getUTCHours()) {
+        if (endTime.getUTCHours() === 23) {
+            endTimeHTML.value = "00:00";
+            endTime.setHours(1);
+        }
+        startTime.setHours(startTime.getUTCHours());
+        startTimeHTML.value = endTimeString;
+    }
+    let result = hourCalculation(startTimeHTML.valueAsDate, endTimeHTML.valueAsDate);
+    if (result >= 5) {
+        totalHourHTML.value = result - 0.5;
+    } else {
+        totalHourHTML.value = result;
+    }
+
+}
+
 
 
 async function shiftSelected(shiftID, employeeID, divID) {
@@ -365,9 +411,9 @@ function timeChanged() {
 function hourCalculation(start, end) {
     let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
     if (start.getMinutes() < end.getMinutes()) {
-        return (end.getHours() - start.getHours()) + minutes / 60;
+        return (end.getUTCHours() - start.getUTCHours()) + minutes / 60;
     } else {
-        return (end.getHours() - start.getHours()) - minutes / 60;
+        return (end.getUTCHours() - start.getUTCHours()) - minutes / 60;
     }
 }
 

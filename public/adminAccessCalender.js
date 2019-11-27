@@ -28,7 +28,7 @@ function createDate() {
     }
     let date;
     allDates.forEach(d => {
-        if (d.style.backgroundColor === "cornflowerblue") {
+        if (d.style.backgroundColor === "darkkhaki") {
             date = d;
         }
     });

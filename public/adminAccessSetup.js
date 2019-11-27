@@ -10,7 +10,8 @@ let year = date.getFullYear();
 let monthDisplay = document.querySelector("#monthDisplay");
 let dayShift = document.querySelector("#hover");
 let employeeSelectShift = document.querySelector("#employeeSelect");
-let employeeSelectCreateShift = document.querySelector("#select");
+
+
 
 function insertDays() {
     let daysList = document.querySelector(".daysList");
@@ -75,11 +76,9 @@ async function populateEmployeeSelection() {
         option2.innerText = e.name;
         option2.setAttribute("data-employee", data);
         employeeSelectAdminAccessEmployee.append(option2);
-        employeeSelectCreateShift.innerHTML += "<option>" + e.name + "</option>";
 
     }
     employeeSelectShift.innerHTML += "<option></option>";
-    employeeSelectCreateShift.innerHTML += "<option></option>";
 }
 
 async function chooseDate() {
@@ -89,7 +88,7 @@ async function chooseDate() {
     allDates.forEach(date => {
         date.style.backgroundColor = "#eee"
     });
-    this.style.backgroundColor = "cornflowerblue";
+    this.style.backgroundColor = "darkkhaki";
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
 }

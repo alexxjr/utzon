@@ -3,7 +3,7 @@ const Employee = require('../models/Employee');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of general controller
-const controller = require("../controllers/Controller");
+const controller = require("../controllers/Controller.js");
 // Import of shift controller
 const shiftController = require("../controllers/shiftController");
 
@@ -108,6 +108,13 @@ async function getEmployee(CPR) {
 }
 
 /**
+ Gets an employee with populated references from mongoDB using the CPR-number
+ */
+async function getEmployeePopulated(CPR) {
+    return Employee.findOne({CPR: CPR}).populate('shifts').exec();
+}
+
+/**
 Gets all employees from mongoDB
  */
 async function getEmployees() {
@@ -118,7 +125,8 @@ async function getEmployees() {
 Gets all shifts for an employee between two dates
  */
 async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
-    employee = await getEmployee(employee.CPR);
+    employee = await getEmployeePopulated(employee.CPR);
+
     return shiftController.getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
 
@@ -139,6 +147,7 @@ exports.addEmployeeToShift = addEmployeeToShift;
 exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
 exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 exports.getEmployee = getEmployee;
+exports.getEmployeePopulated = getEmployeePopulated;
 exports.getEmployeeWithID = getEmployeeWithID;
 exports.getEmployees = getEmployees;
 exports.deleteEmployee = deleteEmployee;

@@ -15,7 +15,7 @@ employee.methods.toString = function() {
 };
 
 
-module.exports = mongoose.model('Employee', employee);
+module.exports = new mongoose.model('Employee', employee);
 
 
 

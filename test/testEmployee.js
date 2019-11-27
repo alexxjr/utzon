@@ -1,8 +1,10 @@
 const employeeController = require('../controllers/employeeController');
-let expect = require('chai').expect;
+const chai = require('chai');
+let expect = chai.expect;
+chai.use(require('chai-as-promised'));
 let fourthtry;
 
-describe('unitTest', () => {
+describe('Test af employeefunktioner', () => {
     it('make an employee with one parameter as an empty string', async () => {
         await expect(employeeController.createEmployee("0123456789","Anders", "test@test.dk", "")).to.be.rejectedWith("One or more of the variable strings are the wrong length");
     });

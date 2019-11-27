@@ -11,18 +11,11 @@ const mongoose = require("../app");
  */
 async function getLoginRole(username) {
     let user = await findOneLogin(username);
-    if (user === undefined) {
+    if (user === null) {
         throw new Error("User does not exist in the system");
     }
     return user.role;
 
-}
-
-/**
- * Find one user in the database.
- */
-async function findOneLogin(username) {
-    return Login.findOne({username}).exec();
 }
 
 /**
@@ -39,13 +32,10 @@ async function createLogin(username, secret, role) {
  * Validate the password for a user for login purposes
  */
 async function validateLogin(username, password) {
-
-    if ((typeof username) !== "string" || (typeof password) !== "string") {
-        throw new Error("One of the variables for the login validation is not a string")
-    }
-
-
     let user = await findOneLogin(username);
+    if (user === null)  {
+        return false;
+    }
     return validatePassword(password, user.password);
 }
 
@@ -79,10 +69,36 @@ async function validatePassword(typedPassword, storedPassword) {
     }
 
     let parts = storedPassword.split(":");
+    if(parts[1] === undefined || parts[2] === undefined) {
+        throw new Error("The stored password had the wrong format")
+    }
 
     let hash = crypto.pbkdf2Sync(typedPassword, parts[1], Number.parseInt(parts[2]), 64, "sha512").toString('hex');
 
     return hash === parts[0];
+}
+
+//Getting, updating and deleting from database
+
+/**
+ * Find one user in the database.
+ */
+async function findOneLogin(username) {
+    return Login.findOne({username}).exec();
+}
+
+/**
+ * Deleting a user in the database
+ */
+async function deleteLogin(login) {
+    return Login.findByIdAndDelete(login._id);
+}
+
+/**
+ Gets a login from mongoDB using the username
+ */
+async function getLogin(login) {
+    return Login.findOne({username: login.username}).exec();
 }
 
 /**
@@ -91,3 +107,8 @@ async function validatePassword(typedPassword, storedPassword) {
 exports.createLogin = createLogin;
 exports.validateLogin = validateLogin;
 exports.getLoginRole = getLoginRole;
+exports.findOneLogin = findOneLogin;
+exports.deleteLogin = deleteLogin;
+exports.getLogin = getLogin;
+exports.generateHash = generateHash;
+exports.validatePassword = validatePassword;

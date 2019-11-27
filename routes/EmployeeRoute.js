@@ -26,11 +26,11 @@ router
             response.redirect("../../noAccess.html");
         }
     })
-    .get('/getOneEmployeeHours/:employeeID/:startTime/:endTime', async (request, response) => {
+    .get('/getOneEmployeeHours/:employee/:startTime/:endTime', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let startDate = new Date(request.params.startTime);
             let toDate = new Date(request.params.endTime);
-            let employee = await employeeController.getEmployeeWithID(request.params.employeeID);
+            let employee = JSON.parse(request.params.employee);
             let totalHours = await employeeController.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
             response.send(totalHours);
         } else {
@@ -38,7 +38,7 @@ router
         }
     })
     .post('/', async (request, response) => {
-        if (request.session.role === "admin") {
+        if (request.session.role === "Admin") {
             const {CPR, name, email, phoneNo} = request.body;
             let employee = employeeController.createEmployee(CPR, name, email, phoneNo);
             if (employee === undefined) {
