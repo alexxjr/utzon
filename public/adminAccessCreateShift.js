@@ -5,11 +5,21 @@ function createShiftModalAction() {
     document.querySelector("#createStartDate").innerHTML = createDate();
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
-    start.addEventListener("click", async function () {
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
+    let createTotalHours = document.getElementById("createTotalHours");
+    document.querySelector("#createStartDate").value = createDate();
+    document.getElementById("popup").style.display = "block";
+    start.value = "00:00";
+    end.value = "01:00"
+
+
+
+    start.addEventListener("input",  function () {
+        timeChanged(start, end, createTotalHours);
     });
-    end.addEventListener("click", async function () {
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
+
+    end.addEventListener("input", function ()  {
+        timeChanged(start, end, createTotalHours);
+
     });
 }
 
@@ -35,3 +45,4 @@ function createShiftcloseModalAction() {
     document.getElementById("createShiftModal").style.display = "none";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
+

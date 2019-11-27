@@ -1,6 +1,5 @@
 const employeeController = require('../controllers/EmployeeController');
 const shiftController = require('../controllers/shiftController');
-const update = require('../public/Update');
 const chai = require('chai');
 let expect = chai.expect;
 chai.use(require('chai-as-promised'));
@@ -12,7 +11,7 @@ let testShift;
 let testShift2;
 let testShift3;
 
-describe('Test af controllerfunktioner', function(){
+describe('Test af employee controllerfunktioner', function(){
 
     before(async function() {
         this.timeout(10000);

@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect(config.localMongoDB + '/SPSDB?retryWrites=true&w=majority', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 });
 
 const express = require('express');
