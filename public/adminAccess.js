@@ -371,40 +371,6 @@ function hourCalculation(start, end) {
     }
 }
 
-async function totalHoursBetweenTwoDates() {
-    let startDate = document.querySelector("#fromDatePicker").value;
-    let toDate = document.querySelector("#toDatePicker").value;
-    let selectedEmployee = select2.value;
-    if (selectedEmployee) {
-        selectedEmployee = JSON.parse(select2[select2.selectedIndex].getAttribute('data-employee'))
-    }
-    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee._id + "/" + startDate + "/" + toDate);
-    document.querySelector("#ansatTid").value = hours;
-
-}
-
-async function siteInit() {
-    update();
-    document.querySelector("#deleteBtn").onclick = deleteAction;
-    document.querySelector("#nextBtn").onclick = nextMonth;
-    document.querySelector("#prevBtn").onclick = prevMonth;
-    allDates = document.querySelectorAll(".date");
-    let today = new Date();
-    for (let i = 0; i < allDates.length; i++) {
-        if (allDates[i].innerText === (today.getDate() + "")) {
-            allDates[i].style.backgroundColor = "cornflowerblue";
-        }
-
-    }
-    date = createDate();
-    dayShift.innerHTML = await generateShifts(date);
-
-    await populateEmployeeSelection();
-}
-
-
-
-// ********** GET AND POST FUNCTIONS *********
 async function GET(url) {
     const OK = 200;
     let response = await fetch(url);
@@ -434,7 +400,3 @@ async function POST(data, url) {
     }
     return await response.json();
 }
-
-siteInit();
-
-
