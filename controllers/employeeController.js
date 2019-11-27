@@ -104,6 +104,13 @@ async function getEmployeeWithID(objectid) {
 Gets an employee from mongoDB using the CPR-number
  */
 async function getEmployee(CPR) {
+    return Employee.findOne({CPR: CPR}).exec();
+}
+
+/**
+ Gets an employee with populated references from mongoDB using the CPR-number
+ */
+async function getEmployeePopulated(CPR) {
     return Employee.findOne({CPR: CPR}).populate('shifts').exec();
 }
 
@@ -118,7 +125,7 @@ async function getEmployees() {
 Gets all shifts for an employee between two dates
  */
 async function getShiftsForEmployeeBetweenDates(employee, fromDate, toDate){
-    employee = await getEmployee(employee.CPR);
+    employee = await getEmployeePopulated(employee.CPR);
 
     return shiftController.getShiftsBetweenTwoDates(employee.shifts, fromDate, toDate);
 }
@@ -140,6 +147,7 @@ exports.addEmployeeToShift = addEmployeeToShift;
 exports.getShiftsForEmployeeBetweenDates = getShiftsForEmployeeBetweenDates;
 exports.getTotalHoursBetweenTwoDatesForAnEmployee = getTotalHoursBetweenTwoDatesForAnEmployee;
 exports.getEmployee = getEmployee;
+exports.getEmployeePopulated = getEmployeePopulated;
 exports.getEmployeeWithID = getEmployeeWithID;
 exports.getEmployees = getEmployees;
 exports.deleteEmployee = deleteEmployee;
