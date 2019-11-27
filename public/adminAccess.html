@@ -17,7 +17,7 @@
         <span class="close" onclick="closeModalAction()">&times;</span>
         <li> Vælg ansat:<select id="select2" required></select></li>
         <li> Fra: <input id="fromDatePicker" type="date" required></li>
-        <li> Til: <input id="toDatePicker" type="date"required></li>
+        <li> Til: <input id="toDatePicker" type="date" required></li>
         <li> Antal timer: <input id="ansatTid" type="text" disabled></li>
 
         <button type="button" id="beregn" onclick="totalHoursBetweenTwoDates()">Beregn timer</button>
@@ -56,7 +56,6 @@
 
 <div class="shifts">
     <ul id="hover">
-
     </ul>
 </div>
 <div id="shiftUpdate">
@@ -75,8 +74,8 @@
 </div>
 
 <button class="createButton" onclick="createShiftAction()">Opret vagt</button>
-
 <button class="createButton2" onclick="createEmployeeAction()">Opret ansat</button>
+<button type="button" id="logOutBtn" onclick="logOutAction()">Log ud</button>
 
 <div class="form-popup" id="popup">
     <form action="/action_page.php" class="form-container">

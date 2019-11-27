@@ -8,7 +8,6 @@ const app = express();
 app.use(session({secret: 'Utzon secret', saveUninitialized: true, resave: true}));
 
 
-
 router
     .get('/', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
@@ -23,7 +22,7 @@ router
             let date = new Date(request.params.date);
             let shiftOnDate = await shiftController.getShiftsOnDate(date);
             response.send(shiftOnDate);
-        }else {
+        } else {
             response.redirect("../../noAccess.html");
         }
     })
@@ -31,7 +30,7 @@ router
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let getOneShift = await shiftController.getOneShift(request.params.shiftID);
             response.send(getOneShift);
-        }else {
+        } else {
             response.redirect("../../noAccess.html");
         }
     })
