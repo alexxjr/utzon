@@ -10,7 +10,6 @@ let startTimePicker = document.querySelector("#startTimePicker");
 let endTimePicker = document.querySelector("#endTimePicker");
 let totalHours = document.querySelector("#totalHours");
 let employeeSelect = document.querySelector("#employeeSelect");
-let select = document.querySelector("#select");
 let select2 = document.querySelector("#select2");
 
 // Currently selected items
@@ -115,15 +114,8 @@ async function populateEmployeeSelection() {
         option2.innerText = e.name;
         option2.setAttribute("data-employee", data);
         select2.append(option2);
-
-
-        select.innerHTML += "<option>" + e.name + "</option>";
-        console.log(employeeSelect);
-        console.log(select2);
-
     }
     employeeSelect.innerHTML += "<option></option>";
-    select.innerHTML += "<option></option>";
 }
 
 // *********** ONCLICK FUNCTIONS **********
@@ -200,7 +192,6 @@ async function shiftSelected(shiftID, employeeID, divID) {
 
 function okAction() {
     let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
-
     let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
     let newEmployee = undefined;
     if (employeeSelect.value !== "") {
@@ -266,7 +257,6 @@ function createEmployeeAction() {
 
 function createShiftAction() {
     document.getElementById("popup").style.display = "block";
-    select.value = "";
     document.querySelector("#createStartTime").value = "00:00";
     document.querySelector("#createEndTime").value = "00:00";
     document.querySelector("#createStartDate").innerHTML = createDate();
@@ -300,7 +290,6 @@ async function okCreateEmployee() {
 
 function closeForm() {
     document.getElementById("popup").style.display = "none";
-    select.value = "";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
 
@@ -312,13 +301,14 @@ async function okCreateShift() {
         let newEnd = document.querySelector("#createEndTime").value;
         let startDate = new Date(mydate + "T" + newStart + "Z");
         let endDate = new Date(mydate + "T" + newEnd + "Z");
-        let newEmployee = select.value;
+        let newEmployee = undefined;
         let update = createUpdate(thisShift, startDate, endDate, newEmployee);
         updates.push(update);
         closeForm();
         alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
     } catch (e) {
         console.log(e.name + ": " + e.message);
+        console.log(createDate());
     }
 }
 
