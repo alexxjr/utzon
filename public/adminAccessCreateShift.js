@@ -7,7 +7,6 @@ function createShiftModalAction() {
     let end = document.querySelector("#createEndTime");
     let createTotalHours = document.getElementById("createTotalHours");
     document.querySelector("#createStartDate").value = createDate();
-    document.getElementById("popup").style.display = "block";
     start.value = "00:00";
     end.value = "01:00"
 
