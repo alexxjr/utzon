@@ -115,7 +115,6 @@ async function manageIncomingUpdates(updates) {
             }
         } catch (e) {
             failures.push({update: updates[i], error: e.message});
-            i--;
         }
     }
     await sendUpdateMail(success);
