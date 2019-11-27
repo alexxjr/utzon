@@ -1,26 +1,32 @@
+let nameInput = document.getElementById("empNavn");
+let phoneNoInput = document.getElementById("empNr");
+let emailInput = document.getElementById("empMail");
+let CPRInput = document.getElementById("empCPR");
+let createEmployeePopup = document.getElementById("createEmployeeWindow");
+
 async function okCreateEmployee() {
     try {
-        let name = document.querySelector("#empNavn").value + "";
-        let phoneNo = document.querySelector("#empNr").value + "";
-        let email = document.querySelector("#empMail").value + "";
-        let CPR = document.querySelector("#empCPR").value + "";
+        let name = nameInput.value + "";
+        let phoneNo = phoneNoInput.value + "";
+        let email = emailInput.value + "";
+        let CPR = CPRInput.value + "";
         await POST({CPR, name, email, phoneNo}, "/api/employees/");
     } catch (e) {
         console.log(e.name + ": " + e.message);
     }
-    closeForm2();
+    closeCreateEmployee();
 }
 
 
 
-function createEmployeeAction() {
-    document.getElementById("popup2").style.display = "block";
-    document.querySelector("#empNavn").value = "";
-    document.querySelector("#empNr").value = "";
-    document.querySelector("#empMail").value = "";
-    document.querySelector("#empCPR").value = "";
+function openCreateEmployee() {
+    createEmployeePopup.style.display = "block";
+    nameInput.value = "";
+    phoneNoInput.value = "";
+    emailInput.value = "";
+    CPRInput.value = "";
 }
 
-function closeForm2() {
-    document.getElementById("popup2").style.display = "none";
+function closeCreateEmployee() {
+    createEmployeePopup.style.display = "none";
 }

@@ -1,16 +1,26 @@
+
+
 function createShiftAction() {
-    document.getElementById("popup").style.display = "block";
-    employeeSelectCreateShift.value = "";
-    document.querySelector("#createStartTime").value = "00:00";
-    document.querySelector("#createStartDate").innerHTML = createDate();
+
     let start = document.querySelector("#createStartTime");
     let end = document.querySelector("#createEndTime");
-    start.addEventListener("click", async function () {
-        createTotalHours.innerHTML = hourCalculation(start.valueAsDate, end.valueAsDate).toFixed(2);
+    let createTotalHours = document.getElementById("createTotalHours");
+    document.querySelector("#createStartDate").value = createDate();
+    document.getElementById("popup").style.display = "block";
+    start.value = "00:00";
+    end.value = "01:00"
+
+
+
+    start.addEventListener("input",  function () {
+        timeChanged(start, end, createTotalHours);
     });
-    end.addEventListener("click", async function () {
+
+    end.addEventListener("input", function ()  {
+        timeChanged(start, end, createTotalHours);
+
     });
-};
+}
 
 async function okCreateShift() {
     try {
@@ -35,3 +45,4 @@ function closeForm() {
     employeeSelectCreateShift.value = "";
     document.querySelector("#createTotalHours").innerHTML = "00:00";
 }
+
