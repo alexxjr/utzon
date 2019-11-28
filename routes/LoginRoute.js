@@ -26,15 +26,15 @@ router
         if (role === "Admin" || role === "Employee") {
             response.send(JSON.stringify(role));
         } else
-            response.send("noAccess");
+            response.send(JSON.stringify("noAccess"));
 
     })
-    .get('/logout', (request, response) => {
+    .get('/logout', async (request, response) => {
             request.session.destroy((err) => {
                 if (err) {
                     console.log(err);
                 } else {
-                    response.send('index.html');
+                    response.redirect('/');
                 }
             });
         }
