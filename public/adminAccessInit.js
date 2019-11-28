@@ -7,7 +7,7 @@ async function siteInit() {
     let today = new Date();
     for (let i = 0; i < allDates.length; i++) {
         if (allDates[i].innerText === (today.getDate() + "")) {
-            allDates[i].style.backgroundColor = "cornflowerblue";
+            allDates[i].style.backgroundColor = "darkkhaki";
         }
 
     }

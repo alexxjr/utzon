@@ -38,7 +38,7 @@ router
         }
     })
     .post('/', async (request, response) => {
-        if (request.session.role === "admin") {
+        if (request.session.role === "Admin") {
             const {CPR, name, email, phoneNo} = request.body;
             let employee = employeeController.createEmployee(CPR, name, email, phoneNo);
             if (employee === undefined) {
