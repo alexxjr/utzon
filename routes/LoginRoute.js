@@ -14,22 +14,20 @@ router
         const {username, password} = request.body;
         if (await loginController.validateLogin(username, password)) {
             request.session.username = username;
+            let role = await loginController.getLoginRole(username);
+            request.session.role = role;
+
             response.send({ok: true});
         } else {
             response.send({ok: false});
         }
     })
     .get('/session', async (request, response) => {
-        const username = request.session.username;
-        let role = await loginController.getLoginRole(username);
-        request.session.role = role;
-        if (role === "Admin") {
+        const role = request.session.role;
+        if (role === "Admin" || role === "Employee") {
             response.send(JSON.stringify(role));
-        } else if(!username) {
-            response.send(JSON.stringify(role));
-        } else {
-            response.send(JSON.stringify(role));
-        }
+        } else
+            response.send("noAccess");
 
     })
     .get('/logout', (request, response) => {
