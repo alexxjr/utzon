@@ -40,11 +40,12 @@ router
     .post('/', async (request, response) => {
         if (request.session.role === "Admin") {
             const {CPR, name, email, phoneNo} = request.body;
-            let employee = employeeController.createEmployee(CPR, name, email, phoneNo);
-            if (employee === undefined) {
-                response.sendStatus(403);
-            } else {
+            try {
+                await employeeController.createEmployee(CPR, name, email, phoneNo);
                 response.sendStatus(201);
+            }
+            catch (e) {
+                response.send(JSON.stringify(e.message));
             }
         }
     });

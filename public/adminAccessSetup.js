@@ -77,22 +77,21 @@ async function update() {
 }
 
 async function populateEmployeeSelection() {
-    if (userRole === "Admin" || userRole === "Employee") {
-        let employees = await GET("/api/employees/");
-        for (let e of employees) {
-            let data = JSON.stringify(e);
-            let option = document.createElement("option");
-            option.innerText = e.name;
-            option.setAttribute("data-employee", data);
-            employeeSelectShift.append(option);
-            let option2 = document.createElement("option");
-            option2.innerText = e.name;
-            option2.setAttribute("data-employee", data);
-            employeeSelectAdminAccessEmployee.append(option2);
+    employeeSelectShift.innerHTML = "";
+    let employees = await GET("/api/employees/");
+    for (let e of employees) {
+        let data = JSON.stringify(e);
+        let option = document.createElement("option");
+        option.innerText = e.name;
+        option.setAttribute("data-employee", data);
+        employeeSelectShift.append(option);
+        let option2 = document.createElement("option");
+        option2.innerText = e.name;
+        option2.setAttribute("data-employee", data);
+        employeeSelectAdminAccessEmployee.append(option2);
 
-        }
-        employeeSelectShift.innerHTML += "<option></option>";
     }
+    employeeSelectShift.innerHTML += "<option></option>";
 }
 
 async function chooseDate() {
