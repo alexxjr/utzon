@@ -1,6 +1,5 @@
 const controller = require('../controllers/controller');
 const shiftController = require('../controllers/shiftController');
-const update = require('../public/Update');
 const chai = require('chai');
 let expect = chai.expect;
 chai.use(require('chai-as-promised'));
@@ -47,13 +46,6 @@ describe('Test af controllerfunktioner', function(){
          testShift = shift[0];
          expect(testShift.end.getTime()).to.equal(new Date(2020, 11, 15,18,55).getTime());
     });
-
-     // it('login as admin', async () => {
-    //     let username = "admin";
-    //     let password = "birgitte";
-    //     let login = controller.login(username, password);
-    //
-    // });
     after(async () => {
         await shiftController.deleteShift(testShift);
 

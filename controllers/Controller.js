@@ -1,11 +1,5 @@
 "use strict";
 
-// Import of employee model
-const Employee = require('../models/Employee');
-// Import of shift model
-const Shift = require('../models/Shift');
-// Import of login model
-const Login = require('../models/Login');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of nodemailer, to be used for notifications over email
