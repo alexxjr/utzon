@@ -1,17 +1,19 @@
 async function saveAction() {
-    if (updates.length === 0) {
-        return;
-    }
-    let url = "/api/shifts/updateShift/";
-    let errors = "";
-    let response = await POST(updates, url);
-    if(response !== undefined) {
-        for (let i = 0; i < response.length; i++) {
-            errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
+    if (userRole === "Admin") {
+        if (updates.length === 0) {
+            return;
         }
-        alert(errors);
+        let url = "/api/shifts/updateShift/";
+        let errors = "";
+        let response = await POST(updates, url);
+        if (response !== undefined) {
+            for (let i = 0; i < response.length; i++) {
+                errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
+            }
+            alert(errors);
+        }
+        location.reload();
     }
-    location.reload();
 }
 function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
     let startTime = startTimeHTML.valueAsDate;

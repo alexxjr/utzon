@@ -14,7 +14,6 @@ let employeeSelectShift = document.querySelector("#employeeSelect");
 
 async function setUserRole() {
     userRole = await GET("/api/login/session");
-    console.log(userRole);
 }
 
 function insertDays() {
@@ -73,10 +72,11 @@ function setCurrentMonth() {
 
 async function update() {
     await setUserRole();
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         setCurrentMonth();
         setYear();
         insertDays();
+        setupEmployeeAccess();
     } else {
        await logOutAction();
     }
