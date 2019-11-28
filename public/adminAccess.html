@@ -15,6 +15,7 @@
     <script src="adminAccessCreateShift.js" defer></script>
     <script src="adminAccessCreateEmployee.js" defer></script>
     <script src="adminAccessInit.js" defer></script>
+    <script src="employeeAccess.js" defer></script>
 </head>
 <body>
 
@@ -46,14 +47,22 @@
     <div class="modal-content">
         <span class="close" onclick="createShiftcloseModalAction()">&times;</span>
         <h2>Opret ny vagt</h2>
-        <li>Dato: <label id="createStartDate" name="start"></label>
-            <span class="validity"></span></li>
-        <li>Starttid: <input id="createStartTime" type="time" name="end">
-            <span class="validity"></span></li>
-        <li>Sluttid: <input id="createEndTime" type="time" name="end">
-            <span class="validity"></span></li>
-        <li>Antal timer: <label id="createTotalHours" name="end"></label>
-            <span class="validity"></span></li>
+        <li>
+            Dato: <input id="createStartDate" name="start" type="date"></input>
+            <span class="validity"></span>
+        </li>
+        <li>
+            Starttid: <input id="createStartTime" type="time" name="end">
+            <span class="validity"></span>
+        </li>
+        <li>
+            Sluttid: <input id="createEndTime" type="time" name="end">
+            <span class="validity"></span>
+        </li>
+        <li>
+            Antal timer: <label id="createTotalHours" name="end"></label>
+            <span class="validity"></span>
+        </li>
         <br>
         <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
     </div>

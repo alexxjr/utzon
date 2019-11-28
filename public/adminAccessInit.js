@@ -8,6 +8,7 @@ async function siteInit() {
     for (let i = 0; i < allDates.length; i++) {
         if (allDates[i].innerText === (today.getDate() + "")) {
             allDates[i].style.backgroundColor = "darkkhaki";
+            allDates[i].setAttribute('chosen', 'true');
         }
 
     }
@@ -18,10 +19,7 @@ async function siteInit() {
 }
 
 async function logOutAction() {
-    console.log(window.location);
-    let response = await GET("api/login/logout");
-
-    window.location = "/response";
+    window.location.href = "api/login/logout";
 }
 
 siteInit();

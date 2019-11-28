@@ -39,7 +39,7 @@ async function shiftSelected(shiftID, employeeID, divID) {
 }
 
 function okAction() {
-    if (userRole === "Admin" || userRole === "Employee") {
+    if (userRole === "Admin") {
         let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
 
         let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
@@ -68,7 +68,7 @@ function cancelAction() {
 }
 
 function deleteAction() {
-    if (userRole === "Admin" || userRole === "Employee") {
+    if (userRole === "Admin") {
         updates.push({
             shift: selectedShift,
             newStart: undefined,

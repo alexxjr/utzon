@@ -31,6 +31,7 @@ function insertDays() {
             let textnode = document.createTextNode(day);
             node.classList.add("date");
             node.appendChild(textnode);
+            node.setAttribute('chosen', 'false');
             node.onclick = chooseDate;
             daysList.appendChild(node);
         }
@@ -71,11 +72,11 @@ function setCurrentMonth() {
 
 async function update() {
     await setUserRole();
-    console.log(userRole);
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         setCurrentMonth();
         setYear();
         insertDays();
+        setupEmployeeAccess();
     } else {
        await logOutAction();
     }
@@ -105,11 +106,13 @@ async function chooseDate() {
     if (userRole === "Admin" || userRole === "Employee") {
         shiftUpdate.style.display = "none";
         dayShift.style.display = 'inline-block';
-        let allDates = document.querySelectorAll(".date");
+        let allDates = document.querySelectorAll(".daysList li");
         allDates.forEach(date => {
             date.style.backgroundColor = "#eee"
+            date.setAttribute("chosen", 'false');
         });
         this.style.backgroundColor = "darkkhaki";
+        this.setAttribute("chosen", 'true');
         let date = createDate();
         dayShift.innerHTML = await generateShifts(date);
     }
