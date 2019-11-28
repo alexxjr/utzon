@@ -2,6 +2,7 @@ const username = document.querySelector('#name');
 const password = document.querySelector('#password');
 const login = document.querySelector("button");
 const fail = document.querySelector('#fail');
+sessionCheck();
 
 async function POST(url, data) {
     const CREATED = 200;
@@ -22,17 +23,18 @@ async function GET(url) {
         throw new Error("GET status code " + response.status);
     return await response.json();
 }
-
+async function sessionCheck() {
+    let userRole = await GET("api/login/session");
+    if (userRole !== "noAccess") {
+        window.location = "adminAccess.html"
+    }
+}
 
 login.onclick = async () => {
     try {
         let response = await POST("/api/login", {username: username.value, password: password.value});
         if (response.ok) {
-            // response = await GET("/api/login/session");
-            // if (response === "Admin" || response === "Employee"){
-                window.location = 'adminAccess.html';
-            // }
-
+            window.location = 'adminAccess.html';
         } else {
             password.value = "";
             fail.innerHTML = "Forkert password!";
