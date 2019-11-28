@@ -118,8 +118,9 @@ body {
 #hover {
     padding-top: 20px;
     padding-bottom: 20px;
-    background-color: #eeeeee;
+    background-color: white;
     display: inline-block;
+    cursor: pointer;
 }
 
 #hover div {
@@ -128,7 +129,7 @@ body {
 
 #shiftUpdate {
     width: 20%;
-    height: 214px;
+    height: 29%;
     border: 1px solid black;
     background: #bc9a5d;
     color: #333;
@@ -179,6 +180,7 @@ input[type="date"]::-webkit-inner-spin-button {
     float: right;
     font-size: 16px;
     font-family: Verdana, sans-serif;
+    cursor: pointer;
 }
 
 #deleteBtn {
@@ -186,6 +188,7 @@ input[type="date"]::-webkit-inner-spin-button {
     font-size: 16px;
     font-family: Verdana, sans-serif;
     margin: 1px;
+    cursor: pointer;
 }
 
 #saveBtn {
