@@ -1,5 +1,5 @@
 // Import of employee model
-const Employee = require('../models/Employee');
+const ModelEmployee = require('../models/Employee');
 // Import of mongoose, to be used for storage
 const mongoose = require("../app");
 // Import of general controller
@@ -28,7 +28,7 @@ async function createEmployee(CPR, name, email, phoneNo) {
     if (await getEmployee(CPR) !== null) {
         throw new Error("The employee already exists in the database")
     }
-    const employee = new Employee({
+    const employee = new ModelEmployee({
         CPR,
         name,
         email: "utzonreceive@gmail.com",
@@ -88,7 +88,7 @@ async function removeEmployeeFromShift(shift) {
  Deletes an employee from mongoDB using the database ID
  */
 async function deleteEmployee(employee) {
-    return Employee.findByIdAndDelete(employee._id);
+    return ModelEmployee.findByIdAndDelete(employee._id);
 }
 
 // ********** GETTERS ********** //
@@ -97,28 +97,28 @@ async function deleteEmployee(employee) {
 Gets an employee from mongoDB using the database ID
  */
 async function getEmployeeWithID(objectid) {
-    return Employee.findOne({_id: objectid});
+    return ModelEmployee.findOne({_id: objectid});
 }
 
 /**
 Gets an employee from mongoDB using the CPR-number
  */
 async function getEmployee(CPR) {
-    return Employee.findOne({CPR: CPR}).exec();
+    return ModelEmployee.findOne({CPR: CPR}).exec();
 }
 
 /**
  Gets an employee with populated references from mongoDB using the CPR-number
  */
 async function getEmployeePopulated(CPR) {
-    return Employee.findOne({CPR: CPR}).populate('shifts').exec();
+    return ModelEmployee.findOne({CPR: CPR}).populate('shifts').exec();
 }
 
 /**
 Gets all employees from mongoDB
  */
 async function getEmployees() {
-    return Employee.find().populate('shifts').exec();
+    return ModelEmployee.find().populate('shifts').exec();
 }
 
 /**

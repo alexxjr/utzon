@@ -1,5 +1,4 @@
 const shiftController = require('../controllers/shiftController');
-//const mongoose = require('../app').mongoose;
 
 let testStartDate = new Date(2018, 11, 15,10,25);
 let testEndDate = new Date(2018, 11, 15,18,55);
