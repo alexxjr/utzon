@@ -65,6 +65,7 @@ function update() {
 }
 
 async function populateEmployeeSelection() {
+    employeeSelectShift.innerHTML = "";
     let employees = await GET("/api/employees/");
     for (let e of employees) {
         let data = JSON.stringify(e);
