@@ -1,7 +1,7 @@
 let employeeSelectAdminAccessEmployee = document.querySelector("#select2");
 
 function modalAction() {
-    if (userRole === "Admin") {
+    if (userRole === "Admin" || userRole === "Employee") {
         document.getElementById("empModal").style.display = "block";
         document.getElementById("select2").value = "";
         document.getElementById("fromDatePicker").value = "0000-00-00";
