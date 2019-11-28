@@ -17,4 +17,11 @@ async function siteInit() {
     await populateEmployeeSelection();
 }
 
+async function logOutAction() {
+    console.log(window.location);
+    let response = await GET("api/login/logout");
+
+    window.location = "/response";
+}
+
 siteInit();

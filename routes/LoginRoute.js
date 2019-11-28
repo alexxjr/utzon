@@ -13,7 +13,6 @@ router
     .post('/', async (request, response) => {
         const {username, password} = request.body;
         if (await loginController.validateLogin(username, password)) {
-            request.session.username = username;
             let role = await loginController.getLoginRole(username);
             request.session.role = role;
 
@@ -35,7 +34,7 @@ router
                 if (err) {
                     console.log(err);
                 } else {
-                    response.redirect('../public/index.html');
+                    response.send('index.html');
                 }
             });
         }
