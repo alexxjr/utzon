@@ -1,9 +1,11 @@
 function createEmployeeAction() {
-    document.getElementById("createEmpModal").style.display = "block";
-    document.querySelector("#empNavn").value = "";
-    document.querySelector("#empNr").value = "";
-    document.querySelector("#empMail").value = "";
-    document.querySelector("#empCPR").value = "";
+    if (userRole === "Admin" ||userRole === "Employee") {
+        document.getElementById("createEmpModal").style.display = "block";
+        document.querySelector("#empNavn").value = "";
+        document.querySelector("#empNr").value = "";
+        document.querySelector("#empMail").value = "";
+        document.querySelector("#empCPR").value = "";
+    }
 }
 
 async function okCreateEmployee() {
