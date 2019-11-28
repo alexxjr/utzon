@@ -71,9 +71,14 @@ function setCurrentMonth() {
 
 async function update() {
     await setUserRole();
-    setCurrentMonth();
-    setYear();
-    insertDays();
+    console.log(userRole);
+    if (userRole === "Admin" ||userRole === "Employee") {
+        setCurrentMonth();
+        setYear();
+        insertDays();
+    } else {
+       await logOutAction();
+    }
 }
 
 async function populateEmployeeSelection() {
