@@ -267,7 +267,7 @@ describe('Test af shift controllerfunktioner', function () {
             }
         }
         let date1 = new Date("2017-01-01T00:00:00Z");
-        let date2 = new Date("2018-11-30T23:59:59Z");
+        let date2 = new Date("2018-12-30T23:59:59Z");
         let shifts = await shiftController.getShifts();
         for (let shift of shifts) {
             if (shift.start.getTime() >= date1.getTime() && shift.end.getTime() <= date2.getTime()) {
