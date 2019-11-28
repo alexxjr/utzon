@@ -14,7 +14,6 @@ let employeeSelectShift = document.querySelector("#employeeSelect");
 
 async function setUserRole() {
     userRole = await GET("/api/login/session");
-    console.log(userRole);
 }
 
 function insertDays() {
