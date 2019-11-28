@@ -17,6 +17,10 @@ const login = new Schema({
         enum: ["Admin", "Employee"],
         required: true
     },
+    employee: {
+        type : Schema.Types.ObjectId,
+        ref : 'Employee'
+    }
 });
 
 module.exports = mongoose.model('Login', login);
