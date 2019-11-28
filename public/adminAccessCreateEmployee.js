@@ -8,7 +8,7 @@ function createEmployeeAction() {
     }
 }
 
-async function okCreateEmployee() {
+async function okCreateEmployee(loginid) {
     if (userRole === "Admin") {
         let name = document.querySelector("#empNavn").value + "";
         let phoneNo = document.querySelector("#empNr").value + "";
@@ -17,11 +17,25 @@ async function okCreateEmployee() {
         // Her skal der laves ændringer så man kan oprette en ansat
         createEmpCloseModalAction();
         let response = await POST({CPR, name, email, phoneNo}, "/api/employees/");
-        if (response !== undefined) {
-            alert("Den ansatte blev ikke oprettet. \n" + response);
+        if (response.status === 400) {
+            alert("Den ansatte blev ikke oprettet. \n" + response.body);
         } else {
-            alert("Den ansatte er nu oprettet!");
-            await populateEmployeeSelection()
+            let employeeid = response.body;
+            response = await POST({employeeid, loginid}, "/api/login/connectEmployee");
+            if (response === 400) {
+                response = await POST(employeeid, "/api/employees/deleteEmployee");
+                if(response === 400) {
+                    alert("Fejl under oprettelsen, ring til tech support")
+                }
+                else {
+                    alert("Fejl under oprettelsen. Prøv igen")
+                }
+            }
+            else {
+                alert("Den ansatte er nu oprettet!");
+                await populateEmployeeSelection()
+            }
+
         }
     }
 }

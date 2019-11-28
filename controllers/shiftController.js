@@ -36,6 +36,10 @@ async function createShift(start, end) {
  Deletes a shift from mongoDB using the database ID
  */
 async function deleteShift(shift) {
+    if (shift.employee !== undefined) {
+        throw new Error("The shift still have an employee attached");
+    }
+
     return Shift.findByIdAndDelete(shift._id);
 }
 

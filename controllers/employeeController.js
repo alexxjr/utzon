@@ -88,6 +88,19 @@ async function removeEmployeeFromShift(shift) {
  Deletes an employee from mongoDB using the database ID
  */
 async function deleteEmployee(employee) {
+    if(employee.shifts.length !== 0) {
+        throw new Error("The employee still have shifts attached");
+    }
+    return ModelEmployee.findByIdAndDelete(employee._id);
+}
+
+/**
+ Deletes an employee from mongoDB using the database ID as a parameter
+ */
+async function deleteEmployeeByID(employeeid) {
+    if(employee.shifts.length !== 0) {
+        throw new Error("The employee still have shifts attached");
+    }
     return ModelEmployee.findByIdAndDelete(employee._id);
 }
 
@@ -152,4 +165,5 @@ exports.getEmployeeWithID = getEmployeeWithID;
 exports.getEmployees = getEmployees;
 exports.deleteEmployee = deleteEmployee;
 exports.createEmployee = createEmployee;
+exports.deleteEmployeeByID = deleteEmployeeByID;
 

@@ -41,11 +41,23 @@ router
         if (request.session.role === "Admin") {
             const {CPR, name, email, phoneNo} = request.body;
             try {
-                await employeeController.createEmployee(CPR, name, email, phoneNo);
-                response.sendStatus(201);
+                let employee = await employeeController.createEmployee(CPR, name, email, phoneNo);
+                response.status(201).send(employee._id);
             }
             catch (e) {
-                response.send(JSON.stringify(e.message));
+                response.status(400).send(JSON.stringify(e.message));
+            }
+        }
+    })
+    .post('/deleteEmployee', async (request, response) => {
+        if (requst.session.role === "Admin") {
+            const employeeid = request.body;
+            try {
+                await employeeController.deleteEmployeeByID(employeeid);
+                response.sendStatus(200);
+            }
+            catch (e) {
+                response.sendStatus(400);
             }
         }
     });

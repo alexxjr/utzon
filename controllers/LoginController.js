@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const Login = require("../models/Login");
 //Mongoose import that enables saving to the right database.
 const mongoose = require("../app");
+//Employee Controller needed for operations concerning the link
+const employeeController = require("./employeeController");
 
 
 /**
@@ -15,7 +17,6 @@ async function getLoginRole(username) {
         throw new Error("User does not exist in the system");
     }
     return user.role;
-
 }
 
 /**
@@ -78,6 +79,36 @@ async function validatePassword(typedPassword, storedPassword) {
     return hash === parts[0];
 }
 
+/**
+ * Link an employee to a a login
+ */
+async function addEmployeeToLogin(loginid, employeeid) {
+    let login = getLoginWithID(loginid);
+    if (login.employee !== undefined) {
+        throw new Error("This login already has an employee linked")
+    }
+    if (employeeid === undefined) {
+        throw new Error("The employee being linked to a login is undefined")
+    }
+    login.employee = employeeid;
+    await login.save();
+}
+
+/**
+ * Remove an employee from a login
+ */
+async function removeEmployeeFromLogin(login) {
+    if (login === undefined) {
+        throw new Error("Cannot remove employee from an undefined login")
+    }
+    login.employee = undefined;
+    await login.save();
+}
+
+/**
+ *
+ */
+
 //Getting, updating and deleting from database
 
 /**
@@ -91,7 +122,10 @@ async function findOneLogin(username) {
  * Deleting a user in the database
  */
 async function deleteLogin(login) {
-    return Login.findByIdAndDelete(login._id);
+    if(login.employee !== undefined) {
+        await employeeController.deleteEmployee(await employeeController.getEmployeeWithID(login.employee))
+    }
+    await Login.findByIdAndDelete(login._id);
 }
 
 /**
@@ -99,6 +133,13 @@ async function deleteLogin(login) {
  */
 async function getLogin(login) {
     return Login.findOne({username: login.username}).exec();
+}
+
+/**
+ * Gets a login from mongoDB using the id of the login.
+ */
+async function getLoginWithID(ID) {
+    return Login.findOne({_id : ID}).exec();
 }
 
 /**
@@ -112,3 +153,5 @@ exports.deleteLogin = deleteLogin;
 exports.getLogin = getLogin;
 exports.generateHash = generateHash;
 exports.validatePassword = validatePassword;
+exports.addEmployeeToLogin = addEmployeeToLogin;
+exports.removeEmployeeFromLogin = removeEmployeeFromLogin;
