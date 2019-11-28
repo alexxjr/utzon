@@ -9,7 +9,7 @@ let endTimePicker = document.querySelector("#endTimePicker");
 let hourDisplay = document.querySelector("#totalHours");
 
 async function generateShifts(date) {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         let shifts = await GET("/api/shifts/" + date);
         let template = await GETtext('/shifts.handlebars');
         let compiledTemplate = Handlebars.compile(template);
@@ -18,7 +18,7 @@ async function generateShifts(date) {
 }
 
 async function shiftSelected(shiftID, employeeID, divID) {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         dayShift.style.display = "none";
         shiftUpdate.style.display = "inline-block";
         selectedShift = await GET("/api/shifts/getOneShift/" + shiftID);
@@ -61,14 +61,14 @@ function okAction() {
 }
 
 function cancelAction() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
     }
 }
 
 function deleteAction() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         updates.push({
             shift: selectedShift,
             newStart: undefined,
@@ -82,26 +82,26 @@ function deleteAction() {
     }
 }
 
-if (userRole === "Admin" ||userRole === "Employee") {
-    Handlebars.registerHelper("formatDate", function (date) {
-        date = date.toString();
-        return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
-    });
 
-    Handlebars.registerHelper("formatTime", function (date) {
-        date = date.toString();
-        return /[0-9]{2}:[0-9]{2}/g.exec(date);
-    });
+Handlebars.registerHelper("formatDate", function (date) {
+    date = date.toString();
+    return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
+});
 
-    startTimePicker.addEventListener("input", function () {
-        timeChanged(startTimePicker, endTimePicker, hourDisplay);
-    });
+Handlebars.registerHelper("formatTime", function (date) {
+    date = date.toString();
+    return /[0-9]{2}:[0-9]{2}/g.exec(date);
+});
 
-    endTimePicker.addEventListener("input", function () {
-        timeChanged(startTimePicker, endTimePicker, hourDisplay);
+startTimePicker.addEventListener("input", function () {
+    timeChanged(startTimePicker, endTimePicker, hourDisplay);
+});
 
-    });
-}
+endTimePicker.addEventListener("input", function () {
+    timeChanged(startTimePicker, endTimePicker, hourDisplay);
+
+});
+
 
 
 

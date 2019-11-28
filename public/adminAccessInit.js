@@ -1,5 +1,5 @@
 async function siteInit() {
-    update();
+    await update();
     document.querySelector("#deleteBtn").onclick = deleteAction;
     document.querySelector("#nextBtn").onclick = nextMonth;
     document.querySelector("#prevBtn").onclick = prevMonth;
