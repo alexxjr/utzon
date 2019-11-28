@@ -19,10 +19,7 @@ async function siteInit() {
 }
 
 async function logOutAction() {
-    console.log(window.location);
-    let response = await GET("api/login/logout");
-
-    window.location = "/response";
+    window.location.href = "api/login/logout";
 }
 
 siteInit();
