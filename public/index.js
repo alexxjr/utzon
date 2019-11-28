@@ -28,10 +28,10 @@ login.onclick = async () => {
     try {
         let response = await POST("/api/login", {username: username.value, password: password.value});
         if (response.ok) {
-            response = await GET("/api/login/session");
-            if (response === "Admin" || response === "Employee"){
+            // response = await GET("/api/login/session");
+            // if (response === "Admin" || response === "Employee"){
                 window.location = 'adminAccess.html';
-            }
+            // }
 
         } else {
             password.value = "";
