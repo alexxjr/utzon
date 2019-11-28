@@ -7,9 +7,11 @@ function createShiftModalAction() {
         let start = document.querySelector("#createStartTime");
         let end = document.querySelector("#createEndTime");
         let createTotalHours = document.getElementById("createTotalHours");
+
         document.querySelector("#createStartDate").value = createDate();
         start.value = "00:00";
         end.value = "01:00";
+        createTotalHours.innerHTML = "1";
 
 
         start.addEventListener("input", function () {
@@ -45,6 +47,6 @@ async function okCreateShift() {
 
 function createShiftcloseModalAction() {
     document.getElementById("createShiftModal").style.display = "none";
-    document.querySelector("#createTotalHours").innerHTML = "00:00";
+    document.querySelector("#createTotalHours").innerHTML = "1";
 }
 

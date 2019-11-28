@@ -22,20 +22,22 @@ function prevMonth() {
 
 
 function createDate() {
+    let dates = document.querySelectorAll(".daysList li")
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
     }
     let date;
-    allDates.forEach(d => {
-        if (d.style.backgroundColor === "darkkhaki") {
-            date = d;
+    for (let i = 0; i < dates.length; i++) {
+        let isChosen = dates[i].getAttribute('chosen');
+        if (isChosen === "true") {
+            date = dates[i].innerText;
         }
-    });
+    }
     if (date === undefined) {
         alert("no date selected");
     }
-    return year + "-" + monthNo + "-" + date.innerText;
+    return year + "-" + monthNo + "-" + date;
 }
 
 

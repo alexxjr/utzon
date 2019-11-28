@@ -8,6 +8,7 @@ async function siteInit() {
     for (let i = 0; i < allDates.length; i++) {
         if (allDates[i].innerText === (today.getDate() + "")) {
             allDates[i].style.backgroundColor = "darkkhaki";
+            allDates[i].setAttribute('chosen', 'true');
         }
 
     }
