@@ -73,10 +73,11 @@ function setCurrentMonth() {
 
 async function update() {
     await setUserRole();
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         setCurrentMonth();
         setYear();
         insertDays();
+        setupEmployeeAccess();
     } else {
        await logOutAction();
     }

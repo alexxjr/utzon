@@ -1,5 +1,5 @@
 function createShiftModalAction() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin") {
         document.getElementById("createShiftModal").style.display = "block";
         document.querySelector("#createStartTime").value = "00:00";
         document.querySelector("#createEndTime").value = "00:00";
