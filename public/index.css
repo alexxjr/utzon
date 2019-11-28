@@ -16,7 +16,6 @@ body {
     padding: 20px 20px;
     width: 100%;
     background: #bc9a5d;
-    /*color: darkkhaki;*/
     text-align: center;
     font-size: 25px;
     height: 130px;
@@ -129,13 +128,13 @@ body {
 
 #shiftUpdate {
     width: 20%;
-    height: 220px;
+    height: 214px;
     border: 1px solid black;
-    background: #333;
-    color: #d9ba83;
+    background: #bc9a5d;
+    color: #333;
     text-align: center;
     alignment: center;
-    padding: 2px;
+    /*padding: 2px;*/
     margin: 20px;
     font-family: Verdana, sans-serif;
     display: none;
