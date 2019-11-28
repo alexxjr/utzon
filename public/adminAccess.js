@@ -85,7 +85,7 @@ function createDate() {
     }
     let date;
     allDates.forEach(d => {
-        if (d.style.backgroundColor === "cornflowerblue") {
+        if (d.style.backgroundColor === "darkkhaki") {
             date = d;
         }
     });
@@ -127,7 +127,7 @@ async function chooseDate() {
     allDates.forEach(date => {
         date.style.backgroundColor = "#eee"
     });
-    this.style.backgroundColor = "cornflowerblue";
+    this.style.backgroundColor = "darkkhaki";
     let date = createDate();
     dayShift.innerHTML = await generateShifts(date);
 }
