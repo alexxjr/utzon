@@ -14,27 +14,24 @@ let employeeSelectShift = document.querySelector("#employeeSelect");
 
 async function setUserRole() {
     userRole = await GET("/api/login/session");
-    console.log(userRole);
 }
 
 function insertDays() {
-    if (userRole === "Admin" || userRole === "Employee") {
-        let daysList = document.querySelector(".daysList");
-        let days = daysArray[month];
-        daysList.innerHTML = "";
-        let day;
-        for (let i = 1; i <= days; i++) {
-            day = i + "";
-            if (i < 10) {
-                day = "0" + i;
-            }
-            let node = document.createElement("li");
-            let textnode = document.createTextNode(day);
-            node.classList.add("date");
-            node.appendChild(textnode);
-            node.onclick = chooseDate;
-            daysList.appendChild(node);
+    let daysList = document.querySelector(".daysList");
+    let days = daysArray[month];
+    daysList.innerHTML = "";
+    let day;
+    for (let i = 1; i <= days; i++) {
+        day = i + "";
+        if (i < 10) {
+            day = "0" + i;
         }
+        let node = document.createElement("li");
+        let textnode = document.createTextNode(day);
+        node.classList.add("date");
+        node.appendChild(textnode);
+        node.onclick = chooseDate;
+        daysList.appendChild(node);
     }
 }
 
@@ -72,17 +69,17 @@ function setCurrentMonth() {
 
 async function update() {
     await setUserRole();
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         setCurrentMonth();
         setYear();
         insertDays();
     } else {
-       await logOutAction();
+        await logOutAction();
     }
 }
 
 async function populateEmployeeSelection() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         employeeSelectShift.innerHTML = "";
         let employees = await GET("/api/employees/");
         for (let e of employees) {
