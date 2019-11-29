@@ -82,6 +82,34 @@ function deleteAction() {
     }
 }
 
+function hasShiftUpdate(shift) {
+    for (let i = 0; i < updates.length; i++) {
+        if (shift._id === updates[i].shift._id) {
+            if(updates[i].type === "deleteShift") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+}
+
+function shiftUpdateColor(shift) {
+    if (hasShiftUpdate(shift) === true) {
+        return "red";
+    }
+    else if (hasShiftUpdate(shift) === false) {
+        return "yellow";
+    } else {
+        return "blue";
+    }
+}
+
+Handlebars.registerHelper("updateColor", function (shift) {
+    return shiftUpdateColor(shift);
+});
+
 
 Handlebars.registerHelper("formatDate", function (date) {
     date = date.toString();
@@ -92,6 +120,7 @@ Handlebars.registerHelper("formatTime", function (date) {
     date = date.toString();
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
+
 
 startTimePicker.addEventListener("input", function () {
     timeChanged(startTimePicker, endTimePicker, hourDisplay);
