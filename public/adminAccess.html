@@ -16,6 +16,7 @@
     <script src="adminAccessCreateEmployee.js" defer></script>
     <script src="adminAccessInit.js" defer></script>
     <script src="employeeAccess.js" defer></script>
+    <script src="adminAccessCreateLogin.js" defer></script>
 </head>
 <body>
 
@@ -27,7 +28,6 @@
         <li> Fra: <input id="fromDatePicker" type="date" required></li>
         <li> Til: <input id="toDatePicker" type="date" required></li>
         <li> Antal timer: <input id="ansatTid" type="text" disabled></li>
-
         <button type="button" id="beregn" onclick="totalHoursBetweenTwoDates()">Beregn timer</button>
     </div>
 </div>
@@ -43,30 +43,36 @@
         <button type="button" class="btn" onclick="okCreateEmployee()">Opret</button>
     </div>
 </div>
+
 <div id="createShiftModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="createShiftcloseModalAction()">&times;</span>
         <h2>Opret ny vagt</h2>
-        <li>
-            Dato: <input id="createStartDate" name="start" type="date"></input>
-            <span class="validity"></span>
-        </li>
-        <li>
-            Starttid: <input id="createStartTime" type="time" name="end">
-            <span class="validity"></span>
-        </li>
-        <li>
-            Sluttid: <input id="createEndTime" type="time" name="end">
-            <span class="validity"></span>
-        </li>
-        <li>
-            Antal timer: <label id="createTotalHours" name="end"></label>
-            <span class="validity"></span>
-        </li>
+        <li>Dato: <input id="createStartDate" name="start" type="date"></input>
+            <span class="validity"></span></li>
+        <li>Starttid: <input id="createStartTime" type="time" name="end">
+            <span class="validity"></span></li>
+        <li>Sluttid: <input id="createEndTime" type="time" name="end">
+            <span class="validity"></span></li>
+        <li>Antal timer: <label id="createTotalHours" name="end"></label>
+            <span class="validity"></span></li>
         <br>
         <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
     </div>
 </div>
+
+<div id="createLoginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="createLoginCloseModalAction()">&times;</span>
+        <h2>Opret login</h2>
+        <li>Brugernavn: <input id="createUsername" type="text" required>
+        <li>Password: <input id="createPassword" type="password" required>
+        <br>
+        <button type="button" class="btn" onclick="okCreateLogin()">Opret login</button>
+    </div>
+</div>
+
+
 
 <div class="navbar">
     <div class="dropdown">
@@ -76,6 +82,7 @@
         <div class="dropdown-content">
             <a href="#" id="createButton" onclick="createShiftModalAction()">Opret vagt</a>
             <a href="#" id="createButton2" onclick="createEmployeeAction()">Opret ansat</a>
+            <a href="#" id="createLoginBtn" onclick="createLoginModalAction()">Opret login</a>
             <a href="#" id="seeEmployeesBtn" onclick="modalAction()">Ansatte timer</a>
         </div>
     </div>
@@ -85,17 +92,9 @@
 
 <div class="month">
     <ul>
-        <li class="prev">
-            <a id="prevBtn">&#10094;</a>
-        </li>
-        <li class="next">
-            <a id="nextBtn">&#10095;</a>
-        </li>
-        <li>
-            <div id="monthDisplay"></div>
-            <br>
-            <div id="yearDisplay"></div>
-        </li>
+        <li class="prev"><a id="prevBtn">&#10094;</a></li>
+        <li class="next"><a id="nextBtn">&#10095;</a></li>
+        <li><div id="monthDisplay"></div><br><div id="yearDisplay"></div></li>
     </ul>
 </div>
 
@@ -128,7 +127,7 @@
         <a id="shiftCancel" onclick="cancelAction()">Annuller</a>
         <a id="deleteBtn">Delete</a>
     </div>
-
 </div>
+<img id="logoAdmin" src="UtzonLogo.PNG">
 </body>
 </html>

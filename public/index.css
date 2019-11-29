@@ -10,6 +10,31 @@ body {
     font-family: Verdana, sans-serif;
 }
 
+/* Login screen */
+#loginOptions {
+    position: absolute;
+    top: 35%;
+    right: 50%;
+}
+
+#name {
+    margin-bottom: 5px;
+}
+
+#logo {
+    position: absolute;
+    right: 43%;
+    top: 5%;
+}
+
+#logoAdmin {
+    position: absolute;
+    right: 2%;
+    top: 90%;
+    width: 7%;
+    height: 7%;
+}
+
 
 /* Month header */
 .month {
