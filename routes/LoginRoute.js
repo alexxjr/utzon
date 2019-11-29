@@ -25,18 +25,34 @@ router
         const role = request.session.role;
         if (role === "Admin" || role === "Employee") {
             response.send(JSON.stringify(role));
-        } else
+        } else {
             response.send(JSON.stringify("noAccess"));
-
+        }
     })
     .get('/logout', async (request, response) => {
-            request.session.destroy((err) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    response.redirect('/');
-                }
-            });
+        request.session.destroy((err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                response.redirect('/');
+            }
+        });
+    })
+    .post('/connectEmployee', async (request, response) => {
+        const role = request.session.role;
+        if (role === "Admin") {
+            try {
+                const{loginid, employeeid} = request.body;
+                await loginController.addEmployeeToLogin(loginid, employeeid);
+                response.sendStatus(200);
+            }
+            catch (e) {
+                response.sendStatus(400);
+            }
+
+        } else {
+            response.send(JSON.stringify("noAccess"));
         }
-    );
+
+    });
 module.exports = router;
