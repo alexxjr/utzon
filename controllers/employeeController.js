@@ -68,11 +68,12 @@ the links will be removed, and the updated objects will be saved in mongoDB
  */
 async function removeEmployeeFromShift(shift) {
     shiftController.checkShift(shift);
+    shift = await shiftController.getOneShift(shift._id);
     if (shift.employee === undefined) {
         throw new Error("This shift does not have an employee attached");
     }
     let employee = await getEmployeeWithID(shift.employee);
-    shift = await shiftController.getOneShift(shift._id);
+
 
 
     for (let i = 0; i < employee.shifts.length; i++) {
@@ -88,6 +89,7 @@ async function removeEmployeeFromShift(shift) {
  Deletes an employee from mongoDB using the database ID
  */
 async function deleteEmployee(employee) {
+    employee = await getEmployeeWithID(employee._id);
     if(employee.shifts.length !== 0) {
         throw new Error("The employee still have shifts attached");
     }
@@ -98,10 +100,11 @@ async function deleteEmployee(employee) {
  Deletes an employee from mongoDB using the database ID as a parameter
  */
 async function deleteEmployeeByID(employeeid) {
+    let employee = await getEmployeeWithID(employeeid);
     if(employee.shifts.length !== 0) {
         throw new Error("The employee still have shifts attached");
     }
-    return ModelEmployee.findByIdAndDelete(employee._id);
+    return ModelEmployee.findByIdAndDelete(employeeid);
 }
 
 // ********** GETTERS ********** //

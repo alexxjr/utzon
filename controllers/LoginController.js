@@ -90,6 +90,7 @@ async function addEmployeeToLogin(loginid, employeeid) {
     if (employeeid === undefined) {
         throw new Error("The employee being linked to a login is undefined")
     }
+    let employee = await employeeController.getEmployeeWithID(employeeid);
     login.employee = employeeid;
     await login.save();
 }
@@ -106,8 +107,18 @@ async function removeEmployeeFromLogin(login) {
 }
 
 /**
- *
+ * Get a list of logins without an attached employee
  */
+async function getListOfLoginsWithoutEmployees() {
+    //TODO
+}
+
+/**
+ * Get a list of logins with an attached employee
+ */
+async function getListOfLoginsWithEmployee() {
+    //TODO
+}
 
 //Getting, updating and deleting from database
 

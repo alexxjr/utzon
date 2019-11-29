@@ -1,10 +1,17 @@
 const employeeController = require('../controllers/employeeController');
 const shiftController = require('../controllers/shiftController');
 
+let listOfCpr = ["0123456789", "2013456789", "9876543210"];
+
 async function dostuff() {
     let employees = await employeeController.getEmployees();
     for (let employee of employees) {
-        if (employee.CPR === "0123456789" || employee.CPR === "2013456789") {
+        if (listOfCpr.includes(employee.CPR)) {
+            if (employee.shifts.length !== 0) {
+                for (let shift of employee.shifts) {
+                    await employeeController.removeEmployeeFromShift(shift);
+                }
+            }
             await employeeController.deleteEmployee(employee)
         }
     }

@@ -77,6 +77,8 @@ describe('Test af employee controllerfunktioner', function(){
     });
 
     after(async () => {
+        await employeeController.removeEmployeeFromShift(testShift2);
+        await employeeController.removeEmployeeFromShift(testShift3);
         await employeeController.deleteEmployee(testEmployee2);
         await employeeController.deleteEmployee(testEmployee1);
         await employeeController.deleteEmployee(testEmployee3);

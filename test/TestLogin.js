@@ -22,6 +22,7 @@ describe('Test af loginfunktioner', () => {
         fourthtry = await loginController.getLogin(fourthtry);
         expect(fourthtry.username).to.equal("test");
         expect(fourthtry.role).to.equal("Employee");
+        expect(fourthtry.employee).to.equal(undefined);
     }).timeout(10000);
 
     it('make a login with a username that already exists', async () => {
