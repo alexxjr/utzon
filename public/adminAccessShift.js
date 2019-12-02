@@ -31,7 +31,7 @@ async function shiftSelected(shiftID, employeeID, divID) {
         datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(selectedShift.start);
         startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.start);
         endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.end);
-        hourDisplay.value = selectedShift.totalHours;
+        hourDisplay.innerHTML = selectedShift.totalHours;
         let shiftOK = document.querySelector("#shiftOK");
         shiftOK.onclick = okAction;
         selectedShiftDiv = document.querySelector("#shift" + divID);
@@ -86,6 +86,7 @@ function okAction() {
         info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function cancelAction() {
@@ -111,6 +112,7 @@ function deleteAction() {
         selectedShiftDiv.setAttribute("hasupdate", "deleted");
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function hasShiftUpdate(shift) {

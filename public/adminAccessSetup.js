@@ -111,7 +111,7 @@ async function chooseDate() {
             date.style.backgroundColor = "#eee"
             date.setAttribute("chosen", 'false');
         });
-        this.style.backgroundColor = "darkkhaki";
+        this.style.backgroundColor = "#bc9a5d";
         this.setAttribute("chosen", 'true');
         let date = createDate();
         dayShift.innerHTML = await generateShifts(date);
