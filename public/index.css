@@ -142,9 +142,9 @@ body {
 }
 
 .shifts ul :hover {
-    background-color: #ddd;
     display: inline;
     alignment: center;
+
 }
 
 #hover {
@@ -157,6 +157,7 @@ body {
 
 #hover div {
     display: inline-block;
+    background-color: white;
 }
 
 #shiftUpdate {
