@@ -68,6 +68,11 @@
         <h2>Opret login</h2>
         <li>Brugernavn: <input id="createUsername" type="text" required>
         <li>Password: <input id="createPassword" type="password" required>
+        <li> Vælg rolle:
+        <select id="loginRole" required>
+            <option value="Admin">Administrator</option>
+            <option value="Employee">Ansatte</option>
+        </select>
         <br>
         <button type="button" class="btn" onclick="okCreateLogin()">Opret login</button>
     </div>

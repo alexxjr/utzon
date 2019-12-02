@@ -8,13 +8,15 @@ function createLoginModalAction() {
 
 async function okCreateLogin() {
     if (userRole === "Admin"){
-        let loginName = document.querySelector("createUsername").value + "";
-        let loginPassword = document.querySelector("createPassword").value + "";
+        let loginName = document.querySelector("#createUsername").value + "";
+        console.log(loginName);
+        let loginPassword = document.querySelector("#createPassword").value + "";
+        let loginRole = document.querySelector("#loginRole").value + "";
+        console.log(loginRole);
+        let response = await POST({loginName, loginPassword, loginRole}, "api/login/createLogin");
+        createLoginCloseModalAction();
         if (response.status === 400) {
-            alert("Den ansatte blev ikke oprettet. \n" + response.body);
-        }
-        else{
-
+            alert("Login blev ikke oprettet. \n" + response.body);
         }
     }
 }
