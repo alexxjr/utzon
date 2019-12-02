@@ -50,14 +50,14 @@ router
         }
     })
     .post('/deleteEmployee', async (request, response) => {
-        if (requst.session.role === "Admin") {
+        if (request.session.role === "Admin") {
             const employeeid = request.body;
             try {
-                await employeeController.deleteEmployeeByID(employeeid);
-                response.sendStatus(200);
+                await employeeController.deleteEmployeeByID(employeeid.employeeid);
+                response.sendStatus(201 );
             }
             catch (e) {
-                response.sendStatus(400);
+                response.status(400).send(JSON.stringify(e.message));
             }
         }
     });
