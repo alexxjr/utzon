@@ -10,9 +10,9 @@ function createShiftModalAction() {
         let createTotalHours = document.getElementById("createTotalHours");
 
         document.querySelector("#createStartDate").value = createDate();
-        start.value = "00:00";
-        end.value = "01:00";
-        createTotalHours.innerHTML = "1";
+        start.value = "09:00";
+        end.value = "17:00";
+        createTotalHours.innerHTML = "7.5";
 
 
         start.addEventListener("input", function () {
