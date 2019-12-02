@@ -86,6 +86,7 @@ function okAction() {
         info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function cancelAction() {
@@ -111,6 +112,7 @@ function deleteAction() {
         selectedShiftDiv.setAttribute("hasupdate", "deleted");
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function hasShiftUpdate(shift) {
