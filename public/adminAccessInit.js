@@ -4,9 +4,12 @@ async function siteInit() {
     document.querySelector("#nextBtn").onclick = nextMonth;
     document.querySelector("#prevBtn").onclick = prevMonth;
     allDates = document.querySelectorAll(".date");
-    let today = new Date();
+    let today = new Date().getDate();
+    if (today < 10) {
+        today = "0" + today;
+    }
     for (let i = 0; i < allDates.length; i++) {
-        if (allDates[i].innerText === (today.getDate() + "")) {
+        if (allDates[i].innerText === (today + "")) {
             allDates[i].style.backgroundColor = "darkkhaki";
             allDates[i].setAttribute('chosen', 'true');
         }

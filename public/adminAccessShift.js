@@ -58,6 +58,7 @@ function okAction() {
         info[2].innerText = "Starttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newStart.toISOString());
         info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
     }
+    checkShiftsOnclick();
 }
 
 function cancelAction() {
@@ -65,6 +66,7 @@ function cancelAction() {
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
     }
+    checkShiftsOnclick();
 }
 
 function deleteAction() {
@@ -80,6 +82,7 @@ function deleteAction() {
         shiftUpdate.style.display = "none";
         selectedShiftDiv.style.backgroundColor = "red";
     }
+    checkShiftsOnclick();
 }
 
 function hasShiftUpdate(shift) {

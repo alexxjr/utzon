@@ -1,17 +1,19 @@
 const loginController = require('../controllers/LoginController');
+const employeeController = require('../controllers/employeeController');
 const chai = require('chai');
 let expect = chai.expect;
 chai.use(require('chai-as-promised'));
 
 let testLogin1;
+let testEmployee1;
 
 describe('Test af login controllerfunktioner', function(){
 
     before(async function() {
         this.timeout(10000);
         testLogin1 = await loginController.createLogin("test", "test", "Employee");
+        testEmployee1 = await employeeController.createEmployee("0123456789", "Anders00000", "utzonreceive@gmail.com", "test");
     });
-
     this.timeout(10000);
 
     // Testing for adding/removing an employee on shifts
@@ -56,7 +58,17 @@ describe('Test af login controllerfunktioner', function(){
     it('validate a login with no parameters', async () => {
         expect(await loginController.validateLogin()).to.equal(false);
     });
-
+    it('Link an employee to a login with no parameters', async () => {
+        await expect(loginController.addEmployeeToLogin()).to.be.rejectedWith("This login does not exist");
+    });
+    it('Link an employee to a login with one parameter', async () => {
+        await expect(loginController.addEmployeeToLogin(testLogin1)).to.be.rejectedWith("The employee does not exist in the database");
+    });
+    it('Link an employee to a login with a nonexistant employee', async () => {
+        await loginController.addEmployeeToLogin(testLogin1, testEmployee1);
+        testLogin1 = await loginController.getLoginWithID(testLogin1._id);
+        expect(testLogin1.employee.toString()).to.equal(testEmployee1._id.toString());
+    });
     after(async () => {
         await loginController.deleteLogin(testLogin1);
     });
