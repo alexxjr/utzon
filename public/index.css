@@ -196,31 +196,6 @@ input[type="date"]::-webkit-inner-spin-button {
 
 }
 
-#selectLogin{
-    position: absolute;
-    right: 65%;
-}
-
-#empNavn{
-    position: absolute;
-    right: 65%;
-}
-
-#empNr{
-    position: absolute;
-    right: 65%;
-}
-
-#empMail{
-    position: absolute;
-    right: 65%;
-}
-
-#empCPR{
-    position: absolute;
-    right: 65%;
-}
-
 #startTimePicker, #endTimePicker {
     font-size: 16px;
     font-family: Verdana, sans-serif;
