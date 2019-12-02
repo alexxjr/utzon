@@ -7,7 +7,9 @@ function createLoginModalAction() {
 }
 
 async function okCreateLogin() {
-    // TODO
+    if (userRole === "Admin"){
+        let loginName = document.querySelector("createUsername");
+    }
 }
 
 
