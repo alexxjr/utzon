@@ -50,10 +50,15 @@ function okAction() {
         updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
-        selectedShiftDiv.style.backgroundColor = "yellow";
+        selectedShiftDiv.style.backgroundColor = "#91A41C";
+        selectedShiftDiv.setAttribute("hasupdate", "update");
         selectedShiftDiv.onclick = undefined;
         let info = selectedShiftDiv.getElementsByTagName("li");
-        info[0].innerText = "Ansat: " + newEmployee.name;
+        if (newEmployee === undefined) {
+            info[0].innerText = "Ingen ansat";
+        } else {
+            info[0].innerText = "Ansat: " + newEmployee.name;
+        }
         info[1].innerText = "Dato: " + /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(newStart.toISOString());
         info[2].innerText = "Starttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newStart.toISOString());
         info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
@@ -80,7 +85,8 @@ function deleteAction() {
         });
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
-        selectedShiftDiv.style.backgroundColor = "red";
+        selectedShiftDiv.style.backgroundColor = "#811C1C";
+        selectedShiftDiv.setAttribute("hasupdate", "update");
     }
     checkShiftsOnclick();
 }
@@ -98,16 +104,25 @@ function hasShiftUpdate(shift) {
     }
 }
 
+
+
 function shiftUpdateColor(shift) {
     if (hasShiftUpdate(shift) === true) {
-        return "red";
+        return "#811C1C";
     }
-    else if (hasShiftUpdate(shift) === false) {
-        return "yellow";
-    } else {
-        return "blue";
+    if (hasShiftUpdate(shift) === false) {
+        return "#91A41C";
+    }
+    if (hasShiftUpdate(shift) === undefined) {
+        return "#bc9a5d";
     }
 }
+
+Handlebars.registerHelper("checkUpdate", function (shift) {
+    if (hasShiftUpdate(shift)) {
+        return "update";
+    }
+});
 
 Handlebars.registerHelper("updateColor", function (shift) {
     return shiftUpdateColor(shift);
