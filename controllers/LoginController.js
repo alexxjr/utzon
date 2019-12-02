@@ -83,12 +83,12 @@ async function validatePassword(typedPassword, storedPassword) {
  * Link an employee to a a login
  */
 async function addEmployeeToLogin(loginid, employeeid) {
-    let login = getLoginWithID(loginid);
+    let login = await getLoginWithID(loginid);
+    if (login === null) {
+        throw new Error("This login does not exist")
+    }
     if (login.employee !== undefined) {
         throw new Error("This login already has an employee linked")
-    }
-    if (employeeid === undefined) {
-        throw new Error("The employeeid being linked to a login is undefined")
     }
     let employee = await employeeController.getEmployeeWithID(employeeid);
     if (employee === null) {
@@ -202,3 +202,4 @@ exports.getLogins = getLogins;
 exports.getListOfLoginsWithoutEmployee = getListOfLoginsWithoutEmployee;
 exports.getListOfLoginsWithEmployee = getListOfLoginsWithEmployee;
 exports.getLoginsLean = getLoginsLean;
+exports.getLoginWithID = getLoginWithID;

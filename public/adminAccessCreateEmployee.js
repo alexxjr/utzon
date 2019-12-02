@@ -5,6 +5,9 @@ function createEmployeeAction() {
         document.querySelector("#empNr").value = "";
         document.querySelector("#empMail").value = "";
         document.querySelector("#empCPR").value = "";
+        ('.navbar-nav>li>').on('click', function(){
+            ('.navbar-collapse').collapse('hide');
+        });
     }
 }
 
