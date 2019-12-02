@@ -2,6 +2,7 @@ let employeeSelectAdminAccessEmployee = document.querySelector("#select2");
 
 function modalAction() {
     if (userRole === "Admin" || userRole === "Employee") {
+        document.querySelector(".dropdown-content").style.visibility ="hidden";
         document.getElementById("empModal").style.display = "block";
         document.getElementById("select2").value = "";
         document.getElementById("fromDatePicker").value = "0000-00-00";
@@ -12,6 +13,7 @@ function modalAction() {
 
 function closeModalAction() {
     document.getElementById("empModal").style.display = "none";
+    document.querySelector(".dropdown-content").style.visibility ="visible";
 }
 
 window.onclick = function(event) {

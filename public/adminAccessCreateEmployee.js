@@ -1,13 +1,11 @@
 function createEmployeeAction() {
     if (userRole === "Admin") {
+        document.querySelector(".dropdown-content").style.visibility ="hidden";
         document.getElementById("createEmpModal").style.display = "block";
         document.querySelector("#empNavn").value = "";
         document.querySelector("#empNr").value = "";
         document.querySelector("#empMail").value = "";
         document.querySelector("#empCPR").value = "";
-        ('.navbar-nav>li>').on('click', function(){
-            ('.navbar-collapse').collapse('hide');
-        });
     }
 }
 
@@ -46,5 +44,6 @@ async function okCreateEmployee(loginid) {
 
 function createEmpCloseModalAction() {
     document.getElementById("createEmpModal").style.display = "none";
+    document.querySelector(".dropdown-content").style.visibility ="visible";
 }
 
