@@ -1,5 +1,6 @@
 function createShiftModalAction() {
     if (userRole === "Admin") {
+        document.querySelector(".dropdown-content").style.visibility ="hidden";
         document.getElementById("createShiftModal").style.display = "block";
         document.querySelector("#createStartTime").value = "00:00";
         document.querySelector("#createEndTime").value = "00:00";
@@ -48,5 +49,6 @@ async function okCreateShift() {
 function createShiftcloseModalAction() {
     document.getElementById("createShiftModal").style.display = "none";
     document.querySelector("#createTotalHours").innerHTML = "1";
+    document.querySelector(".dropdown-content").style.visibility ="visible";
 }
 
