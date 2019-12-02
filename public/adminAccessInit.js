@@ -1,3 +1,20 @@
+let saveButton = document.querySelector("#saveBtn");
+
+function saveButtonEnable() {
+    if (updates.length === 0) {
+        saveButton.style.display = "none";
+    } else {
+        saveButton.style.display = "block";
+        window.onbeforeunload = function(e) {
+            return e;
+        };
+    }
+}
+
+
+
+
+
 async function siteInit() {
     await update();
     document.querySelector("#deleteBtn").onclick = deleteAction;
@@ -10,13 +27,16 @@ async function siteInit() {
     }
     for (let i = 0; i < allDates.length; i++) {
         if (allDates[i].innerText === (today + "")) {
-            allDates[i].style.backgroundColor = "darkkhaki";
+            allDates[i].style.backgroundColor = "#bc9a5d";
             allDates[i].setAttribute('chosen', 'true');
         }
 
     }
     date = createDate();
     dayShift.innerHTML = await generateShifts(date);
+    saveButtonEnable();
+
+
 
     await populateEmployeeSelection();
 }

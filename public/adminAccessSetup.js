@@ -111,9 +111,22 @@ async function chooseDate() {
             date.style.backgroundColor = "#eee"
             date.setAttribute("chosen", 'false');
         });
-        this.style.backgroundColor = "darkkhaki";
+        this.style.backgroundColor = "#bc9a5d";
         this.setAttribute("chosen", 'true');
         let date = createDate();
         dayShift.innerHTML = await generateShifts(date);
+        checkShiftsOnclick();
+
+
+    }
+}
+
+function checkShiftsOnclick() {
+    let shiftsOnDay = dayShift.getElementsByTagName("div");
+    for (let i = 0; i < shiftsOnDay.length; i++) {
+        let thisShift = document.querySelector("#shift" + i)
+        if (thisShift.getAttribute("hasupdate") !== "unchanged") {
+            thisShift.onclick = undefined;
+        }
     }
 }

@@ -3,6 +3,7 @@ let loginSelect = document.querySelector("#selectLogin");
 async function createEmployeeAction() {
     if (userRole === "Admin") {
         await populateLogins();
+        document.querySelector(".dropdown-content").style.visibility ="hidden";
         document.getElementById("createEmpModal").style.display = "block";
         loginSelect.value = "";
         document.querySelector("#empNavn").value = "";
@@ -52,6 +53,7 @@ async function okCreateEmployee() {
 
 function createEmpCloseModalAction() {
     document.getElementById("createEmpModal").style.display = "none";
+    document.querySelector(".dropdown-content").style.visibility ="visible";
 }
 
 async function populateLogins() {

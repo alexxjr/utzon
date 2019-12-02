@@ -169,6 +169,7 @@ Gets all shifts from an array of shifts between two dates
 
 async function getShiftsBetweenTwoDates(shifts, fromDate, toDate) {
     let results = [];
+    toDate.setHours(23, 59, 59);
     for (let i = 0; i < shifts.length; i++) {
         if (shifts[i].start.getTime() >= fromDate.getTime() && shifts[i].start.getTime() <= toDate.getTime()) {
             results.push(shifts[i]);

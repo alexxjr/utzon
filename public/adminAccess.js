@@ -1,4 +1,8 @@
+
+
+
 async function saveAction() {
+    window.onbeforeunload = undefined;
     if (userRole === "Admin") {
         if (updates.length === 0) {
             return;
