@@ -1,28 +1,28 @@
 function createShiftModalAction() {
-    if (userRole === "Admin") {
-        document.querySelector(".dropdown-content").style.visibility ="hidden";
-        document.getElementById("createShiftModal").style.display = "block";
-        document.querySelector("#createStartTime").value = "00:00";
-        document.querySelector("#createEndTime").value = "00:00";
-        document.querySelector("#createStartDate").innerHTML = createDate();
-        let start = document.querySelector("#createStartTime");
-        let end = document.querySelector("#createEndTime");
-        let createTotalHours = document.getElementById("createTotalHours");
+    if (userRole === "Admin" && createDate() != undefined) {
+            document.querySelector(".dropdown-content").style.visibility = "hidden";
+            document.getElementById("createShiftModal").style.display = "block";
+            document.querySelector("#createStartTime").value = "00:00";
+            document.querySelector("#createEndTime").value = "00:00";
+            document.querySelector("#createStartDate").innerHTML = createDate();
+            let start = document.querySelector("#createStartTime");
+            let end = document.querySelector("#createEndTime");
+            let createTotalHours = document.getElementById("createTotalHours");
 
-        document.querySelector("#createStartDate").value = createDate();
-        start.value = "00:00";
-        end.value = "01:00";
-        createTotalHours.innerHTML = "1";
+            document.querySelector("#createStartDate").value = createDate();
+            start.value = "00:00";
+            end.value = "01:00";
+            createTotalHours.innerHTML = "1";
 
 
-        start.addEventListener("input", function () {
-            timeChanged(start, end, createTotalHours);
-        });
+            start.addEventListener("input", function () {
+                timeChanged(start, end, createTotalHours);
+            });
 
-        end.addEventListener("input", function () {
-            timeChanged(start, end, createTotalHours);
+            end.addEventListener("input", function () {
+                timeChanged(start, end, createTotalHours);
 
-        });
+            });
     }
 }
 
