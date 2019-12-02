@@ -35,6 +35,7 @@
     <div class="modal-content">
         <span class="close" onclick="createEmpCloseModalAction()">&times;</span>
         <h2>Opret ny ansat</h2>
+        <li> Vælg login til ansat: <select id="selectLogin"></select> </li>
         <li>Navn:<input id="empNavn" type="text" required></li>
         <li>Telefonnummer:<input id="empNr" type="text" required></li>
         <li>Email:<input id="empMail" type="text" required></li>
@@ -48,7 +49,7 @@
     <div class="modal-content">
         <span class="close" onclick="createShiftcloseModalAction()">&times;</span>
         <h2>Opret ny vagt</h2>
-        <li>Dato: <input id="createStartDate" name="start" type="date"></input>
+        <li>Dato: <input id="createStartDate" name="start" type="date">
             <span class="validity"></span></li>
         <li>Starttid: <input id="createStartTime" type="time" name="end">
             <span class="validity"></span></li>
@@ -67,6 +68,11 @@
         <h2>Opret login</h2>
         <li>Brugernavn: <input id="createUsername" type="text" required>
         <li>Password: <input id="createPassword" type="password" required>
+        <li> Vælg rolle:
+        <select id="loginRole" required>
+            <option value="Admin">Administrator</option>
+            <option value="Employee">Ansatte</option>
+        </select>
         <br>
         <button type="button" class="btn" onclick="okCreateLogin()">Opret login</button>
     </div>

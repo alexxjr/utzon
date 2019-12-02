@@ -83,15 +83,18 @@ async function validatePassword(typedPassword, storedPassword) {
  * Link an employee to a a login
  */
 async function addEmployeeToLogin(loginid, employeeid) {
-    let login = getLoginWithID(loginid);
+    let login = await getLoginWithID(loginid);
+    if (login === null) {
+        throw new Error("This login does not exist")
+    }
     if (login.employee !== undefined) {
         throw new Error("This login already has an employee linked")
     }
-    if (employeeid === undefined) {
-        throw new Error("The employee being linked to a login is undefined")
-    }
     let employee = await employeeController.getEmployeeWithID(employeeid);
-    login.employee = employeeid;
+    if (employee === null) {
+        throw new Error("The employee does not exist in the database")
+    }
+    login.employee = employee;
     await login.save();
 }
 
@@ -109,15 +112,29 @@ async function removeEmployeeFromLogin(login) {
 /**
  * Get a list of logins without an attached employee
  */
-async function getListOfLoginsWithoutEmployees() {
-    //TODO
+async function getListOfLoginsWithoutEmployee() {
+    let logins = await getLoginsLean();
+    let listOfLogins = [];
+    for (let login of logins) {
+        if (login.employee === undefined) {
+            listOfLogins.push(login);
+        }
+    }
+    return listOfLogins;
 }
 
 /**
  * Get a list of logins with an attached employee
  */
 async function getListOfLoginsWithEmployee() {
-    //TODO
+    let logins = await getLoginsLean();
+    let listOfLogins = [];
+    for (let login of logins) {
+        if (login.employee !== undefined) {
+            listOfLogins.push(login);
+        }
+    }
+    return listOfLogins;
 }
 
 //Getting, updating and deleting from database
@@ -154,6 +171,21 @@ async function getLoginWithID(ID) {
 }
 
 /**
+ * Get a list of all logins
+ */
+async function getLogins() {
+    return Login.find().exec();
+}
+
+/**
+ * Function to get the lean version of logins
+ */
+async function getLoginsLean() {
+    return Login.find().lean.exec();
+}
+
+
+/**
  * Exports for use in routes.
  */
 exports.createLogin = createLogin;
@@ -166,3 +198,8 @@ exports.generateHash = generateHash;
 exports.validatePassword = validatePassword;
 exports.addEmployeeToLogin = addEmployeeToLogin;
 exports.removeEmployeeFromLogin = removeEmployeeFromLogin;
+exports.getLogins = getLogins;
+exports.getListOfLoginsWithoutEmployee = getListOfLoginsWithoutEmployee;
+exports.getListOfLoginsWithEmployee = getListOfLoginsWithEmployee;
+exports.getLoginsLean = getLoginsLean;
+exports.getLoginWithID = getLoginWithID;

@@ -13,8 +13,7 @@ router
     .post('/', async (request, response) => {
         const {username, password} = request.body;
         if (await loginController.validateLogin(username, password)) {
-            let role = await loginController.getLoginRole(username);
-            request.session.role = role;
+            request.session.role = await loginController.getLoginRole(username);
 
             response.send({ok: true});
         } else {
@@ -38,15 +37,29 @@ router
             }
         });
     })
+    .post('/createLogin', async (request, response) => {
+        const role = request.session.role;
+        if (role === "Admin") {
+            try {
+                const {username, password, role} = request.body;
+                await loginController.createLogin(username, password, role);
+                response.sendStatus(200);
+            } catch (e) {
+                response.status(400).send(JSON.stringify(e.message));
+            }
+
+        } else {
+            response.send(JSON.stringify("noAccess"));
+        }
+    })
     .post('/connectEmployee', async (request, response) => {
         const role = request.session.role;
         if (role === "Admin") {
             try {
-                const{loginid, employeeid} = request.body;
+                const {loginid, employeeid} = request.body;
                 await loginController.addEmployeeToLogin(loginid, employeeid);
                 response.sendStatus(200);
-            }
-            catch (e) {
+            } catch (e) {
                 response.sendStatus(400);
             }
 
@@ -54,5 +67,31 @@ router
             response.send(JSON.stringify("noAccess"));
         }
 
+    })
+    .get('/getListOfLoginsWithoutEmployee', async (request, response) => {
+        const role = request.session.role;
+        if (role === "Admin") {
+            try {
+                let employees = await loginController.getListOfLoginsWithoutEmployee();
+                response.send(employees);
+            } catch (e) {
+                response.sendStatus(400);
+            }
+        } else {
+            response.send(JSON.stringify("noAccess"));
+        }
+    })
+    .get('/getListOfLoginsWithEmployee', async (request, response) => {
+        const role = request.session.role;
+        if (role === "Admin") {
+            try {
+                let employees = await loginController.getListOfLoginsWithEmployee();
+                response.send(employees);
+            } catch (e) {
+                response.sendStatus(400);
+            }
+        } else {
+            response.send(JSON.stringify("noAccess"));
+        }
     });
 module.exports = router;

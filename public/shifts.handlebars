@@ -1,5 +1,5 @@
 {{#each shifts}}
-<div  id='shift{{@index}}' onclick="shiftSelected('{{this._id}}', '{{this.employee._id}}', {{@index}})">
+<div  id='shift{{@index}}' onclick="shiftSelected('{{this._id}}', '{{this.employee._id}}', {{@index}})" style="background-color:{{updateColor this}};">
 
     {{#if this.employee}}
     <li>Ansat: {{this.employee.name}}</li>
