@@ -24,22 +24,27 @@
 <div id="empModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModalAction()">&times;</span>
+        <h2>Ansatte timer</h2>
+        <ul>
         <li> Vælg ansat:<select id="select2" required></select></li>
         <li> Fra: <input id="fromDatePicker" type="date" required></li>
         <li> Til: <input id="toDatePicker" type="date" required></li>
         <li> Antal timer: <input id="ansatTid" type="text" disabled></li>
         <button type="button" id="beregn" onclick="totalHoursBetweenTwoDates()">Beregn timer</button>
+        </ul>
     </div>
 </div>
 <div id="createEmpModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="createEmpCloseModalAction()">&times;</span>
         <h2>Opret ny ansat</h2>
+        <ul>
         <li> Vælg login til ansat: <select id="selectLogin"></select> </li>
         <li>Navn:<input id="empNavn" type="text" required></li>
         <li>Telefonnummer:<input id="empNr" type="text" required></li>
         <li>Email:<input id="empMail" type="text" required></li>
         <li>CPR:<input id="empCPR" type="text" required></li>
+        </ul>
         <br>
         <button type="button" class="btn" onclick="okCreateEmployee()">Opret</button>
     </div>
@@ -49,6 +54,7 @@
     <div class="modal-content">
         <span class="close" onclick="createShiftcloseModalAction()">&times;</span>
         <h2>Opret ny vagt</h2>
+        <ul>
         <li>Dato: <input id="createStartDate" name="start" type="date">
             <span class="validity"></span></li>
         <li>Starttid: <input id="createStartTime" type="time" name="end">
@@ -57,6 +63,7 @@
             <span class="validity"></span></li>
         <li>Antal timer: <label id="createTotalHours" name="end"></label>
             <span class="validity"></span></li>
+        </ul>
         <br>
         <button type="button" class="btn" onclick="okCreateShift()">Opret</button>
     </div>
@@ -66,9 +73,11 @@
     <div class="modal-content">
         <span class="close" onclick="createLoginCloseModalAction()">&times;</span>
         <h2>Opret login</h2>
+        <ul>
         <li>Brugernavn: <input id="createUsername" type="text" required>
         <li>Password: <input id="createPassword" type="password" required>
         <li> Vælg rolle:
+        </ul>
         <select id="loginRole" required>
             <option value="Admin">Administrator</option>
             <option value="Employee">Ansatte</option>
