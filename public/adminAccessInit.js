@@ -18,6 +18,8 @@ async function siteInit() {
     date = createDate();
     dayShift.innerHTML = await generateShifts(date);
 
+
+
     await populateEmployeeSelection();
 }
 
