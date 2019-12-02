@@ -41,9 +41,9 @@ router
         const role = request.session.role;
         if (role === "Admin") {
             try {
-                const {username, password, role} = request.body;
-                await loginController.createLogin(username, password, role);
-                response.sendStatus(200);
+                const {loginName, loginPassword, loginRole} = request.body;
+                await loginController.createLogin(loginName, loginPassword, loginRole);
+                response.sendStatus(201);
             } catch (e) {
                 response.status(400).send(JSON.stringify(e.message));
             }

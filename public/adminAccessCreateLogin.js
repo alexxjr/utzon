@@ -15,7 +15,7 @@ async function okCreateLogin() {
         console.log(loginRole);
         let response = await POST({loginName, loginPassword, loginRole}, "api/login/createLogin");
         createLoginCloseModalAction();
-        if (response.status === 400) {
+        if (response !== undefined) {
             alert("Login blev ikke oprettet. \n" + response.body);
         }
     }
