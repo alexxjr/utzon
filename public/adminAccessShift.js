@@ -51,7 +51,7 @@ function okAction() {
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
         selectedShiftDiv.style.backgroundColor = "#91A41C";
-        selectedShiftDiv.setAttribute("hasupdate", "update");
+        selectedShiftDiv.setAttribute("hasupdate", "changed");
         selectedShiftDiv.onclick = undefined;
         let info = selectedShiftDiv.getElementsByTagName("li");
         if (newEmployee === undefined) {
@@ -86,7 +86,7 @@ function deleteAction() {
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
         selectedShiftDiv.style.backgroundColor = "#811C1C";
-        selectedShiftDiv.setAttribute("hasupdate", "update");
+        selectedShiftDiv.setAttribute("hasupdate", "deleted");
     }
     checkShiftsOnclick();
 }
@@ -102,6 +102,7 @@ function hasShiftUpdate(shift) {
             }
         }
     }
+    return undefined;
 }
 
 
@@ -119,9 +120,16 @@ function shiftUpdateColor(shift) {
 }
 
 Handlebars.registerHelper("checkUpdate", function (shift) {
-    if (hasShiftUpdate(shift)) {
-        return "update";
+    if (hasShiftUpdate(shift) === true) {
+        return "deleted";
     }
+    if (hasShiftUpdate(shift) === true) {
+        return "changed";
+    }
+    if (hasShiftUpdate(shift) === undefined) {
+        return "unchanged";
+    }
+
 });
 
 Handlebars.registerHelper("updateColor", function (shift) {

@@ -1,6 +1,6 @@
 {{#each shifts}}
 <div  id='shift{{@index}}' onclick="shiftSelected('{{this._id}}', '{{this.employee._id}}', {{@index}})"
-      hasupdate={{checkUpdate this}} style="background-color:{{updateColor this}};">
+      hasupdate="{{checkUpdate this}}" style="background-color:{{updateColor this}};">
 
     {{#if this.employee}}
     <li>Ansat: {{this.employee.name}}</li>
