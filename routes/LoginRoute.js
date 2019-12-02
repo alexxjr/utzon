@@ -37,6 +37,21 @@ router
             }
         });
     })
+    .post('/createLogin', async (request, response) => {
+        const role = request.session.role;
+        if (role === "Admin") {
+            try {
+                const {username, password, role} = request.body;
+                await loginController.createLogin(username, password, role);
+                response.sendStatus(200);
+            } catch (e) {
+                response.status(400).send(JSON.stringify(e.message));
+            }
+
+        } else {
+            response.send(JSON.stringify("noAccess"));
+        }
+    })
     .post('/connectEmployee', async (request, response) => {
         const role = request.session.role;
         if (role === "Admin") {
