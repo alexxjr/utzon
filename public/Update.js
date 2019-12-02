@@ -9,7 +9,7 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
         let oldStart = new Date(shift.start).toISOString();
         let oldEnd = new Date(shift.end).toISOString();
         if (shift.employee) {
-            oldEmployee = shift.employee.name;
+            oldEmployee = shift.employee;
         }
         if (oldEmployee === undefined && newEmployee !== undefined) {
             type = "addEmployeeToShift";
@@ -22,12 +22,16 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
                 type = "changeShiftTimes";
             }
         }
-        if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined) {
+        if (oldEmployee !== undefined && newEmployee !== undefined) {
+        if (oldEmployee.CPR !== newEmployee.CPR) {
             type = "changeShiftEmployee";
         }
-        if (oldEmployee !== newEmployee && oldEmployee !== undefined && newEmployee !== undefined){
-            if (oldStart !== newStartString || oldEnd !== newEndString) {
-                type = "changeShiftTimesAndEmployee";
+        }
+        if (oldEmployee !== undefined && newEmployee !== undefined) {
+            if (oldEmployee.CPR !== newEmployee.CPR) {
+                if (oldStart !== newStartString || oldEnd !== newEndString) {
+                    type = "changeShiftTimesAndEmployee";
+                }
             }
         }
         if (oldStart !== newStartString || oldEnd !== newEndString) {
