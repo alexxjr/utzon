@@ -7,7 +7,18 @@ function createLoginModalAction() {
 }
 
 async function okCreateLogin() {
-    // TODO
+    if (userRole === "Admin"){
+        let loginName = document.querySelector("#createUsername").value + "";
+        console.log(loginName);
+        let loginPassword = document.querySelector("#createPassword").value + "";
+        let loginRole = document.querySelector("#loginRole").value + "";
+        console.log(loginRole);
+        let response = await POST({loginName, loginPassword, loginRole}, "api/login/createLogin");
+        createLoginCloseModalAction();
+        if (response.status === 400) {
+            alert("Login blev ikke oprettet. \n" + response.body);
+        }
+    }
 }
 
 
