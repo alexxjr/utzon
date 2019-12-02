@@ -8,6 +8,7 @@ function nextMonth() {
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
     dayShift.innerHTML = ""
+    cancelAction();
 }
 
 function prevMonth() {
@@ -20,6 +21,7 @@ function prevMonth() {
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
     dayShift.innerHTML = "";
+    cancelAction();
 }
 
 
