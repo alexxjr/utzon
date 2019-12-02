@@ -8,7 +8,14 @@ function createLoginModalAction() {
 
 async function okCreateLogin() {
     if (userRole === "Admin"){
-        let loginName = document.querySelector("createUsername");
+        let loginName = document.querySelector("createUsername").value + "";
+        let loginPassword = document.querySelector("createPassword").value + "";
+        if (response.status === 400) {
+            alert("Den ansatte blev ikke oprettet. \n" + response.body);
+        }
+        else{
+
+        }
     }
 }
 
