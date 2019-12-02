@@ -39,6 +39,7 @@ async function okCreateShift() {
             let update = createUpdate(thisShift, startDate, endDate, newEmployee);
             updates.push(update);
             createShiftcloseModalAction();
+            saveButtonEnable();
             alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
         } catch (e) {
             console.log(e.name + ": " + e.message);
