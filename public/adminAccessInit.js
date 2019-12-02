@@ -5,8 +5,15 @@ function saveButtonEnable() {
         saveButton.style.display = "none";
     } else {
         saveButton.style.display = "block";
+        window.onbeforeunload = function(e) {
+            return e;
+        };
     }
 }
+
+
+
+
 
 async function siteInit() {
     await update();
