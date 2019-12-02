@@ -52,4 +52,3 @@ function createShiftcloseModalAction() {
     document.querySelector("#createTotalHours").innerHTML = "1";
     document.querySelector(".dropdown-content").style.visibility ="visible";
 }
-
