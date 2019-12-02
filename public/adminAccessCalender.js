@@ -7,6 +7,8 @@ function nextMonth() {
     }
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
+    dayShift.innerHTML = ""
+    cancelAction();
 }
 
 function prevMonth() {
@@ -18,6 +20,8 @@ function prevMonth() {
     }
     monthDisplay.innerHTML = monthArray[month];
     insertDays();
+    dayShift.innerHTML = "";
+    cancelAction();
 }
 
 
@@ -35,9 +39,10 @@ function createDate() {
         }
     }
     if (date === undefined) {
-        alert("no date selected");
+        alert("vælg dato");
+    }else{
+        return year + "-" + monthNo + "-" + date;
     }
-    return year + "-" + monthNo + "-" + date;
 }
 
 
