@@ -31,7 +31,7 @@ async function shiftSelected(shiftID, employeeID, divID) {
         datePicker.value = /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(selectedShift.start);
         startTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.start);
         endTimePicker.value = /[0-9]{2}:[0-9]{2}/g.exec(selectedShift.end);
-        hourDisplay.value = selectedShift.totalHours;
+        hourDisplay.innerHTML = selectedShift.totalHours;
         let shiftOK = document.querySelector("#shiftOK");
         shiftOK.onclick = okAction;
         selectedShiftDiv = document.querySelector("#shift" + divID);
@@ -41,18 +41,40 @@ async function shiftSelected(shiftID, employeeID, divID) {
 function okAction() {
     if (userRole === "Admin") {
         let newStart = new Date(datePicker.value + "T" + startTimePicker.value + "Z");
-
         let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
         let newEmployee = undefined;
         if (employeeSelectShift.value !== "") {
             newEmployee = JSON.parse(employeeSelectShift[employeeSelectShift.selectedIndex].getAttribute('data-employee'))
         }
-        updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
+        let isUpdate = true;
+        if ((selectedShiftEmployee !== undefined && newEmployee === undefined) ||
+            (selectedShiftEmployee === undefined && newEmployee !== undefined)){
+
+        }
+        else if (selectedShiftEmployee === undefined && newEmployee === undefined
+            && selectedShift.start === newStart.toISOString()
+            && selectedShift.end === newEnd.toISOString()) {
+            isUpdate = false;
+        }
+        else if (selectedShiftEmployee.name === newEmployee.name
+            && selectedShift.start === newStart.toISOString()
+            && selectedShift.end === newEnd.toISOString())
+        {
+            isUpdate = false;
+        }
+
+        if (isUpdate) {
+            updates.push(createUpdate(selectedShift, newStart, newEnd, newEmployee));
+            selectedShiftDiv.style.backgroundColor = "#91A41C";
+            selectedShiftDiv.setAttribute("hasupdate", "changed");
+            selectedShiftDiv.onclick = undefined;
+        }
+
+        console.log(updates);
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
-        selectedShiftDiv.style.backgroundColor = "#91A41C";
-        selectedShiftDiv.setAttribute("hasupdate", "changed");
-        selectedShiftDiv.onclick = undefined;
+
+
         let info = selectedShiftDiv.getElementsByTagName("li");
         if (newEmployee === undefined) {
             info[0].innerText = "Ingen ansat";
@@ -64,6 +86,7 @@ function okAction() {
         info[3].innerText = "Sluttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newEnd.toISOString());
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function cancelAction() {
@@ -89,6 +112,7 @@ function deleteAction() {
         selectedShiftDiv.setAttribute("hasupdate", "deleted");
     }
     checkShiftsOnclick();
+    saveButtonEnable();
 }
 
 function hasShiftUpdate(shift) {
