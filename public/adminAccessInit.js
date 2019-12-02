@@ -9,7 +9,7 @@ async function siteInit() {
         today = "0" + today;
     }
     for (let i = 0; i < allDates.length; i++) {
-        if (allDates[i].innerText === (today.getDate() + "")) {
+        if (allDates[i].innerText === (today + "")) {
             allDates[i].style.backgroundColor = "darkkhaki";
             allDates[i].setAttribute('chosen', 'true');
         }
