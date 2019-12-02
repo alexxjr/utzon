@@ -18,6 +18,7 @@ async function generateShifts(date) {
 }
 
 async function shiftSelected(shiftID, employeeID, divID) {
+    console.log(this.style.backgroundColor);
     if (userRole === "Admin" || userRole === "Employee") {
         dayShift.style.display = "none";
         shiftUpdate.style.display = "inline-block";
