@@ -58,9 +58,10 @@ router
             try {
                 const {loginid, employeeid} = request.body;
                 await loginController.addEmployeeToLogin(loginid, employeeid);
-                response.sendStatus(200);
+                response.sendStatus(201);
             } catch (e) {
-                response.sendStatus(400);
+                response.status(401);
+                response.send(JSON.stringify(e.message));
             }
 
         } else {

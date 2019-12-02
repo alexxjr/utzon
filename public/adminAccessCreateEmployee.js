@@ -1,7 +1,11 @@
-function createEmployeeAction() {
+let loginSelect = document.querySelector("#selectLogin");
+
+async function createEmployeeAction() {
     if (userRole === "Admin") {
+        await populateLogins();
         document.querySelector(".dropdown-content").style.visibility ="hidden";
         document.getElementById("createEmpModal").style.display = "block";
+        loginSelect.value = "";
         document.querySelector("#empNavn").value = "";
         document.querySelector("#empNr").value = "";
         document.querySelector("#empMail").value = "";
@@ -9,23 +13,28 @@ function createEmployeeAction() {
     }
 }
 
-async function okCreateEmployee(loginid) {
+async function okCreateEmployee() {
     if (userRole === "Admin") {
         let name = document.querySelector("#empNavn").value + "";
         let phoneNo = document.querySelector("#empNr").value + "";
         let email = document.querySelector("#empMail").value + "";
         let CPR = document.querySelector("#empCPR").value + "";
+        let loginid = loginSelect.options[loginSelect.selectedIndex].getAttribute("data-login");
+        if(loginid === undefined) {
+            alert("You must select a login for the employee");
+            return;
+        }
         // Her skal der laves ændringer så man kan oprette en ansat
         createEmpCloseModalAction();
-        let response = await POST({CPR, name, email, phoneNo}, "/api/employees/");
-        if (response.status === 400) {
-            alert("Den ansatte blev ikke oprettet. \n" + response.body);
+        let firstresponse = await adminPOSTWithReturnOnSuccess({CPR, name, email, phoneNo}, "/api/employees/");
+        if (firstresponse.status === 400) {
+            alert("Den ansatte blev ikke oprettet. \n" + firstresponse.body);
         } else {
-            let employeeid = response.body;
-            response = await POST({employeeid, loginid}, "/api/login/connectEmployee");
-            if (response === 400) {
-                response = await POST(employeeid, "/api/employees/deleteEmployee");
-                if(response === 400) {
+            let employeeid = firstresponse;
+            let secondresponse = await adminPOST({loginid, employeeid}, "/api/login/connectEmployee");
+            if (secondresponse !== undefined) {
+                let thirdresponse = await adminPOST({employeeid}, "/api/employees/deleteEmployee");
+                if(thirdresponse !== undefined) {
                     alert("Fejl under oprettelsen, ring til tech support")
                 }
                 else {
@@ -45,5 +54,18 @@ async function okCreateEmployee(loginid) {
 function createEmpCloseModalAction() {
     document.getElementById("createEmpModal").style.display = "none";
     document.querySelector(".dropdown-content").style.visibility ="visible";
+}
+
+async function populateLogins() {
+        loginSelect.innerHTML = "";
+        let logins = await GET("/api/login/getListOfLoginsWithoutEmployee");
+        for (let l of logins) {
+            let option = document.createElement("option");
+            option.innerText = l.username;
+            option.setAttribute("data-login", l._id);
+            loginSelect.append(option);
+
+        }
+    loginSelect.innerHTML += "<option></option>";
 }
 

@@ -15,7 +15,7 @@ async function okCreateLogin() {
         console.log(loginPassword);
         let loginRole = document.querySelector("#loginRole").value + "";
         console.log(loginRole);
-        let response = await POST({loginName, loginPassword, loginRole}, "api/login/createLogin");
+        let response = await adminPOST({loginName, loginPassword, loginRole}, "api/login/createLogin");
         createLoginCloseModalAction();
         if (response !== undefined) {
             alert("Login blev ikke oprettet. \n" + response.body);
@@ -28,4 +28,6 @@ function createLoginCloseModalAction() {
     document.getElementById("createLoginModal").style.display = "none";
     document.querySelector(".dropdown-content").style.visibility ="visible";
 }
+
+
 

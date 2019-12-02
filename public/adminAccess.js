@@ -9,12 +9,15 @@ async function saveAction() {
         }
         let url = "/api/shifts/updateShift/";
         let errors = "";
-        let response = await POST(updates, url);
+        let response = await adminPOST(updates, url);
         if (response !== undefined) {
             for (let i = 0; i < response.length; i++) {
                 errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
             }
             alert(errors);
+        }
+        else {
+            alert("Alle ændringer er lavet i databasen");
         }
         location.reload();
     }
@@ -91,7 +94,7 @@ async function GETtext(url) {
     return await response.text();
 }
 
-async function POST(data, url) {
+async function adminPOST(data, url) {
     const CREATED = 201;
     let response = await fetch(url, {
         method: "POST",
@@ -99,8 +102,20 @@ async function POST(data, url) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === CREATED) {
-        alert("Alle ændringer er lavet i databasen");
         return;
+    }
+    return await response.json();
+}
+
+async function adminPOSTWithReturnOnSuccess(data, url) {
+    const CREATED = 201;
+    let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status === CREATED) {
+        return await response.json();
     }
     return await response.json();
 }

@@ -181,7 +181,7 @@ async function getLogins() {
  * Function to get the lean version of logins
  */
 async function getLoginsLean() {
-    return Login.find().lean.exec();
+    return Login.find().lean().exec();
 }
 
 

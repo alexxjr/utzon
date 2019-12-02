@@ -117,6 +117,9 @@ function deleteAction() {
 
 function hasShiftUpdate(shift) {
     for (let i = 0; i < updates.length; i++) {
+        if (!shift || !updates[i].shift) {
+            return;
+        }
         if (shift._id === updates[i].shift._id) {
             if(updates[i].type === "deleteShift") {
                 return true;
