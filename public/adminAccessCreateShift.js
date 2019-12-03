@@ -1,11 +1,26 @@
+/**
+ * Selects HTML-elements for later use
+ */
+
 const shiftModal = document.querySelector("#createShiftModal");
 const startTimeInput = document.querySelector("#createStartTime");
 const endTimeInput = document.querySelector("#createEndTime");
 const DateLabel = document.querySelector("#createStartDate");
 const totalHoursLabel = document.getElementById("createTotalHours");
+
+/**
+ * Instantiates a date used for finding the selected date. Is defined in other function.
+ */
 let SelectedDate;
 
-function createShiftModalAction() {
+/**
+ * Opens the modal for creating a new shift
+ * Sets some default values in the input fields
+ * Adds listeners to the start- and endtime pickers,
+ * the listener calls a function, that dynamically updates the total hours.
+ */
+
+function openCreateShiftModalAction() {
     SelectedDate = createDate();
     if (userRole === "Admin" && SelectedDate != undefined) {
         dropdown_content.style.visibility = "hidden";
@@ -26,6 +41,14 @@ function createShiftModalAction() {
     }
 }
 
+/**
+ * Attempts to create a update with the type of createShift.
+ * Pushes the update to the updates array
+ * Closes the modal for creating a shift
+ * Enables the save changes button, since changes have been made
+ * Alerts the user, to press the save changes button, to attempt to create the shift
+ */
+
 async function okCreateShift() {
     if (userRole === "Admin") {
         try {
@@ -45,6 +68,10 @@ async function okCreateShift() {
         }
     }
 }
+
+/**
+ * Closes the modal for creating a new shift
+ */
 
 function ShiftModalCloseAction() {
     shiftModal.className = "modal";

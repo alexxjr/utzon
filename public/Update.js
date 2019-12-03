@@ -1,3 +1,8 @@
+/**
+ * Creates an update with the specified params
+ * Checks what type of update we are working with
+ */
+
 function createUpdate(shift, newStart, newEnd, newEmployee){
     let type = "";
     let newStartString = newStart.toISOString();

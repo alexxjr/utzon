@@ -1,3 +1,12 @@
+
+/**
+ * Onclick function for changing the month using right arrow button
+ * The displayed month is changed to the following month
+ * Days are generated according to how many days are in the following month
+ * The amount of shifts on every day in the month, is also updated
+ * If the next month is january, the function also changes the year
+ */
+
 async function nextMonth() {
     month++;
     if (month > 11) {
@@ -12,6 +21,14 @@ async function nextMonth() {
     await generateShiftOnDates();
     cancelAction();
 }
+
+/**
+ * Onclick function for changing the month using the left arrow button
+ * The displayed month is changed to the previous month
+ * Days are generated according to how many days are in the previous month
+ * The amount of shifts on every day in the month, is also updated
+ * If the next month is january, the function also changes the year
+ */
 
 async function prevMonth() {
     month--;
@@ -28,6 +45,11 @@ async function prevMonth() {
     cancelAction();
 }
 
+/**
+ * Method that finds out which day is chosen in the calendar.
+ * Returns a string with the year, month and chosen day in the month.
+ * Throws an alert if no day is selected
+ */
 
 function createDate() {
     let dates = document.querySelectorAll(".daysList li");
@@ -50,7 +72,14 @@ function createDate() {
     }
 }
 
-
+/**
+ * Generates and displays the amount of shifts on every date for a month in a year
+ * If there are no shifts on a certain day, it will display 0, and give it a red color
+ * If there are shifts on a certain day, but one or more shifts does not have an employee attached,
+ * it wil display the amount of shifts, and give it a yellow color
+ * If there are shifts on a certain, and all the shifts have an employee attached, it wil display
+ * the amount of shifts, and give it a green color.
+ */
 async function generateShiftOnDates() {
     let dates = document.querySelectorAll(".date");
     let allShifts = await GET("/api/shifts/");

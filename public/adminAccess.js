@@ -1,3 +1,11 @@
+/**
+ * Onclick function for saving changes made in shifts
+ * Sends an array of updates through the adminPOST route
+ * Stores failed updates in an array of errors
+ * If no error happens alerts that all changes have been made
+ * Else alerts all failed updates errors
+ */
+
 async function saveAction() {
     window.onbeforeunload = undefined;
     if (userRole === "Admin") {
@@ -19,6 +27,13 @@ async function saveAction() {
         location.reload();
     }
 }
+
+/**
+ * Method for dynamically updating a total hours field of a shift
+ * Also defensively and dynamically makes sure that it is not possible,
+ * to select a start time that is before the end time.
+ * Updates given start time, end time and total hours fields
+ */
 function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
     let startTime = startTimeHTML.valueAsDate;
     let endTime = endTimeHTML.valueAsDate;
@@ -65,6 +80,10 @@ function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
 
 }
 
+/**
+ * Calculates the total amount of decimal hours between two dates
+ * (Example 1:00-2:45 = 1.75 hours)
+ */
 
 function hourCalculation(start, end) {
     let minutes = (Math.max(start.getMinutes(), end.getMinutes()) - Math.min(start.getMinutes(), end.getMinutes()));
@@ -75,6 +94,10 @@ function hourCalculation(start, end) {
     }
 }
 
+/**
+ * Simple get function for fetching json from a url
+ */
+
 async function GET(url) {
     const OK = 200;
     let response = await fetch(url);
@@ -83,6 +106,10 @@ async function GET(url) {
     return await response.json();
 }
 
+/**
+ * Simple get function for fetching text from a url
+ */
+
 async function GETtext(url) {
     const OK = 200;
     let response = await fetch(url);
@@ -90,6 +117,10 @@ async function GETtext(url) {
         throw new Error("GET status code " + response.status);
     return await response.text();
 }
+
+/**
+ * Simple post function posting on a url as an Admin
+ */
 
 async function adminPOST(data, url) {
     const CREATED = 201;
@@ -103,6 +134,12 @@ async function adminPOST(data, url) {
     }
     return await response.json();
 }
+
+
+/**
+ * Simple post function posting on a url as an Admin
+ * Returns the posted data, if the post succeeds
+ */
 
 async function adminPOSTWithReturnOnSuccess(data, url) {
     const CREATED = 201;

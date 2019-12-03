@@ -1,4 +1,14 @@
+/**
+ * Selects the HTML-element save button for later use
+ */
+
 let saveButton = document.querySelector("#saveBtn");
+
+/**
+ * Function for displaying or hiding the save button
+ * The save button is displayed when updates have been made
+ * (Creation, changing and deleting shifts)
+ */
 
 function saveButtonEnable() {
     if (updates.length === 0) {
@@ -10,6 +20,13 @@ function saveButtonEnable() {
         };
     }
 }
+
+/**
+ * Initialises the webpage
+ * Selects today's date in the calendar
+ * Generates all shifts on today's date and displays them
+ * Gets all employees and puts them in as options in various employee-pickers
+ */
 
 async function siteInit() {
     await update();
@@ -34,9 +51,17 @@ async function siteInit() {
     await generateShiftOnDates();
 }
 
+/**
+ * Logs out and return to the login screen
+ */
+
 async function logOutAction() {
     window.location.href = "api/login/logout";
 }
+
+/**
+ * Initialises the webpage
+ */
 
 siteInit();
 

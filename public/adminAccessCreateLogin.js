@@ -1,9 +1,17 @@
+/**
+ * Selecting HTML-elements for later use
+ */
+
 const loginModal = document.querySelector("#createLoginModal");
 const userNameInput = document.querySelector("#createUsername");
 const passwordInput = document.querySelector("#createPassword");
 const loginRoleSelect = document.querySelector("#loginRole");
 
-function createLoginModalAction() {
+/**
+ * Opens the modal for creating a new login
+ */
+
+function openLoginModalAction() {
     if (userRole === "Admin") {
         dropdown_content.style.visibility ="hidden";
         loginModal.className += " visible";
@@ -12,6 +20,12 @@ function createLoginModalAction() {
         document.onclick = closeAnyModal;
     }
 }
+
+/**
+ * Attempts to create a new login.
+ * If the creation fails, alerts the user
+ * Closes the modal for creating a new login
+ */
 
 async function okCreateLogin() {
     if (userRole === "Admin"){
@@ -26,6 +40,9 @@ async function okCreateLogin() {
     }
 }
 
+/**
+ * Closes the modal for creating a new login
+ */
 
 function createLoginCloseModalAction() {
     loginModal.className = "modal";
