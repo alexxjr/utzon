@@ -1,12 +1,25 @@
+/**
+ * Initialises different shift information, which will be set later
+ */
+
 let selectedShift;
 let selectedShiftDiv;
 let selectedShiftEmployee;
+
+/**
+ * Selects HTML-elements for later use
+ */
 
 let shiftUpdate = document.querySelector("#shiftUpdate");
 let datePicker = document.querySelector("#datePicker");
 let startTimePicker = document.querySelector("#startTimePicker");
 let endTimePicker = document.querySelector("#endTimePicker");
 let hourDisplay = document.querySelector("#totalHours");
+
+/**
+ * Method for generating all shifts on a certain date
+ * Uses handlebars to template the way the shifts are displayed
+ */
 
 async function generateShifts(date) {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -16,6 +29,14 @@ async function generateShifts(date) {
         return compiledTemplate({shifts});
     }
 }
+
+/**
+ * Function for when a shift on a day is selected
+ * Gets the selected shift from the database, to set the current shift information
+ * (The shift object is not able to be sent using handlebars,
+ * it must therefore be retrieved from the database again
+ * Opens the shifts so changes are able to be made
+ */
 
 async function shiftSelected(shiftID, employeeID, divID) {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -37,6 +58,18 @@ async function shiftSelected(shiftID, employeeID, divID) {
         selectedShiftDiv = document.querySelector("#shift" + divID);
     }
 }
+
+/**
+ * Function for when the OK button is pressed after updating a shift
+ * Checks whether or not any changes have been made to selected shift
+ * If changes have been made to the selected shift, an update is created
+ * The created update is pushes to the updates array.
+ * The color of the updated shift is changed to green, to indicate that a change has been made
+ * The onclick function of the updates shift is disabled, to secure that not more than on update
+ * is made to a certain shift at once.
+ * The updated shifts div information is set to what changes have been made to the shift
+ * Enables the save changes button, since changes have been made
+ */
 
 function okAction() {
     if (userRole === "Admin") {
@@ -88,6 +121,11 @@ function okAction() {
     saveButtonEnable();
 }
 
+/**
+ * Closes the update part of a selected shift
+ * No updates or changes are made
+ */
+
 function cancelAction() {
     if (userRole === "Admin" || userRole === "Employee") {
         dayShift.style.display = "inline-block";
@@ -95,6 +133,14 @@ function cancelAction() {
     }
     checkShiftsOnclick();
 }
+
+/**
+ * Marks a shift for deletion
+ * The selected shift div's color is set to red, to indicate deletion
+ * The selected shift's div's onclick function is disabled,
+ * to ensure not more than on change is made to the same shift at once
+ * A update with the type deleteShift is pushed to the updates array
+ */
 
 function deleteAction() {
     if (userRole === "Admin") {
@@ -114,6 +160,10 @@ function deleteAction() {
     saveButtonEnable();
 }
 
+/**
+ * Checks if an update had been made for a certain shift
+ */
+
 function hasShiftUpdate(shift) {
     for (let i = 0; i < updates.length; i++) {
         if (!shift || !updates[i].shift) {
@@ -126,7 +176,12 @@ function hasShiftUpdate(shift) {
     return undefined;
 }
 
-
+/**
+ * Selects a color for a certain shift, depending on wheter or not the shift has an update
+ * Red indicates a deletion update
+ * Green indicated a change update
+ * Original color is no changes are made
+ */
 
 function shiftUpdateColor(shift) {
     if (hasShiftUpdate(shift) === true) {
@@ -139,6 +194,10 @@ function shiftUpdateColor(shift) {
         return "#bc9a5d";
     }
 }
+
+/**
+ * Handlebars helper method, that return if and what kind of update is for a certain shift
+ */
 
 Handlebars.registerHelper("checkUpdate", function (shift) {
     if (hasShiftUpdate(shift) === true) {
@@ -153,25 +212,45 @@ Handlebars.registerHelper("checkUpdate", function (shift) {
 
 });
 
+/**
+ * Handlebars helper method, that calls the update color method
+ */
+
 Handlebars.registerHelper("updateColor", function (shift) {
     return shiftUpdateColor(shift);
 });
 
+/**
+ * Handlebars helper method, which formats a date
+ */
 
 Handlebars.registerHelper("formatDate", function (date) {
     date = date.toString();
     return /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(date);
 });
 
+/**
+ * Handlebars helper method, which formats a date
+ */
+
 Handlebars.registerHelper("formatTime", function (date) {
     date = date.toString();
     return /[0-9]{2}:[0-9]{2}/g.exec(date);
 });
 
+/**
+ * Adding listeners to startTimePicker,
+ * which calls the method for dynamically updating the total hours
+ */
 
 startTimePicker.addEventListener("input", function () {
     timeChanged(startTimePicker, endTimePicker, hourDisplay);
 });
+
+/**
+ * Adding listeners to endTimePicker,
+ * which calls the method for dynamically updating the total hours
+ */
 
 endTimePicker.addEventListener("input", function () {
     timeChanged(startTimePicker, endTimePicker, hourDisplay);
