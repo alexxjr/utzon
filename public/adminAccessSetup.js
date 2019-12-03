@@ -1,4 +1,7 @@
-// Setup of dates
+/**
+ * Initialises updates array and day, month and year objects for various purposes
+ * Initialises the user role
+ */
 let updates = [];
 let allDates;
 let monthArray = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
@@ -9,15 +12,29 @@ let year = date.getFullYear();
 let firstDayOfMonth;
 let userRole;
 
+/**
+ * Selects HTML-elements for later use
+ */
+
 const monthDisplay = document.querySelector("#monthDisplay");
 const dayShift = document.querySelector("#hover");
 const employeeSelectShift = document.querySelector("#employeeSelect");
 const daysList = document.querySelector(".daysList");
 const yearDisplay = document.querySelector("#yearDisplay");
 
+/**
+ * Sets the users role
+ */
+
 async function setUserRole() {
     userRole = await GET("/api/login/session");
 }
+
+/**
+ * Generates the days in the calendar for the specified month and year
+ * Every day contains 2 divs. The first div displays the day,
+ * the other div will display the amount of shifts on every day in the month in that year
+ */
 
 function insertDays() {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -49,19 +66,22 @@ function insertDays() {
                 let shiftNoDiv = document.createElement("div");
                 shiftNoDiv.style.float = "right";
                 shiftNoDiv.style.marginRight = "22%";
-                shiftNoDiv.style.paddingRight = "4px"
-                shiftNoDiv.style.paddingLeft = "4px"
+                shiftNoDiv.style.paddingRight = "4px";
+                shiftNoDiv.style.paddingLeft = "4px";
                 shiftNoDiv.style.color = "white";
 
                 node.appendChild(dayDiv);
                 node.appendChild(shiftNoDiv);
-
-
                 daysList.appendChild(node);
             }
         }
     }
 }
+
+/**
+ * Calculates the amount of days in a certain month in a certain year
+ * Sets the amount of days in the daysArray, which updates every time a new month is selected
+ */
 
 function calculateDaysInMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -81,12 +101,20 @@ function calculateDaysInMonth() {
     }
 }
 
+/**
+ * Sets the current year
+ */
+
 function setYear() {
     if (userRole === "Admin" || userRole === "Employee") {
         yearDisplay.innerHTML = year + "";
         calculateDaysInMonth();
     }
 }
+
+/**
+ * Sets the current month
+ */
 
 function setCurrentMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -95,6 +123,10 @@ function setCurrentMonth() {
         monthDisplay.innerHTML = monthArray[month] + monthDisplay.innerHTML;
     }
 }
+
+/**
+ * Function that calls the setup functions for days, months and year
+ */
 
 async function update() {
     await setUserRole();
@@ -107,6 +139,11 @@ async function update() {
         await logOutAction();
     }
 }
+
+/**
+ * Gets all employees from the database
+ * Inserts them in the different drop down menus for picking employees
+ */
 
 async function populateEmployeeSelection() {
     if (userRole === "Admin" || userRole === "Employee") {
@@ -128,6 +165,11 @@ async function populateEmployeeSelection() {
     }
 }
 
+/**
+ * Method for when a date has been chosen in the calendar.
+ * Sets the color for the chosen date, and resets all other date's colors
+ */
+
 async function chooseDate() {
     if (userRole === "Admin" || userRole === "Employee") {
         shiftUpdate.style.display = "none";
@@ -142,20 +184,27 @@ async function chooseDate() {
         let date = createDate();
         dayShift.innerHTML = await generateShifts(date);
         checkShiftsOnclick();
-
-
     }
 }
+
+/**
+ * Checks if the generated shifts on a certain day have had changes
+ * If a shift has unsaved changes, the onclick function of that shift is disabled
+ */
 
 function checkShiftsOnclick() {
     let shiftsOnDay = dayShift.getElementsByTagName("div");
     for (let i = 0; i < shiftsOnDay.length; i++) {
-        let thisShift = document.querySelector("#shift" + i)
+        let thisShift = document.querySelector("#shift" + i);
         if (thisShift.getAttribute("hasupdate") !== "unchanged") {
             thisShift.onclick = undefined;
         }
     }
 }
+
+/**
+ * Finds the first day in a month in a year
+ */
 
 function firstDayInMonth(month) {
     let firstDay;

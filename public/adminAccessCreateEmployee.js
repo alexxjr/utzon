@@ -1,3 +1,7 @@
+/**
+ * Saves HTML-elements for in variables for later use
+ */
+
 let loginSelect = document.querySelector("#selectLogin");
 const dropdown_content = document.querySelector(".dropdown-content");
 const empModal = document.querySelector("#createEmpModal");
@@ -6,7 +10,12 @@ const empNr = document.querySelector("#empNr");
 const empMail = document.querySelector("#empMail");
 const empCPR = document.querySelector("#empCPR");
 
-async function createEmployeeAction() {
+/**
+ * Opens the modal for creating a new employee
+ * Sets some default values in the input fields
+ */
+
+async function openCreateEmployeeModal() {
     if (userRole === "Admin") {
         await populateLogins();
         dropdown_content.style.visibility ="hidden";
@@ -18,6 +27,17 @@ async function createEmployeeAction() {
         empCPR.value = "";
     }
 }
+
+/**
+ * Attempts to create an empolyee with a login
+ * The login must be created before creating an employee and linking the login
+ * If the creation fails before creating the employee object, an error is thrown
+ * If the creation of employee succeeds, but the connection between employee and login fails,
+ * an alert is thrown, and an attempt to delete the employee again is made.
+ * If the creation of the employee succeeds, the connection between employee and login fails,
+ * and the attempt to delete the employee. A error is thrown to call support,
+ * because no employee object that does not have a login, is allowed to exist in the system.
+ */
 
 async function okCreateEmployee() {
     if (userRole === "Admin") {
@@ -55,11 +75,19 @@ async function okCreateEmployee() {
     }
 }
 
+/**
+ * Closes the modal for creating an employee
+ */
 
 function createEmpCloseModalAction() {
     empModal.style.display = "none";
     dropdown_content.style.visibility ="visible";
 }
+
+/**
+ * Gets all logins from the database, and adds them as options for selecting logins
+ * when creating an employee
+ */
 
 async function populateLogins() {
         loginSelect.innerHTML = "";
