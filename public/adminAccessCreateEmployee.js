@@ -9,13 +9,14 @@ const empCPR = document.querySelector("#empCPR");
 async function createEmployeeAction() {
     if (userRole === "Admin") {
         await populateLogins();
-        dropdown_content.style.visibility ="hidden";
-        empModal.style.display = "block";
+        dropdown_content.style.visibility = "hidden";
+        empModal.className += " visible";
         loginSelect.value = "";
         empNavn.value = "";
         empNr.value = "";
         empMail.value = "";
         empCPR.value = "";
+        document.onclick = closeAnyModal;
     }
 }
 
@@ -26,7 +27,7 @@ async function okCreateEmployee() {
         let email = empMail.value + "";
         let CPR = empCPR.value + "";
         let loginid = loginSelect.options[loginSelect.selectedIndex].getAttribute("data-login");
-        if(loginid === undefined) {
+        if (loginid === undefined) {
             alert("You must select a login for the employee");
             return;
         }
@@ -39,14 +40,12 @@ async function okCreateEmployee() {
             let secondresponse = await adminPOST({loginid, employeeid}, "/api/login/connectEmployee");
             if (secondresponse !== undefined) {
                 let thirdresponse = await adminPOST({employeeid}, "/api/employees/deleteEmployee");
-                if(thirdresponse !== undefined) {
+                if (thirdresponse !== undefined) {
                     alert("Fejl under oprettelsen, ring til tech support")
-                }
-                else {
+                } else {
                     alert("Fejl under oprettelsen. Prøv igen")
                 }
-            }
-            else {
+            } else {
                 alert("Den ansatte er nu oprettet!");
                 await populateEmployeeSelection()
             }
@@ -57,20 +56,27 @@ async function okCreateEmployee() {
 
 
 function createEmpCloseModalAction() {
-    empModal.style.display = "none";
-    dropdown_content.style.visibility ="visible";
+    empModal.className = "modal";
+    dropdown_content.style.visibility = "visible";
 }
 
 async function populateLogins() {
-        loginSelect.innerHTML = "";
-        let logins = await GET("/api/login/getListOfLoginsWithoutEmployee");
-        for (let l of logins) {
-            let option = document.createElement("option");
-            option.innerText = l.username;
-            option.setAttribute("data-login", l._id);
-            loginSelect.append(option);
+    loginSelect.innerHTML = "";
+    let logins = await GET("/api/login/getListOfLoginsWithoutEmployee");
+    for (let l of logins) {
+        let option = document.createElement("option");
+        option.innerText = l.username;
+        option.setAttribute("data-login", l._id);
+        loginSelect.append(option);
 
-        }
+    }
     loginSelect.innerHTML += "<option></option>";
 }
 
+function closeAnyModal() {
+    dropdown_content.style.visibility = "visible";
+    empModal.className = "modal";
+    // loginModal.className = "modal";
+    // shiftModal.className = "modal";
+    // viewEmpModal.className = "modal";
+}

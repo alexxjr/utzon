@@ -6,9 +6,10 @@ const loginRoleSelect = document.querySelector("#loginRole");
 function createLoginModalAction() {
     if (userRole === "Admin") {
         dropdown_content.style.visibility ="hidden";
-        loginModal.style.display = "block";
+        loginModal.className += " visible";
         userNameInput.value = "";
         passwordInput.value = "";
+        document.onclick = closeAnyModal;
     }
 }
 
@@ -27,6 +28,6 @@ async function okCreateLogin() {
 
 
 function createLoginCloseModalAction() {
-    loginModal.style.display = "none";
+    loginModal.className = "modal";
     dropdown_content.style.visibility ="visible";
 }
