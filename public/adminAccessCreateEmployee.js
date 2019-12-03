@@ -1,24 +1,30 @@
 let loginSelect = document.querySelector("#selectLogin");
+const dropdown_content = document.querySelector(".dropdown-content");
+const empModal = document.querySelector("#createEmpModal");
+const empNavn = document.querySelector("#empNavn");
+const empNr = document.querySelector("#empNr");
+const empMail = document.querySelector("#empMail");
+const empCPR = document.querySelector("#empCPR");
 
 async function createEmployeeAction() {
     if (userRole === "Admin") {
         await populateLogins();
-        document.querySelector(".dropdown-content").style.visibility ="hidden";
-        document.getElementById("createEmpModal").style.display = "block";
+        dropdown_content.style.visibility ="hidden";
+        empModal.style.display = "block";
         loginSelect.value = "";
-        document.querySelector("#empNavn").value = "";
-        document.querySelector("#empNr").value = "";
-        document.querySelector("#empMail").value = "";
-        document.querySelector("#empCPR").value = "";
+        empNavn.value = "";
+        empNr.value = "";
+        empMail.value = "";
+        empCPR.value = "";
     }
 }
 
 async function okCreateEmployee() {
     if (userRole === "Admin") {
-        let name = document.querySelector("#empNavn").value + "";
-        let phoneNo = document.querySelector("#empNr").value + "";
-        let email = document.querySelector("#empMail").value + "";
-        let CPR = document.querySelector("#empCPR").value + "";
+        let name = empNavn.value + "";
+        let phoneNo = empNr.value + "";
+        let email = empMail.value + "";
+        let CPR = empCPR.value + "";
         let loginid = loginSelect.options[loginSelect.selectedIndex].getAttribute("data-login");
         if(loginid === undefined) {
             alert("You must select a login for the employee");
@@ -51,8 +57,8 @@ async function okCreateEmployee() {
 
 
 function createEmpCloseModalAction() {
-    document.getElementById("createEmpModal").style.display = "none";
-    document.querySelector(".dropdown-content").style.visibility ="visible";
+    empModal.style.display = "none";
+    dropdown_content.style.visibility ="visible";
 }
 
 async function populateLogins() {

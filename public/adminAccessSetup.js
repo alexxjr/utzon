@@ -8,9 +8,11 @@ let date = new Date(Date.now());
 let year = date.getFullYear();
 let userRole;
 
-let monthDisplay = document.querySelector("#monthDisplay");
-let dayShift = document.querySelector("#hover");
-let employeeSelectShift = document.querySelector("#employeeSelect");
+const monthDisplay = document.querySelector("#monthDisplay");
+const dayShift = document.querySelector("#hover");
+const employeeSelectShift = document.querySelector("#employeeSelect");
+const daysList = document.querySelector(".daysList");
+const yearDisplay = document.querySelector("#yearDisplay");
 
 async function setUserRole() {
     userRole = await GET("/api/login/session");
@@ -18,7 +20,6 @@ async function setUserRole() {
 
 function insertDays() {
     if (userRole === "Admin" || userRole === "Employee") {
-        let daysList = document.querySelector(".daysList");
         let days = daysArray[month];
         daysList.innerHTML = "";
         let day;
@@ -81,7 +82,6 @@ function calculateDaysInMonth() {
 
 function setYear() {
     if (userRole === "Admin" || userRole === "Employee") {
-        let yearDisplay = document.querySelector("#yearDisplay");
         yearDisplay.innerHTML = year + "";
         calculateDaysInMonth();
     }
@@ -119,7 +119,7 @@ async function populateEmployeeSelection() {
             let option2 = document.createElement("option");
             option2.innerText = e.name;
             option2.setAttribute("data-employee", data);
-            employeeSelectAdminAccessEmployee.append(option2);
+            employeeSelectViewEmployee.append(option2);
 
         }
         employeeSelectShift.innerHTML += "<option></option>";

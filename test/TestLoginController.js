@@ -16,8 +16,6 @@ describe('Test af login controllerfunktioner', function(){
     });
     this.timeout(10000);
 
-    // Testing for adding/removing an employee on shifts
-
     it('get a role for a login that does not exists', async () => {
         await expect(loginController.getLoginRole("test2")).to.be.rejectedWith("User does not exist in the system");
     });
@@ -69,7 +67,44 @@ describe('Test af login controllerfunktioner', function(){
         testLogin1 = await loginController.getLoginWithID(testLogin1._id);
         expect(testLogin1.employee.toString()).to.equal(testEmployee1._id.toString());
     });
-    after(async () => {
+    it('Link an employee to a login with an existing employee', async () => {
+        await expect(loginController.addEmployeeToLogin(testLogin1, testEmployee1)).to.be.rejectedWith("This login already has an employee linked");
+    });
+    it('Remove the employee from a login where no login is provided', async () => {
+        await expect(loginController.removeEmployeeFromLogin()).to.be.rejectedWith("Cannot remove employee from an undefined login");
+    });
+    it('Remove the employee from a login', async () => {
+        await loginController.removeEmployeeFromLogin(testLogin1);
+        testLogin1 = await loginController.getLoginWithID(testLogin1._id);
+        expect(testLogin1.employee).to.equal(undefined);
+    });
+    it('Check that we get the complete list of logins with employees', async () => {
+        let logins = await loginController.getLoginsLean();
+        let counter = 0;
+        for (let login of logins) {
+            if (login.employee !== undefined) {
+                counter++;
+            }
+        }
+        let loginsWithEmployees = await loginController.getListOfLoginsWithEmployee();
+        expect(loginsWithEmployees.length).to.equal(counter);
+    });
+    it('Check that we get the complete list of logins without employees', async () => {
+        let logins = await loginController.getLoginsLean();
+        let counter = 0;
+        for (let login of logins) {
+            if (login.employee === undefined) {
+                counter++;
+            }
+        }
+        let loginsWithEmployees = await loginController.getListOfLoginsWithoutEmployee();
+        expect(loginsWithEmployees.length).to.equal(counter);
+    });
+    it('Test that an employee is automatically deleted if his login is deleted', async () => {
+        await loginController.addEmployeeToLogin(testLogin1, testEmployee1);
+        testLogin1 = await loginController.getLoginWithID(testLogin1._id);
         await loginController.deleteLogin(testLogin1);
+        testEmployee1 = await employeeController.getEmployeeWithID(testEmployee1._id);
+        expect(testEmployee1).to.equal(null);
     });
 });
