@@ -5,30 +5,61 @@ const seeWeeklyModalTableRowOfShifts = document.querySelector("#seeWeeklyTableSh
 async function seeWeeklyAction() {
     if (userRole === "Admin") {
         await populateMondays();
-        dropdown_content.style.visibility ="hidden";
+        dropdown_content.style.visibility = "hidden";
         seeWeeklyModal.style.display = "block";
-        seeWeeklyModalTableRowOfShifts
+        seeWeeklyModalTableRowOfShifts.innerHTML = "";
+        listOfMondays.options[0].selected = true;
+        listOfMondays.onchange();
     }
 }
 
 function seeWeeklyCloseModalAction() {
     seeWeeklyModal.style.display = "none";
-    dropdown_content.style.visibility ="visible";
+    dropdown_content.style.visibility = "visible";
 }
 
 async function populateShifts() {
-    let monday =  new Date(listOfMondays.options[listOfMondays.selectedIndex].getAttribute("data-date"));
+    let monday = new Date(listOfMondays.options[listOfMondays.selectedIndex].getAttribute("data-date"));
     seeWeeklyModalTableRowOfShifts.innerHTML = "";
-    if(monday !== undefined) {
+    if (monday) {
+        let date = new Date();
+        date.setDate(monday.getDate() + 7);
+        date.setHours(0, 0, 0);
+        let shifts = await GET("/api/shifts/getShiftsInPeriod/" + monday + "/" + date);
+        shifts.sort(function (a, b) {
+            if (a.start.localeCompare(b.start) === 0) return a.end.localeCompare(b.end);
+            return a.start.localeCompare(b.start);
+        });
         for (let i = 0; i < 7; i++) {
-            let date = new Date();
-            date.setDate(monday.getDate()+i);
+            date = new Date();
+            date.setDate(monday.getDate() + i);
             let newCell = seeWeeklyModalTableRowOfShifts.insertCell(-1);
-            let shifts = await GET("/api/shifts/" + date);
-            newCell.innerHTML = shifts;
+            for (let j = 0; j < shifts.length; j++) {
+                let dateOfCurrentDateInShifts = new Date(shifts[j].start).toDateString();
+                if(dateOfCurrentDateInShifts === date.toDateString()) {
+                    let div = document.createElement("div");
+                    if (shifts[j].employee !== undefined) {
+                        div.innerHTML += shifts[j].employee.name + "<br>";
+                    }
+                    else {
+                        div.innerHTML += "Ingen ansat<br>";
+                    }
+                    div.innerHTML += shifts[j].start.substring(11, 16) + "<br>";
+                    div.innerHTML += shifts[j].end.substring(11, 16) + "<br>";
+                    div.innerHtml += shifts[j].totalHours + "";
+                    newCell.appendChild(div);
+                    let br = document.createElement('br');
+                    newCell.appendChild(br);
+                }
+                else {
+                    shifts.splice(0, j);
+                    break;
+                }
+            }
         }
     }
 }
+
 
 async function populateMondays() {
     listOfMondays.innerHTML = "";
