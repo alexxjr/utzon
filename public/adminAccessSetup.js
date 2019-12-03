@@ -28,11 +28,35 @@ function insertDays() {
                 day = "0" + i;
             }
             let node = document.createElement("li");
-            let textnode = document.createTextNode(day);
             node.classList.add("date");
-            node.appendChild(textnode);
             node.setAttribute('chosen', 'false');
+            node.setAttribute("date", day + "");
             node.onclick = chooseDate;
+
+
+
+            let dayDiv = document.createElement("div");
+            let textnode = document.createTextNode(day);
+            dayDiv.appendChild(textnode);
+            dayDiv.style.float = "left";
+            dayDiv.style.marginLeft = "76px";
+
+
+
+            let shiftNoDiv = document.createElement("div");
+            shiftNoDiv.style.float = "right";
+            shiftNoDiv.style.marginRight = "42px";
+            shiftNoDiv.style.color = "blue";
+
+
+            node.appendChild(dayDiv);
+            node.appendChild(shiftNoDiv);
+
+
+
+
+
+
             daysList.appendChild(node);
         }
     }

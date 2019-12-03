@@ -26,19 +26,21 @@ async function siteInit() {
         today = "0" + today;
     }
     for (let i = 0; i < allDates.length; i++) {
-        if (allDates[i].innerText === (today + "")) {
+        if (allDates[i].getAttribute("date") === (today + "")) {
             allDates[i].style.backgroundColor = "#bc9a5d";
             allDates[i].setAttribute('chosen', 'true');
         }
-
     }
     date = createDate();
     dayShift.innerHTML = await generateShifts(date);
     saveButtonEnable();
-
-
-
     await populateEmployeeSelection();
+    await generateShiftOnDates();
+
+
+
+
+
 }
 
 async function logOutAction() {
@@ -46,3 +48,4 @@ async function logOutAction() {
 }
 
 siteInit();
+

@@ -24,7 +24,6 @@ async function okCreateEmployee() {
             alert("You must select a login for the employee");
             return;
         }
-        // Her skal der laves ændringer så man kan oprette en ansat
         createEmpCloseModalAction();
         let firstresponse = await adminPOSTWithReturnOnSuccess({CPR, name, email, phoneNo}, "/api/employees/");
         if (firstresponse.status === 400) {
