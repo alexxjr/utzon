@@ -11,8 +11,8 @@
     <script src="adminAccess.js" defer></script>
     <script src="adminAccessCalender.js" defer></script>
     <script src="adminAccessShift.js" defer></script>
+    <script src="accessViewEmployee.js" defer></script>
     <script src="adminAccessCreateEmployee.js" defer></script>
-    <script src="adminAccessEmployee.js" defer></script>
     <script src="adminAccessCreateShift.js" defer></script>
     <script src="adminAccessShowWeekly.js" defer></script>
     <script src="adminAccessInit.js" defer></script>
@@ -22,15 +22,15 @@
 <body>
 
 
-<div id="empModal" class="modal">
+<div id="viewEmpModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModalAction()">&times;</span>
         <h2>Ansatte timer</h2>
         <ul>
-        <li> Vælg ansat:<select id="select2" required></select></li>
+        <li> Vælg ansat:<select id="selectEmp" required></select></li>
         <li> Fra: <input id="fromDatePicker" type="date" required></li>
         <li> Til: <input id="toDatePicker" type="date" required></li>
-        <li> Antal timer: <input id="ansatTid" type="text" disabled></li>
+        <li> Antal timer: <input id="empTotalHours" type="text" disabled></li>
         <button type="button" id="beregn" onclick="totalHoursBetweenTwoDates()">Beregn timer</button>
         </ul>
     </div>
@@ -126,7 +126,7 @@
             <a href="#" class="item" id="createButton" onclick="createShiftModalAction()">Opret vagt</a>
             <a href="#" class="item" id="createButton2" onclick="createEmployeeAction()">Opret ansat</a>
             <a href="#" class="item" id="createLoginBtn" onclick="createLoginModalAction()">Opret login</a>
-            <a href="#" class="item" id="seeEmployeesBtn" onclick="modalAction()">Ansatte timer</a>
+            <a href="#" class="item" id="seeEmployeesBtn" onclick="viewEmpModalAction()">Ansatte timer</a>
             <a href="#" class="item" id="seeWeeklyBtn" onclick="seeWeeklyAction()">Ugens vagter</a>
         </div>
     </div>
@@ -152,7 +152,11 @@
     <li>Søndag</li>
 </ul>
 
-<ul class="daysList"></ul>
+<ul class="daysList">
+
+</ul>
+
+
 
 <div class="shifts">
     <ul id="hover"></ul>
