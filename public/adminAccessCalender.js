@@ -45,14 +45,14 @@ function createDate() {
     }
     if (date === undefined) {
         alert("vælg dato");
-    }else{
+    } else {
         return year + "-" + monthNo + "-" + date;
     }
 }
 
 
 async function generateShiftOnDates() {
-    let dates = document.querySelectorAll(".daysList li");
+    let dates = document.querySelectorAll(".date");
     let allShifts = await GET("/api/shifts/");
     for (let i = 2; i <= dates.length + 1; i++) {
         let countShift = 0;
