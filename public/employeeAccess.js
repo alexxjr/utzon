@@ -1,3 +1,8 @@
+/**
+ * Method to check if it is an employee-login
+ * It only gives access to specific parts of the system because it's an employee
+ */
+
 function setupEmployeeAccess() {
     if (userRole === "Employee") {
         const optionsBtn = document.querySelector("#createButton");
