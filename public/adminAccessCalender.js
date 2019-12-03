@@ -40,7 +40,6 @@ function createDate() {
         let isChosen = dates[i].getAttribute('chosen');
         if (isChosen === "true") {
             date = dates[i].getAttribute("date");
-            console.log(date);
 
         }
     }
@@ -57,16 +56,32 @@ async function generateShiftOnDates() {
     let allShifts = await GET("/api/shifts/");
     for (let i = 2; i <= dates.length + 1; i++) {
         let countShift = 0;
+        let allShiftsHaveEmployee = true;
         let currentDate = new Date(year, month, i);
         for (let j = 0; j < allShifts.length; j++) {
             if (/[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(allShifts[j].start)[0] ===
                 /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(currentDate.toISOString())[0]) {
+                if (!allShifts[j].employee) {
+                    allShiftsHaveEmployee = false;
+                }
                 countShift++;
             }
         }
+        let shiftCountDiv = dates[i - 2].getElementsByTagName("div")[1];
         let textnode = document.createTextNode(countShift + "");
+        if (allShiftsHaveEmployee) {
+            shiftCountDiv.style.backgroundColor = "#91A41C";
+        } else {
+            shiftCountDiv.style.backgroundColor = "#D6A41C";
+        }
+        if (countShift === 0) {
+            shiftCountDiv.style.backgroundColor = "#811C1C";
 
-        dates[i - 2].getElementsByTagName("div")[1].appendChild(textnode);
+        }
+        shiftCountDiv.appendChild(textnode);
+
+
+
 
 
 

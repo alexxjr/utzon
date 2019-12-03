@@ -70,7 +70,6 @@ function okAction() {
             selectedShiftDiv.onclick = undefined;
         }
 
-        console.log(updates);
         dayShift.style.display = "inline-block";
         shiftUpdate.style.display = "none";
 
