@@ -45,7 +45,7 @@ function createDate() {
     }
     if (date === undefined) {
         alert("vælg dato");
-    }else{
+    } else {
         return year + "-" + monthNo + "-" + date;
     }
 }
@@ -54,7 +54,9 @@ function createDate() {
 async function generateShiftOnDates() {
     let dates = document.querySelectorAll(".daysList li")
     let allShifts = await GET("/api/shifts/");
-    for (let i = 2; i <= dates.length + 1; i++) {
+    let blankDdays = firstDayInMonth(month);
+    console.log(blankDdays);
+    for (let i = 2 + blankDdays; i <= dates.length + (1 + blankDdays); i++) {
         let countShift = 0;
         let allShiftsHaveEmployee = true;
         let currentDate = new Date(year, month, i);
@@ -67,7 +69,7 @@ async function generateShiftOnDates() {
                 countShift++;
             }
         }
-        let shiftCountDiv = dates[i - 2].getElementsByTagName("div")[1];
+        let shiftCountDiv = dates[i - (2 + blankDdays)].getElementsByTagName("div")[1];
         if (shiftCountDiv) {
             let textnode = document.createTextNode(countShift + "");
             if (allShiftsHaveEmployee) {
