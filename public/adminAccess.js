@@ -1,6 +1,3 @@
-
-
-
 async function saveAction() {
     window.onbeforeunload = undefined;
     if (userRole === "Admin") {
@@ -15,27 +12,25 @@ async function saveAction() {
                 errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
             }
             alert(errors);
-        }
-        else {
+        } else {
             alert("Alle ændringer er lavet i databasen");
         }
         location.reload();
     }
 }
+
 function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
     let startTime = startTimeHTML.valueAsDate;
     let endTime = endTimeHTML.valueAsDate;
     let endTimeString;
     if (endTime.getUTCHours() < 11) {
         endTimeString = "0" + (endTime.getUTCHours() - 1) + ":";
-    }
-    else {
+    } else {
         endTimeString = (endTime.getUTCHours() - 1) + ":"
     }
     if (endTime.getUTCMinutes() < 11) {
         endTimeString += "0" + endTime.getMinutes();
-    }
-    else {
+    } else {
         endTimeString += endTime.getMinutes() + "";
     }
 
@@ -47,7 +42,7 @@ function timeChanged(startTimeHTML, endTimeHTML, totalHourHTML) {
         endTimeHTML.value = "00:00";
         endTime.setHours(1);
     }
-    if (endTime.getUTCHours() === 0){
+    if (endTime.getUTCHours() === 0) {
         endTimeHTML.value = "23:00";
         endTime.setHours(22);
     }
@@ -118,4 +113,27 @@ async function adminPOSTWithReturnOnSuccess(data, url) {
         return await response.json();
     }
     return await response.json();
+}
+
+function calculateMondays16Weeks() {
+    let date = new Date();
+    date.setHours(0,0,0);
+    let today = date.getDay();
+    let diff = date.getDate() - today + (today === 0 ? -6 : 1); // adjust when day is sunday
+    let mondays = [new Date(date.setDate(diff))];
+
+    for (let i = 0; i < 16; i++) {
+        let d = new Date();
+        d = getNextDayOfWeek(mondays[i], 1);
+        mondays.push(d);
+    }
+    return mondays;
+}
+
+function getNextDayOfWeek(date, dayOfWeek) {
+    let resultDate = new Date(date.getTime());
+
+    resultDate.setDate(date.getDate() + (7 - date.getDay()) % 7+1);
+
+    return resultDate;
 }

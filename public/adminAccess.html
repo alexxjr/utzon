@@ -11,9 +11,10 @@
     <script src="adminAccess.js" defer></script>
     <script src="adminAccessCalender.js" defer></script>
     <script src="adminAccessShift.js" defer></script>
+    <script src="adminAccessCreateEmployee.js" defer></script>
     <script src="adminAccessEmployee.js" defer></script>
     <script src="adminAccessCreateShift.js" defer></script>
-    <script src="adminAccessCreateEmployee.js" defer></script>
+    <script src="adminAccessShowWeekly.js" defer></script>
     <script src="adminAccessInit.js" defer></script>
     <script src="employeeAccess.js" defer></script>
     <script src="adminAccessCreateLogin.js" defer></script>
@@ -86,6 +87,34 @@
     </div>
 </div>
 
+<div id="showWeeklyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="seeWeeklyCloseModalAction()">&times;</span>
+        <h2>Ugens Vagter</h2>
+        <div>
+            <select id="seeWeeklyMondays" onchange="populateShifts()">
+            </select>
+        </div>
+        <br>
+        <div>
+            <table id="seeWeeklyTable">
+                <tr>
+                    <th>Mandag</th>
+                    <th>Tirsdag</th>
+                    <th>Onsdag</th>
+                    <th>Torsdag</th>
+                    <th>Fredag</th>
+                    <th>Lørdag</th>
+                    <th>Søndag</th>
+                </tr>
+                <tr id="seeWeeklyTableShifts">
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="navbar">
@@ -98,6 +127,7 @@
             <a href="#" class="item" id="createButton2" onclick="createEmployeeAction()">Opret ansat</a>
             <a href="#" class="item" id="createLoginBtn" onclick="createLoginModalAction()">Opret login</a>
             <a href="#" class="item" id="seeEmployeesBtn" onclick="modalAction()">Ansatte timer</a>
+            <a href="#" class="item" id="seeWeeklyBtn" onclick="seeWeeklyAction()">Ugens vagter</a>
         </div>
     </div>
     <a href="#" id="logoutBtn" onclick="logOutAction()">Log ud</a>
