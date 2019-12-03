@@ -27,7 +27,7 @@ async function siteInit() {
     }
     for (let i = 0; i < allDates.length; i++) {
         if (allDates[i].getAttribute("date") === (today + "")) {
-            allDates[i].style.backgroundColor = "#bc9a5d";
+            allDates[i].style.backgroundColor = "#9B9696";
             allDates[i].setAttribute('chosen', 'true');
         }
     }

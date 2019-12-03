@@ -34,29 +34,21 @@ function insertDays() {
             node.setAttribute("date", day + "");
             node.onclick = chooseDate;
 
-
-
             let dayDiv = document.createElement("div");
             let textnode = document.createTextNode(day);
             dayDiv.appendChild(textnode);
             dayDiv.style.float = "left";
-            dayDiv.style.marginLeft = "76px";
-
-
+            dayDiv.style.marginLeft = "44%";
 
             let shiftNoDiv = document.createElement("div");
             shiftNoDiv.style.float = "right";
-            shiftNoDiv.style.marginRight = "42px";
-            shiftNoDiv.style.color = "blue";
-
+            shiftNoDiv.style.marginRight = "22%";
+            shiftNoDiv.style.paddingRight = "4px"
+            shiftNoDiv.style.paddingLeft = "4px"
+            shiftNoDiv.style.color = "white";
 
             node.appendChild(dayDiv);
             node.appendChild(shiftNoDiv);
-
-
-
-
-
 
             daysList.appendChild(node);
         }
@@ -135,7 +127,7 @@ async function chooseDate() {
             date.style.backgroundColor = "#eee"
             date.setAttribute("chosen", 'false');
         });
-        this.style.backgroundColor = "#bc9a5d";
+        this.style.backgroundColor = "#9B9696";
         this.setAttribute("chosen", 'true');
         let date = createDate();
         dayShift.innerHTML = await generateShifts(date);
