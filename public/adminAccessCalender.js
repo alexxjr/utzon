@@ -6,6 +6,7 @@ async function nextMonth() {
         month = 0;
     }
     monthDisplay.innerHTML = monthArray[month];
+    firstDayOfMonth = firstDayInMonth(month);
     insertDays();
     dayShift.innerHTML = "";
     await generateShiftOnDates();
@@ -20,6 +21,7 @@ async function prevMonth() {
         month = 11;
     }
     monthDisplay.innerHTML = monthArray[month];
+    firstDayOfMonth = firstDayInMonth(month);
     insertDays();
     dayShift.innerHTML = "";
     await generateShiftOnDates();
@@ -66,23 +68,19 @@ async function generateShiftOnDates() {
             }
         }
         let shiftCountDiv = dates[i - 2].getElementsByTagName("div")[1];
-        let textnode = document.createTextNode(countShift + "");
-        if (allShiftsHaveEmployee) {
-            shiftCountDiv.style.backgroundColor = "#91A41C";
-        } else {
-            shiftCountDiv.style.backgroundColor = "#D6A41C";
+        if (shiftCountDiv) {
+            let textnode = document.createTextNode(countShift + "");
+            if (allShiftsHaveEmployee) {
+                shiftCountDiv.style.backgroundColor = "#91A41C";
+            } else {
+                shiftCountDiv.style.backgroundColor = "#D6A41C";
+            }
+            if (countShift === 0) {
+                shiftCountDiv.style.backgroundColor = "#811C1C";
+
+            }
+            shiftCountDiv.appendChild(textnode);
         }
-        if (countShift === 0) {
-            shiftCountDiv.style.backgroundColor = "#811C1C";
-
-        }
-        shiftCountDiv.appendChild(textnode);
-
-
-
-
-
-
     }
 }
 
