@@ -52,11 +52,10 @@ function createDate() {
 
 
 async function generateShiftOnDates() {
-    let dates = document.querySelectorAll(".daysList li")
+    let dates = document.querySelectorAll(".date");
     let allShifts = await GET("/api/shifts/");
-    let blankDdays = firstDayInMonth(month);
-    console.log(blankDdays);
-    for (let i = 2 + blankDdays; i <= dates.length + (1 + blankDdays); i++) {
+    for (let i = 2; i <= dates.length + 1; i++) {
+
         let countShift = 0;
         let allShiftsHaveEmployee = true;
         let currentDate = new Date(year, month, i);
@@ -69,7 +68,7 @@ async function generateShiftOnDates() {
                 countShift++;
             }
         }
-        let shiftCountDiv = dates[i - (2 + blankDdays)].getElementsByTagName("div")[1];
+        let shiftCountDiv = dates[i - 2].getElementsByTagName("div")[1];
         if (shiftCountDiv) {
             let textnode = document.createTextNode(countShift + "");
             if (allShiftsHaveEmployee) {
