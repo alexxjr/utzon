@@ -6,6 +6,7 @@ let daysArray = [];
 let month;
 let date = new Date(Date.now());
 let year = date.getFullYear();
+let firstDayOfMonth;
 let userRole;
 
 const monthDisplay = document.querySelector("#monthDisplay");
@@ -24,41 +25,41 @@ function insertDays() {
         daysList.innerHTML = "";
         let day;
         for (let i = 1; i <= days; i++) {
-            day = i + "";
-            if (i < 10) {
-                day = "0" + i;
+            if (i < firstDayOfMonth) {
+                let node = document.createElement("li");
+                daysList.appendChild(node);
+            } else {
+                let j = i - firstDayOfMonth + 1;
+                day = j + "";
+                if (j < 10) {
+                    day = "0" + j;
+                }
+                let node = document.createElement("li");
+                node.classList.add("date");
+                node.setAttribute('chosen', 'false');
+                node.setAttribute("date", day + "");
+                node.onclick = chooseDate;
+
+
+                let dayDiv = document.createElement("div");
+                let textnode = document.createTextNode(day);
+                dayDiv.appendChild(textnode);
+                dayDiv.style.float = "left";
+                dayDiv.style.marginLeft = "76px";
+
+
+                let shiftNoDiv = document.createElement("div");
+                shiftNoDiv.style.float = "right";
+                shiftNoDiv.style.marginRight = "42px";
+                shiftNoDiv.style.color = "blue";
+
+
+                node.appendChild(dayDiv);
+                node.appendChild(shiftNoDiv);
+
+
+                daysList.appendChild(node);
             }
-            let node = document.createElement("li");
-            node.classList.add("date");
-            node.setAttribute('chosen', 'false');
-            node.setAttribute("date", day + "");
-            node.onclick = chooseDate;
-
-
-
-            let dayDiv = document.createElement("div");
-            let textnode = document.createTextNode(day);
-            dayDiv.appendChild(textnode);
-            dayDiv.style.float = "left";
-            dayDiv.style.marginLeft = "76px";
-
-
-
-            let shiftNoDiv = document.createElement("div");
-            shiftNoDiv.style.float = "right";
-            shiftNoDiv.style.marginRight = "42px";
-            shiftNoDiv.style.color = "blue";
-
-
-            node.appendChild(dayDiv);
-            node.appendChild(shiftNoDiv);
-
-
-
-
-
-
-            daysList.appendChild(node);
         }
     }
 }
@@ -66,16 +67,17 @@ function insertDays() {
 function calculateDaysInMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
         for (let i = 0; i < 12; i++) {
+            let blankDays = firstDayInMonth(i);
             if (i === 3 || i === 5 || i === 8 || i === 10) {
-                daysArray[i] = 30;
+                daysArray[i] = 30 + blankDays;
             } else if (i === 1) {
                 let isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
                 if (isLeapYear)
-                    daysArray[i] = 29;
+                    daysArray[i] = 29 + blankDays;
                 else
-                    daysArray[i] = 28;
+                    daysArray[i] = 28 + blankDays;
             } else
-                daysArray[i] = 31;
+                daysArray[i] = 31 + blankDays;
         }
     }
 }
@@ -90,6 +92,7 @@ function setYear() {
 function setCurrentMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
         month = date.getMonth();
+        firstDayOfMonth = firstDayInMonth(month);
         monthDisplay.innerHTML = monthArray[month] + monthDisplay.innerHTML;
     }
 }
@@ -153,4 +156,11 @@ function checkShiftsOnclick() {
             thisShift.onclick = undefined;
         }
     }
+}
+
+function firstDayInMonth(month) {
+    let firstDay;
+    let dateObject = new Date(year, month, 0);
+    firstDay = dateObject.getDay() + 1;
+    return firstDay;
 }

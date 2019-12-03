@@ -6,6 +6,7 @@ async function nextMonth() {
         month = 0;
     }
     monthDisplay.innerHTML = monthArray[month];
+    firstDayOfMonth = firstDayInMonth(month);
     insertDays();
     dayShift.innerHTML = "";
     await generateShiftOnDates();
@@ -20,6 +21,7 @@ async function prevMonth() {
         month = 11;
     }
     monthDisplay.innerHTML = monthArray[month];
+    firstDayOfMonth = firstDayInMonth(month);
     insertDays();
     dayShift.innerHTML = "";
     await generateShiftOnDates();
