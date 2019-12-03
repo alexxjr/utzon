@@ -11,10 +11,6 @@ function saveButtonEnable() {
     }
 }
 
-
-
-
-
 async function siteInit() {
     await update();
     document.querySelector("#deleteBtn").onclick = deleteAction;
@@ -36,11 +32,6 @@ async function siteInit() {
     saveButtonEnable();
     await populateEmployeeSelection();
     await generateShiftOnDates();
-
-
-
-
-
 }
 
 async function logOutAction() {

@@ -1,6 +1,3 @@
-
-
-
 async function saveAction() {
     window.onbeforeunload = undefined;
     if (userRole === "Admin") {

@@ -49,14 +49,12 @@ function insertDays() {
                 let shiftNoDiv = document.createElement("div");
                 shiftNoDiv.style.float = "right";
                 shiftNoDiv.style.marginRight = "22%";
-                shiftNoDiv.style.paddingRight = "4px"
-                shiftNoDiv.style.paddingLeft = "4px"
+                shiftNoDiv.style.paddingRight = "4px";
+                shiftNoDiv.style.paddingLeft = "4px";
                 shiftNoDiv.style.color = "white";
 
                 node.appendChild(dayDiv);
                 node.appendChild(shiftNoDiv);
-
-
                 daysList.appendChild(node);
             }
         }
@@ -134,7 +132,7 @@ async function chooseDate() {
         dayShift.style.display = 'inline-block';
         let allDates = document.querySelectorAll(".daysList li");
         allDates.forEach(date => {
-            date.style.backgroundColor = "#eee"
+            date.style.backgroundColor = "#eee";
             date.setAttribute("chosen", 'false');
         });
         this.style.backgroundColor = "#9B9696";

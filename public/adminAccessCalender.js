@@ -30,7 +30,7 @@ async function prevMonth() {
 
 
 function createDate() {
-    let dates = document.querySelectorAll(".daysList li")
+    let dates = document.querySelectorAll(".daysList li");
     let monthNo = month + 1 + "";
     if (monthNo.length === 1) {
         monthNo = "0" + monthNo;
@@ -52,7 +52,7 @@ function createDate() {
 
 
 async function generateShiftOnDates() {
-    let dates = document.querySelectorAll(".daysList li")
+    let dates = document.querySelectorAll(".daysList li");
     let allShifts = await GET("/api/shifts/");
     for (let i = 2; i <= dates.length + 1; i++) {
         let countShift = 0;
