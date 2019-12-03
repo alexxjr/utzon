@@ -1,3 +1,7 @@
+/**
+ * Saves HTML-elements in variables, to use for later
+ */
+
 const viewEmpModal = document.querySelector("#viewEmpModal");
 const employeeSelectViewEmployee = document.querySelector("#selectEmp");
 const startDatePicker = document.querySelector("#fromDatePicker");
