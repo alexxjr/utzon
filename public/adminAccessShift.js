@@ -49,7 +49,7 @@ function okAction() {
         let isUpdate = true;
         if ((selectedShiftEmployee !== undefined && newEmployee === undefined) ||
             (selectedShiftEmployee === undefined && newEmployee !== undefined)){
-
+            //DO NOTHING
         }
         else if (selectedShiftEmployee === undefined && newEmployee === undefined
             && selectedShift.start === newStart.toISOString()
@@ -120,12 +120,7 @@ function hasShiftUpdate(shift) {
             return;
         }
         if (shift._id === updates[i].shift._id) {
-            if(updates[i].type === "deleteShift") {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return updates[i].type === "deleteShift";
         }
     }
     return undefined;
