@@ -28,6 +28,3 @@ function createLoginCloseModalAction() {
     document.getElementById("createLoginModal").style.display = "none";
     document.querySelector(".dropdown-content").style.visibility ="visible";
 }
-
-
-
