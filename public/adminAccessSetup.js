@@ -40,28 +40,25 @@ function insertDays() {
                 node.setAttribute("date", day + "");
                 node.onclick = chooseDate;
 
-            let dayDiv = document.createElement("div");
-            let textnode = document.createTextNode(day);
-            dayDiv.appendChild(textnode);
-            dayDiv.style.float = "left";
-            dayDiv.style.marginLeft = "44%";
+                let dayDiv = document.createElement("div");
+                let textnode = document.createTextNode(day);
+                dayDiv.appendChild(textnode);
+                dayDiv.style.float = "left";
+                dayDiv.style.marginLeft = "44%";
 
-            let shiftNoDiv = document.createElement("div");
-            shiftNoDiv.style.float = "right";
-            shiftNoDiv.style.marginRight = "22%";
-            shiftNoDiv.style.paddingRight = "4px"
-            shiftNoDiv.style.paddingLeft = "4px"
-            shiftNoDiv.style.color = "white";
+                let shiftNoDiv = document.createElement("div");
+                shiftNoDiv.style.float = "right";
+                shiftNoDiv.style.marginRight = "22%";
+                shiftNoDiv.style.paddingRight = "4px"
+                shiftNoDiv.style.paddingLeft = "4px"
+                shiftNoDiv.style.color = "white";
 
-            node.appendChild(dayDiv);
-            node.appendChild(shiftNoDiv);
-
-
+                node.appendChild(dayDiv);
+                node.appendChild(shiftNoDiv);
 
 
-
-
-            daysList.appendChild(node);
+                daysList.appendChild(node);
+            }
         }
     }
 }
@@ -69,7 +66,7 @@ function insertDays() {
 function calculateDaysInMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
         for (let i = 0; i < 12; i++) {
-            let blankDays = firstDayInMonth(i);
+            let blankDays = firstDayInMonth(i) - 1;
             if (i === 3 || i === 5 || i === 8 || i === 10) {
                 daysArray[i] = 30 + blankDays;
             } else if (i === 1) {
@@ -107,12 +104,12 @@ async function update() {
         insertDays();
         setupEmployeeAccess();
     } else {
-       await logOutAction();
+        await logOutAction();
     }
 }
 
 async function populateEmployeeSelection() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin" || userRole === "Employee") {
         employeeSelectShift.innerHTML = "";
         let employees = await GET("/api/employees/");
         for (let e of employees) {
