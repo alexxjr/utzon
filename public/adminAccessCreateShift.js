@@ -1,44 +1,42 @@
+const shiftModal = document.querySelector("#createShiftModal");
+const startTimeInput = document.querySelector("#createStartTime");
+const endTimeInput = document.querySelector("#createEndTime");
+const DateLabel = document.querySelector("#createStartDate");
+const totalHoursLabel = document.getElementById("createTotalHours");
+let SelectedDate;
+
 function createShiftModalAction() {
-    if (userRole === "Admin" && createDate() != undefined) {
-            document.querySelector(".dropdown-content").style.visibility = "hidden";
-            document.getElementById("createShiftModal").style.display = "block";
-            document.querySelector("#createStartTime").value = "00:00";
-            document.querySelector("#createEndTime").value = "00:00";
-            document.querySelector("#createStartDate").innerHTML = createDate();
-            let start = document.querySelector("#createStartTime");
-            let end = document.querySelector("#createEndTime");
-            let createTotalHours = document.getElementById("createTotalHours");
+    SelectedDate = createDate();
+    if (userRole === "Admin" && SelectedDate != undefined) {
+        dropdown_content.style.visibility = "hidden";
+        shiftModal.style.display = "block";
+        DateLabel.innerHTML = SelectedDate;
+        startTimeInput.value = "09:00";
+        endTimeInput.value = "17:00";
+        totalHoursLabel.innerHTML = "7.5";
 
-            document.querySelector("#createStartDate").value = createDate();
-            start.value = "00:00";
-            end.value = "01:00";
-            createTotalHours.innerHTML = "1";
+        startTimeInput.addEventListener("input", function () {
+            timeChanged(startTimeInput, endTimeInput, totalHoursLabel);
+        });
 
-
-            start.addEventListener("input", function () {
-                timeChanged(start, end, createTotalHours);
-            });
-
-            end.addEventListener("input", function () {
-                timeChanged(start, end, createTotalHours);
-
-            });
+        endTimeInput.addEventListener("input", function () {
+            timeChanged(startTimeInput, endTimeInput, totalHoursLabel);
+        });
     }
 }
 
 async function okCreateShift() {
-    if (userRole === "Admin" ||userRole === "Employee") {
+    if (userRole === "Admin") {
         try {
-            let mydate = createDate();
             let thisShift = undefined;
-            let newStart = document.querySelector("#createStartTime").value;
-            let newEnd = document.querySelector("#createEndTime").value;
-            let startDate = new Date(mydate + "T" + newStart + "Z");
-            let endDate = new Date(mydate + "T" + newEnd + "Z");
+            let newStart = startTimeInput.value;
+            let newEnd = endTimeInput.value;
+            let startDate = new Date(SelectedDate + "T" + newStart + "Z");
+            let endDate = new Date(SelectedDate + "T" + newEnd + "Z");
             let newEmployee = undefined;
             let update = createUpdate(thisShift, startDate, endDate, newEmployee);
             updates.push(update);
-            createShiftcloseModalAction();
+            ShiftModalCloseAction();
             saveButtonEnable();
             alert("Vagten er nu oprettet! Tryk gem for at tilføje vagten");
         } catch (e) {
@@ -47,8 +45,7 @@ async function okCreateShift() {
     }
 }
 
-function createShiftcloseModalAction() {
-    document.getElementById("createShiftModal").style.display = "none";
-    document.querySelector("#createTotalHours").innerHTML = "1";
-    document.querySelector(".dropdown-content").style.visibility ="visible";
+function ShiftModalCloseAction() {
+    shiftModal.style.display = "none";
+    dropdown_content.style.visibility = "visible";
 }

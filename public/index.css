@@ -107,10 +107,7 @@ body {
 
 }
 
-.daysList :hover {
-    background-color: #ddd;
-    border: 1px solid black;
-}
+
 
 .daysList li {
     list-style-type: none;
@@ -121,8 +118,8 @@ body {
     font-size: 18px;
     color: #777;
     cursor: pointer;
-    border: 1px solid #eee;
 }
+
 
 /* Highlight the "current" day */
 .daysList li .active {
