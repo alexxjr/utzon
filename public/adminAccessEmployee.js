@@ -16,12 +16,6 @@ function closeModalAction() {
     document.querySelector(".dropdown-content").style.visibility ="visible";
 }
 
-window.onclick = function(event) {
-    if(event.target === document.getElementById("empModal")) {
-        document.getElementById("empModal").style.display = "none";
-    }
-};
-
 async function totalHoursBetweenTwoDates() {
     let startDate = document.querySelector("#fromDatePicker").value;
     let toDate = document.querySelector("#toDatePicker").value;
