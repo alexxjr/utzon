@@ -17,11 +17,17 @@ async function seeWeeklyAction() {
     }
 }
 
+/**
+ * Closing the modal window when done.
+ */
 function seeWeeklyCloseModalAction() {
     seeWeeklyModal.style.display = "none";
     dropdown_content.style.visibility = "visible";
 }
 
+/**
+ * Find all shift for the week and sort them. Then generate the weekdays and dates for the table head.
+ */
 async function populateShifts() {
     if (userRole === "Admin" || userRole === "Employee") {
         //find the currently selected week by the monday representing it.
@@ -49,13 +55,17 @@ async function populateShifts() {
             date.setDate(monday.getDate() + i);
             //Insert a new table row in head row
             let th = document.createElement('th');
-            th.innerHTML = daysOfTheWeek[i] + "<br>" + date.toDateString();
+            th.innerHTML = daysOfTheWeek[i] + "<br>" + date.toDateString().substring(3);
             rowOfWeeklyShiftsTableHeads.appendChild(th);
             insertShiftDetailsIntoDivIntoCellInTable(shifts, date);
         }
     }
 }
 
+/**
+ * Use the shift to generate shift information. This information is put into a cell
+ * matching the date in the info.
+ */
 function insertShiftDetailsIntoDivIntoCellInTable(shifts, date) {
     let newCell = seeWeeklyModalTableRowOfShifts.insertCell(-1);
     newCell.className = "CellsInWeekShiftPlan";
@@ -85,7 +95,9 @@ function insertShiftDetailsIntoDivIntoCellInTable(shifts, date) {
     }
 }
 
-
+/**
+ * Get the last monday and the next 16 mondays as date objects in an array.
+ */
 async function populateMondays() {
     listOfMondays.innerHTML = "";
     let mondays = calculateMondays16Weeks();

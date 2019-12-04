@@ -18,6 +18,7 @@
     <script src="adminAccessInit.js" defer></script>
     <script src="employeeAccess.js" defer></script>
     <script src="adminAccessCreateLogin.js" defer></script>
+    <script src="employeeAccessViewShifts.js" defer></script>
 </head>
 <body>
 
@@ -98,6 +99,19 @@
     </div>
 </div>
 
+<div id="myShiftsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="myShiftsCloseModalAction()">&times;</span>
+        <h2>Vagt oversigt</h2>
+        <div>Vælg start: <input id="myShiftsStart" type="date" required></div>
+        <div>Vælg slut: <input id="myShiftsEnd" type="date" required></div>
+        <textarea id="shiftArea" rows="30" cols="50" readonly>
+        </textarea>
+        <button type="button" class="btn" onclick="getShiftsForEmployee()">OK</button>
+        <button type="button" class="btn" onclick="myShiftsCloseModalAction()">Luk vindue</button>
+    </div>
+</div>
+
 <div id="showWeeklyModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="seeWeeklyCloseModalAction()">&times;</span>
@@ -132,6 +146,7 @@
             <a href="#" class="item" id="createButton2" onclick="openCreateEmployeeModal()">Opret ansat</a>
             <a href="#" class="item" id="createLoginBtn" onclick="openLoginModalAction()">Opret login</a>
             <a href="#" class="item" id="seeEmployeesBtn" onclick="viewEmpModalAction()">Ansatte timer</a>
+            <a href="#" class="item" id="myShiftsBtn" onclick="viewMyShiftsAction()">Mine vagter</a>
             <a href="#" class="item" id="seeWeeklyBtn" onclick="seeWeeklyAction()">Ugens vagter</a>
         </div>
     </div>

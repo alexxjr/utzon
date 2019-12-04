@@ -156,6 +156,9 @@ async function adminPOSTWithReturnOnSuccess(data, url) {
     return await response.json();
 }
 
+/**
+ * Gets the last monday and the next 16 mondays.
+ */
 function calculateMondays16Weeks() {
     let date = new Date();
     date.setHours(0,0,0);
@@ -171,6 +174,9 @@ function calculateMondays16Weeks() {
     return mondays;
 }
 
+/**
+ * Helper method for finding the next monday.
+ */
 function getNextDayOfWeek(date, dayOfWeek) {
     let resultDate = new Date(date.getTime());
 
