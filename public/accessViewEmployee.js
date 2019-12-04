@@ -16,7 +16,7 @@ const empTotalHours = document.querySelector("#empTotalHours");
 function viewEmpModalAction() {
     if (userRole === "Admin" || userRole === "Employee") {
         dropdown_content.style.visibility ="hidden";
-        viewEmpModal.style.display = "block";
+        viewEmpModal.className += " visible";
         employeeSelectViewEmployee.value = "";
         startDatePicker.value = "0000-00-00";
         toDatePicker.value = "0000-00-00";
@@ -29,7 +29,7 @@ function viewEmpModalAction() {
  */
 
 function closeModalAction() {
-    viewEmpModal.style.display = "none";
+    viewEmpModal.className = "modal";
     dropdown_content.style.visibility ="visible";
 }
 
