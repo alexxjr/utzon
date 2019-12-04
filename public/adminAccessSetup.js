@@ -197,13 +197,20 @@ async function chooseDate() {
  */
 
 function checkShiftsOnclick() {
-    let shiftsOnDay = dayShift.getElementsByTagName("div");
-    for (let i = 0; i < shiftsOnDay.length; i++) {
-        let thisShift = document.querySelector("#shift" + i);
-        if (thisShift.getAttribute("hasupdate") !== "unchanged") {
-            thisShift.onclick = undefined;
+
+        let shiftsOnDay = dayShift.getElementsByTagName("div");
+        for (let i = 0; i < shiftsOnDay.length; i++) {
+            let thisShift = document.querySelector("#shift" + i);
+            if (userRole === "Admin") {
+                if (thisShift.getAttribute("hasupdate") !== "unchanged") {
+                    thisShift.onclick = undefined;
+                }
+            } else {
+                thisShift.onclick = undefined;
+            }
         }
-    }
+
+
 }
 
 /**

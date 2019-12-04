@@ -49,6 +49,7 @@ async function siteInit() {
     saveButtonEnable();
     await populateEmployeeSelection();
     await generateShiftOnDates();
+    checkShiftsOnclick()
 }
 
 /**
