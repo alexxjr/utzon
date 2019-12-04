@@ -94,5 +94,12 @@ router
         } else {
             response.send(JSON.stringify("noAccess"));
         }
-    });
+    }).get('/loginWithEmployee', async (request, response) => {
+        const user = request.session.user;
+        if (user.employee !== undefined){
+            response.send(JSON.stringify(true));
+        } else {
+            response.send(JSON.stringify(false));
+        }
+});
 module.exports = router;

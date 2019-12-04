@@ -135,6 +135,10 @@ async function update() {
         setYear();
         insertDays();
         setupEmployeeAccess();
+        let hasUserAnEmployee = await GET("/api/login/loginWithEmployee");
+        if (!hasUserAnEmployee){
+            document.querySelector("#myShiftsBtn").style.display = "none";
+        }
     } else {
         await logOutAction();
     }

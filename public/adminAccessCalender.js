@@ -81,8 +81,14 @@ function createDate() {
  * the amount of shifts, and give it a green color.
  */
 async function generateShiftOnDates() {
+    let allShifts;
+    if (userRole === "Admin") {
+        allShifts =  await GET("/api/shifts/");
+    } else if(userRole === "Employee") {
+       let employee =  await GET("/api/employees/employeeForUser");
+        allShifts = employee.shifts;
+    }
     let dates = document.querySelectorAll(".date");
-    let allShifts = await GET("/api/shifts/");
     for (let i = 2; i <= dates.length + 1; i++) {
         let countShift = 0;
         let allShiftsHaveEmployee = true;
@@ -96,9 +102,10 @@ async function generateShiftOnDates() {
                 countShift++;
             }
         }
+
         let shiftCountDiv = dates[i - 2].getElementsByTagName("div")[1];
-        if (shiftCountDiv) {
-            let textnode = document.createTextNode(countShift + "");
+
+        if(userRole === "Admin") {
             if (allShiftsHaveEmployee) {
                 shiftCountDiv.style.backgroundColor = "#91A41C";
             } else {
@@ -106,10 +113,17 @@ async function generateShiftOnDates() {
             }
             if (countShift === 0) {
                 shiftCountDiv.style.backgroundColor = "#811C1C";
-
             }
-            shiftCountDiv.appendChild(textnode);
+        } else if(userRole === "Employee") {
+                if (countShift !== 0) {
+                    shiftCountDiv.style.backgroundColor = "#91A41C";
+                    shiftCountDiv.style.color = "#91A41C";
+                } else {
+                    shiftCountDiv.style.display = "none";
+                }
         }
+        let textnode = document.createTextNode(countShift + "");
+        shiftCountDiv.appendChild(textnode);
     }
 }
 
