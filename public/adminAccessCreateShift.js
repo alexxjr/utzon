@@ -26,8 +26,8 @@ function openCreateShiftModalAction() {
         dropdown_content.style.visibility = "hidden";
         shiftModal.className += " visible";
         DateLabel.innerHTML = SelectedDate;
-        startTimeInput.value = "09:00";
-        endTimeInput.value = "17:00";
+        startTimeInput.value = "10:00";
+        endTimeInput.value = "17:30";
         totalHoursLabel.innerHTML = "7.5";
 
         startTimeInput.addEventListener("input", function () {
