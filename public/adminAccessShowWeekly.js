@@ -3,8 +3,11 @@ const listOfMondays = document.querySelector("#seeWeeklyMondays");
 const seeWeeklyModalTableRowOfShifts = document.querySelector("#seeWeeklyTableShifts");
 let rowOfWeeklyShiftsTableHeads = document.querySelector("#seeWeeklyTableHeadRow");
 
+/**
+ * Opening the modal windows to see shifts of the week.
+ */
 async function seeWeeklyAction() {
-    if (userRole === "Admin") {
+    if (userRole === "Admin" || userRole === "Employee") {
         await populateMondays();
         dropdown_content.style.visibility = "hidden";
         seeWeeklyModal.style.display = "block";
@@ -20,34 +23,36 @@ function seeWeeklyCloseModalAction() {
 }
 
 async function populateShifts() {
-    //find the currently selected week by the monday representing it.
-    let monday = new Date(listOfMondays.options[listOfMondays.selectedIndex].getAttribute("data-date"));
-    seeWeeklyModalTableRowOfShifts.innerHTML = "";
-    rowOfWeeklyShiftsTableHeads.innerHTML = "";
+    if (userRole === "Admin" || userRole === "Employee") {
+        //find the currently selected week by the monday representing it.
+        let monday = new Date(listOfMondays.options[listOfMondays.selectedIndex].getAttribute("data-date"));
+        seeWeeklyModalTableRowOfShifts.innerHTML = "";
+        rowOfWeeklyShiftsTableHeads.innerHTML = "";
 
-    //Days of the week in an Array
-    let daysOfTheWeek = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"];
+        //Days of the week in an Array
+        let daysOfTheWeek = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"];
 
-    //Create the next monday as a date
-    let date = new Date(monday);
-    date.setDate(monday.getDate() + 7);
+        //Create the next monday as a date
+        let date = new Date(monday);
+        date.setDate(monday.getDate() + 7);
 
-    //Get the shifts between the chosen monday and the next monday.
-    let shifts = await GET("/api/shifts/getShiftsInPeriod/" + monday + "/" + date);
-    //Sort the date by day and starting/ending times.
-    shifts.sort(function (a, b) {
-        if (a.start.localeCompare(b.start) === 0) return a.end.localeCompare(b.end);
-        return a.start.localeCompare(b.start);
-    });
-    //Go through each day of the week, so they can be added to the table.
-    for (let i = 0; i < 7; i++) {
-        date = new Date();
-        date.setDate(monday.getDate() + i);
-        //Insert a new table row in head row
-        let th = document.createElement('th');
-        th.innerHTML = daysOfTheWeek[i] + "<br>" + date.toDateString();
-        rowOfWeeklyShiftsTableHeads.appendChild(th);
-        insertShiftDetailsIntoDivIntoCellInTable(shifts, date);
+        //Get the shifts between the chosen monday and the next monday.
+        let shifts = await GET("/api/shifts/getShiftsInPeriod/" + monday + "/" + date);
+        //Sort the date by day and starting/ending times.
+        shifts.sort(function (a, b) {
+            if (a.start.localeCompare(b.start) === 0) return a.end.localeCompare(b.end);
+            return a.start.localeCompare(b.start);
+        });
+        //Go through each day of the week, so they can be added to the table.
+        for (let i = 0; i < 7; i++) {
+            date = new Date();
+            date.setDate(monday.getDate() + i);
+            //Insert a new table row in head row
+            let th = document.createElement('th');
+            th.innerHTML = daysOfTheWeek[i] + "<br>" + date.toDateString();
+            rowOfWeeklyShiftsTableHeads.appendChild(th);
+            insertShiftDetailsIntoDivIntoCellInTable(shifts, date);
+        }
     }
 }
 
