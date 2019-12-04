@@ -24,7 +24,7 @@ function openCreateShiftModalAction() {
     SelectedDate = createDate();
     if (userRole === "Admin" && SelectedDate != undefined) {
         dropdown_content.style.visibility = "hidden";
-        shiftModal.style.display = "block";
+        shiftModal.className += " visible";
         DateLabel.innerHTML = SelectedDate;
         startTimeInput.value = "09:00";
         endTimeInput.value = "17:00";
@@ -73,6 +73,6 @@ async function okCreateShift() {
  */
 
 function ShiftModalCloseAction() {
-    shiftModal.style.display = "none";
+    shiftModal.className = "modal";
     dropdown_content.style.visibility = "visible";
 }

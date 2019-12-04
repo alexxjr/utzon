@@ -7,6 +7,8 @@
  */
 
 async function saveAction() {
+    let saveScreen = document.getElementById("saveScreen");
+    saveScreen.style.display = "block";
     window.onbeforeunload = undefined;
     if (userRole === "Admin") {
         if (updates.length === 0) {
@@ -19,8 +21,11 @@ async function saveAction() {
             for (let i = 0; i < response.length; i++) {
                 errors += response[i].update.type + " fejl: " + response[i].error + "\n\n";
             }
+            saveScreen.style.display = "none";
             alert(errors);
-        } else {
+        }
+        else {
+            saveScreen.style.display = "none";
             alert("Alle ændringer er lavet i databasen");
         }
         location.reload();
