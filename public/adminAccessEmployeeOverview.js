@@ -9,6 +9,7 @@ const employeeOverviewList = document.querySelector("#employeeOverviewList");
  */
 
 async function employeeOverviewAction() {
+    populateEmployeeOverview();
     if (userRole === "Employee" || userRole ==="Admin") {
         dropdown_content.style.visibility ="hidden";
         employeeOverviewModal.style.display = "block";
@@ -28,6 +29,7 @@ function employeeOverviewCloseModalAction() {
  */
 
 async function populateEmployeeOverview() {
+    employeeOverviewList.innerHTML = "";
     let employees = await GET("/api/employees");
     for (let i = 0; i < employees.length; i++) {
         employeeOverviewList.innerHTML += "<li>Navn: " + employees[i].name + "</li>";
@@ -36,4 +38,3 @@ async function populateEmployeeOverview() {
     }
 }
 
-populateEmployeeOverview();

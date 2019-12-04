@@ -55,7 +55,6 @@ router
         if (user.employee) {
             let employee = await employeeController.getEmployeeWithID(user.employee);
             let populatedEmployee = await employeeController.getEmployeePopulated(employee.CPR);
-            console.log(populatedEmployee);
             response.send(populatedEmployee);
         } else {
             response.sendStatus(404);
