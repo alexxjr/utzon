@@ -30,7 +30,7 @@ router
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let startDate = new Date(request.params.startTime);
             let toDate = new Date(request.params.endTime);
-            let employee = JSON.parse(request.params.employee);
+            let employee = await employeeController.getEmployeeWithID(request.params.employee);
             let totalHours = await employeeController.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
             response.send(totalHours);
         } else {

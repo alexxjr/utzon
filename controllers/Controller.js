@@ -6,6 +6,8 @@ const mongoose = require("../app");
 const nodemailer = require('nodemailer');
 // Import of the shift controller
 const shiftController = require('./shiftController');
+// Import of the employee controller
+const employeeController = require('./employeeController');
 
 /**
  * Methods for creatings the transporter that enables emails to be sent out.
@@ -94,6 +96,10 @@ async function manageIncomingUpdates(updates) {
     for (let i = 0; i < updates.length; i++) {
         try {
             changeStringToDateInUpdate(updates[i]);
+            if(updates[i].newEmployee !== undefined) {
+                let employee = await employeeController.getEmployeeWithID(updates[i].newEmployee);
+                updates[i].newEmployee = employee;
+            }
             let updateInfo;
             let isShift = updates[i].shift !== undefined;
             if (isShift) {

@@ -153,11 +153,11 @@ async function populateEmployeeSelection() {
             let data = JSON.stringify(e);
             let option = document.createElement("option");
             option.innerText = e.name;
-            option.setAttribute("data-employee", data);
+            option.setAttribute("data-employee", e._id);
             employeeSelectShift.append(option);
             let option2 = document.createElement("option");
             option2.innerText = e.name;
-            option2.setAttribute("data-employee", data);
+            option2.setAttribute("data-employee", e._id);
             employeeSelectViewEmployee.append(option2);
 
         }
