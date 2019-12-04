@@ -50,6 +50,17 @@ router
         response.redirect("../../noAccess.html");
     }
 })
+    .get('/employeeForUser', async (request, response) => {
+        let user = request.session.user;
+        if (user.employee) {
+            let employee = await employeeController.getEmployeeWithID(user.employee);
+            let populatedEmployee = await employeeController.getEmployeePopulated(employee.CPR);
+            console.log(populatedEmployee);
+            response.send(populatedEmployee);
+        } else {
+            response.sendStatus(404);
+        }
+    })
     .post('/', async (request, response) => {
         if (request.session.role === "Admin") {
             const {CPR, name, email, phoneNo} = request.body;

@@ -37,14 +37,6 @@ router
             }
         });
     })
-    .get('/user', async (request, response) => {
-        const role = request.session.role;
-        
-            response.send(JSON.stringify(role));
-        } else {
-            response.send(JSON.stringify("noAccess"));
-        }
-    })
     .post('/createLogin', async (request, response) => {
         const role = request.session.role;
         if (role === "Admin") {
