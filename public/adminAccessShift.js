@@ -89,11 +89,12 @@ function okAction() {
             && selectedShift.end === newEnd.toISOString()) {
             isUpdate = false;
         }
-        else if (selectedShiftEmployee.name === newEmployee.name
-            && selectedShift.start === newStart.toISOString()
-            && selectedShift.end === newEnd.toISOString())
-        {
-            isUpdate = false;
+        else if (selectedShiftEmployee && newEmployee) {
+            if (selectedShiftEmployee.name === newEmployee.name
+                && selectedShift.start === newStart.toISOString()
+                && selectedShift.end === newEnd.toISOString()) {
+                isUpdate = false;
+            }
         }
 
         if (isUpdate) {

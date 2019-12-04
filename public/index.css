@@ -336,3 +336,11 @@ input[type="date"]::-webkit-inner-spin-button {
     display: block;
 }
 
+#saveScreen {
+    display: none;
+    font-size: 48px;
+    text-align: center;
+    text-shadow: 3px 3px 3px black;
+    color: white;
+}
+
