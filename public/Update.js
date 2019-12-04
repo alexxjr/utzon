@@ -28,12 +28,12 @@ function createUpdate(shift, newStart, newEnd, newEmployee){
             }
         }
         if (oldEmployee !== undefined && newEmployee !== undefined) {
-        if (oldEmployee.CPR !== newEmployee.CPR) {
+        if (oldEmployee._id !== newEmployee) {
             type = "changeShiftEmployee";
         }
         }
         if (oldEmployee !== undefined && newEmployee !== undefined) {
-            if (oldEmployee.CPR !== newEmployee.CPR) {
+            if (oldEmployee._id !== newEmployee) {
                 if (oldStart !== newStartString || oldEnd !== newEndString) {
                     type = "changeShiftTimesAndEmployee";
                 }
