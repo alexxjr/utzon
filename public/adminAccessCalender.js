@@ -81,8 +81,13 @@ function createDate() {
  * the amount of shifts, and give it a green color.
  */
 async function generateShiftOnDates() {
+    let allShifts;
+    if (userRole === "Admin") {
+        allShifts =  await GET("/api/shifts/");
+    } else if(userRole === "Employee") {
+        allShifts =  await GET("/api/shifts/");
+    }
     let dates = document.querySelectorAll(".date");
-    let allShifts = await GET("/api/shifts/");
     for (let i = 2; i <= dates.length + 1; i++) {
         let countShift = 0;
         let allShiftsHaveEmployee = true;
