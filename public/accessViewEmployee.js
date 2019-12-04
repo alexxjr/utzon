@@ -21,7 +21,6 @@ function viewEmpModalAction() {
         startDatePicker.value = "0000-00-00";
         toDatePicker.value = "0000-00-00";
         empTotalHours.value = "";
-        document.onclick = closeAnyModal;
     }
 }
 

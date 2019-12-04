@@ -25,7 +25,6 @@ async function openCreateEmployeeModal() {
         empNr.value = "";
         empMail.value = "";
         empCPR.value = "";
-        document.onclick = closeAnyModal;
     }
 }
 
@@ -99,12 +98,4 @@ async function populateLogins() {
 
     }
     loginSelect.innerHTML += "<option></option>";
-}
-
-function closeAnyModal() {
-    dropdown_content.style.visibility = "visible";
-    empModal.className = "modal";
-    // loginModal.className = "modal";
-    // shiftModal.className = "modal";
-    // viewEmpModal.className = "modal";
 }

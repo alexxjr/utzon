@@ -37,7 +37,6 @@ function openCreateShiftModalAction() {
         endTimeInput.addEventListener("input", function () {
             timeChanged(startTimeInput, endTimeInput, totalHoursLabel);
         });
-        document.onclick = closeAnyModal;
     }
 }
 

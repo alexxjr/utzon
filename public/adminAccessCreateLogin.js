@@ -17,7 +17,6 @@ function openLoginModalAction() {
         loginModal.className += " visible";
         userNameInput.value = "";
         passwordInput.value = "";
-        document.onclick = closeAnyModal;
     }
 }
 
