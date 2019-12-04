@@ -336,3 +336,28 @@ input[type="date"]::-webkit-inner-spin-button {
     display: block;
 }
 
+/*
+Weekly shift plan
+*/
+
+.CellsInWeekShiftPlan, #seeWeeklyTableHeadRow {
+    width:150px;
+    text-align:center;
+    border:1px solid black;
+    padding:5px
+}
+
+.CellsInWeekShiftPlan {
+    vertical-align: top;
+}
+
+.SeeWeekShiftPlanDivWithShift {
+    border: 1px solid black;
+    background: #bc9a5d;
+    font-family: Verdana, sans-serif;
+}
+
+#seeWeeklyTableHeadRow {
+    font-size: small;
+}
+
