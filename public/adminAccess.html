@@ -12,8 +12,9 @@
     <script src="adminAccessCalender.js" defer></script>
     <script src="adminAccessShift.js" defer></script>
     <script src="accessViewEmployee.js" defer></script>
-    <script src="adminAccessCreateShift.js" defer></script>
     <script src="adminAccessCreateEmployee.js" defer></script>
+    <script src="adminAccessCreateShift.js" defer></script>
+    <script src="adminAccessShowWeekly.js" defer></script>
     <script src="adminAccessInit.js" defer></script>
     <script src="employeeAccess.js" defer></script>
     <script src="adminAccessCreateLogin.js" defer></script>
@@ -21,6 +22,17 @@
 </head>
 <body>
 
+<div id="saveScreen" class="modal">
+
+        <span class="close">&times;</span>
+        <br>
+        <br>
+    <br>
+    <p>Gemmer ændringer...</p>
+    <p>Luk ikke browseren</p>
+    </div>
+
+</div>
 
 <div id="viewEmpModal" class="modal">
     <div class="modal-content">
@@ -100,6 +112,28 @@
     </div>
 </div>
 
+<div id="showWeeklyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="seeWeeklyCloseModalAction()">&times;</span>
+        <h2>Ugens Vagter</h2>
+        <div>
+            <select id="seeWeeklyMondays" onchange="populateShifts()">
+            </select>
+        </div>
+        <br>
+        <div>
+            <table id="seeWeeklyTable">
+                <tr id="seeWeeklyTableHeadRow">
+
+                </tr>
+                <tr id="seeWeeklyTableShifts">
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="navbar">
@@ -108,11 +142,12 @@
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-            <a href="#" class="item" id="createButton" onclick="createShiftModalAction()">Opret vagt</a>
-            <a href="#" class="item" id="createButton2" onclick="createEmployeeAction()">Opret ansat</a>
-            <a href="#" class="item" id="createLoginBtn" onclick="createLoginModalAction()">Opret login</a>
+            <a href="#" class="item" id="createButton" onclick="openCreateShiftModalAction()">Opret vagt</a>
+            <a href="#" class="item" id="createButton2" onclick="openCreateEmployeeModal()">Opret ansat</a>
+            <a href="#" class="item" id="createLoginBtn" onclick="openLoginModalAction()">Opret login</a>
             <a href="#" class="item" id="seeEmployeesBtn" onclick="viewEmpModalAction()">Ansatte timer</a>
             <a href="#" class="item" id="myShiftsBtn" onclick="viewMyShiftsAction()">Mine vagter</a>
+            <a href="#" class="item" id="seeWeeklyBtn" onclick="seeWeeklyAction()">Ugens vagter</a>
         </div>
     </div>
     <a href="#" id="logoutBtn" onclick="logOutAction()">Log ud</a>

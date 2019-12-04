@@ -4,6 +4,10 @@ const login = document.querySelector("button");
 const fail = document.querySelector('#fail');
 sessionCheck();
 
+/**
+ * Simple post function posting on a url
+ */
+
 async function POST(url, data) {
     const CREATED = 200;
     let response = await fetch(url, {
@@ -15,6 +19,10 @@ async function POST(url, data) {
         throw new Error("POST status code " + response.status);
     return await response.json();
 }
+
+/**
+ * Simple get function for fetching json from a url
+ */
 
 async function GET(url) {
     const OK = 200;
@@ -29,6 +37,10 @@ async function sessionCheck() {
         window.location = "adminAccess.html"
     }
 }
+
+/**
+ * Simple onclick function for login screen
+ */
 
 login.onclick = async () => {
     try {
