@@ -14,7 +14,7 @@ router
         const {username, password} = request.body;
         if (await loginController.validateLogin(username, password)) {
             request.session.role = await loginController.getLoginRole(username);
-
+            request.session.user = await loginController.findOneLogin(username);
             response.send({ok: true});
         } else {
             response.send({ok: false});
