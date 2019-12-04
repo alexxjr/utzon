@@ -367,3 +367,11 @@ Weekly shift plan
     font-size: small;
 }
 
+#saveScreen {
+    display: none;
+    font-size: 48px;
+    text-align: center;
+    text-shadow: 3px 3px 3px black;
+    color: white;
+}
+
