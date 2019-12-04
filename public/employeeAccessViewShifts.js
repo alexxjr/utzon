@@ -18,16 +18,14 @@ function myShiftsCloseModalAction() {
 async function getShiftsForEmployee() {
     let allShifts = await GET("/api/employees/getLoginShifts/" + myShiftsStart.value + "/" + myShiftsEnd.value);
     shiftArea.innerHTML = "";
-    console.log(allShifts);
     for (let i = 0; i < allShifts.length; i++) {
         let startDate = new Date(allShifts[i].start);
         let endDate = new Date(allShifts[i].end);
         //Regex virker kun en gang, derfor har vi lavet to!!!!!
-        let reg = /[0-9]{4}-[0-9]{2}-[0-9]{2} Tid: [0-9]{2}:[0-9]{2}/g;
-        let reg2 = /[0-9]{4}-[0-9]{2}-[0-9]{2} Tid: [0-9]{2}:[0-9]{2}/g;
-
-        shiftArea.innerHTML += "Vagt start: Dato " +reg.exec(startDate.toISOString().replace(/[T]/, " Tid: "))
-                + "\n" + "Vagt slut: Dato " +reg2.exec(endDate.toISOString().replace(/[T]/, " Tid: ")) + "\n";
+        let reg = /[0-9]{4}-[0-9]{2}-[0-9]{2} kl: [0-9]{2}:[0-9]{2}/g;
+        let reg2 = /[0-9]{4}-[0-9]{2}-[0-9]{2} kl: [0-9]{2}:[0-9]{2}/g;
+        shiftArea.innerHTML += "Vagt start: " +reg.exec(startDate.toISOString().replace(/[T]/, " kl: "))
+                + "\n" + "Vagt slut: " +reg2.exec(endDate.toISOString().replace(/[T]/, " kl: ")) + "\n";
             shiftArea.innerHTML +="----------------------------------------------------";
     }
 }
