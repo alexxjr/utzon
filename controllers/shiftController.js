@@ -182,7 +182,7 @@ async function getShiftsBetweenTwoDates(shifts, fromDate, toDate) {
 /**
 Gets all shifts from mongoDB on a specific date
  */
-exports.getShiftsOnDate = async function (date) {
+async function getShiftsOnDate(date) {
     let result = [];
     let shifts = await getShifts();
     for (let i = 0; i < shifts.length; i++) {
@@ -191,8 +191,14 @@ exports.getShiftsOnDate = async function (date) {
         }
     }
     return result;
-};
+}
 
+/**
+ * Get all shifts between 2 dates
+ */
+async function getShiftsBetweenDates(start, end) {
+    return Shift.find({ start: { $gte: start}, end: { $lt: end}}).populate('employee').lean().exec();
+}
 
 /**
 Helper method that checks if a shift exists and is a valid shift object
@@ -225,3 +231,5 @@ exports.getShifts = getShifts;
 exports.changeShiftTime = changeShiftTime;
 exports.changeShiftEmployee = changeShiftEmployee;
 exports.checkShift = checkShift;
+exports.getShiftsOnDate = getShiftsOnDate;
+exports.getShiftsBetweenDates = getShiftsBetweenDates;

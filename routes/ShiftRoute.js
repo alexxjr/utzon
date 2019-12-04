@@ -34,6 +34,16 @@ router
             response.redirect("../../noAccess.html");
         }
     })
+    .get('/getShiftsInPeriod/:start/:end', async (request, response) => {
+        let start = new Date(request.params.start);
+        let end = new Date(request.params.end);
+        if (request.session.role === "Admin") {
+            let shifts = await shiftController.getShiftsBetweenDates(start, end);
+            response.send(shifts);
+        } else {
+            response.redirect("../../noAccess.html");
+        }
+    })
     .post('/updateShift', async (request, response) => {
         if (request.session.role === "Admin") {
             let updates = request.body;
