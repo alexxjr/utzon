@@ -120,7 +120,7 @@ function setCurrentMonth() {
     if (userRole === "Admin" || userRole === "Employee") {
         month = date.getMonth();
         firstDayOfMonth = firstDayInMonth(month);
-        monthDisplay.innerHTML = monthArray[month] + monthDisplay.innerHTML;
+        monthDisplay.innerHTML = monthArray[month];
     }
 }
 
