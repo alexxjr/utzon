@@ -14,6 +14,12 @@ employee.methods.toString = function() {
     return 'CPR: ' + this.CPR + 'Navn: ' + this.name + 'Email: ' + this.email + 'Tlf: ' + this.phoneNo;
 };
 
+employee.methods.toJSON = function() {
+    let obj = this.toObject();
+    delete obj.CPR;
+    return obj;
+};
+
 
 module.exports = new mongoose.model('Employee', employee);
 

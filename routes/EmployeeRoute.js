@@ -39,7 +39,7 @@ router
     }).get('/getLoginShifts/:fromDate/:toDate', async (request, response) => {
     if (request.session.role === "Admin" || request.session.role === "Employee"){
         let user = request.session.user;
-        if(user.employee != undefined){
+        if(user.employee !== undefined){
             let start = new Date(request.params.fromDate);
             let end = new Date(request.params.toDate);
             let employee = await employeeController.getEmployeeWithID(user.employee);
@@ -55,7 +55,6 @@ router
         if (user.employee) {
             let employee = await employeeController.getEmployeeWithID(user.employee);
             let populatedEmployee = await employeeController.getEmployeePopulated(employee.CPR);
-            console.log(populatedEmployee);
             response.send(populatedEmployee);
         } else {
             response.sendStatus(404);
