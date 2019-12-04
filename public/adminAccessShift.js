@@ -77,7 +77,7 @@ function okAction() {
         let newEnd = new Date(datePicker.value + "T" + endTimePicker.value + "Z");
         let newEmployee = undefined;
         if (employeeSelectShift.value !== "") {
-            newEmployee = JSON.parse(employeeSelectShift[employeeSelectShift.selectedIndex].getAttribute('data-employee'))
+            newEmployee = employeeSelectShift[employeeSelectShift.selectedIndex].getAttribute('data-employee');
         }
         let isUpdate = true;
         if ((selectedShiftEmployee !== undefined && newEmployee === undefined) ||
@@ -112,7 +112,7 @@ function okAction() {
         if (newEmployee === undefined) {
             info[0].innerText = "Ingen ansat";
         } else {
-            info[0].innerText = "Ansat: " + newEmployee.name;
+            info[0].innerText = "Ansat: " + employeeSelectShift.options[employeeSelectShift.selectedIndex].innerHTML
         }
         info[1].innerText = "Dato: " + /[0-9]{4}-[0-9]{2}-[0-9]{2}/g.exec(newStart.toISOString());
         info[2].innerText = "Starttid: " + /[0-9]{2}:[0-9]{2}/g.exec(newStart.toISOString());

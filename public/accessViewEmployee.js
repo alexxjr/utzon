@@ -41,10 +41,9 @@ function closeModalAction() {
 async function totalHoursBetweenTwoDates() {
     let startDate = startDatePicker.value;
     let toDate = toDatePicker.value;
-    let selectedEmployee = employeeSelectViewEmployee.value;
-    if (selectedEmployee) {
-        selectedEmployee =  employeeSelectViewEmployee[employeeSelectViewEmployee.selectedIndex].getAttribute('data-employee');
+    if (!employeeSelectViewEmployee[employeeSelectViewEmployee.selectedIndex] || !startDate || !toDate) {
+        return
     }
-    let hours = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee + "/" + startDate + "/" + toDate);
-    empTotalHours.value = hours;
+    let selectedEmployee = employeeSelectViewEmployee[employeeSelectViewEmployee.selectedIndex].getAttribute('data-employee');
+    empTotalHours.value = await GET("/api/employees/getOneEmployeeHours/" + selectedEmployee + "/" + startDate + "/" + toDate);
 }
