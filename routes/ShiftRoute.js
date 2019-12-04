@@ -37,7 +37,7 @@ router
     .get('/getShiftsInPeriod/:start/:end', async (request, response) => {
         let start = new Date(request.params.start);
         let end = new Date(request.params.end);
-        if (request.session.role === "Admin") {
+        if (request.session.role === "Admin" || request.session.role === "Employee") {
             let shifts = await shiftController.getShiftsBetweenDates(start, end);
             response.send(shifts);
         } else {
