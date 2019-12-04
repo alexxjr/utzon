@@ -51,7 +51,7 @@ async function populateShifts() {
         });
         //Go through each day of the week, so they can be added to the table.
         for (let i = 0; i < 7; i++) {
-            date = new Date();
+            date = new Date(monday);
             date.setDate(monday.getDate() + i);
             //Insert a new table row in head row
             let th = document.createElement('th');
@@ -108,6 +108,12 @@ async function populateMondays() {
         option.onclick = populateShifts;
         listOfMondays.append(option);
     }
+}
+
+function printWeek(){
+    let element = document.querySelector("#seeWeeklyTable");
+    printElement(element);
+    window.print();
 }
 
 

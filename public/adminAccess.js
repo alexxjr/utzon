@@ -184,3 +184,33 @@ function getNextDayOfWeek(date, dayOfWeek) {
 
     return resultDate;
 }
+
+/**
+ * print element in
+ */
+function printElement(elem, append, delimiter) {
+    let domClone = elem.cloneNode(true);
+
+    let $printSection = document.getElementById("printSection");
+
+    if (!$printSection) {
+        $printSection = document.createElement("div");
+        $printSection.id = "printSection";
+        document.body.appendChild($printSection);
+    }
+
+    if (append !== true) {
+        $printSection.innerHTML = "";
+    }
+
+    else if (append === true) {
+        if (typeof (delimiter) === "string") {
+            $printSection.innerHTML += delimiter;
+        }
+        else if (typeof (delimiter) === "object") {
+            $printSection.appendChild(delimiter);
+        }
+    }
+
+    $printSection.appendChild(domClone);
+}
