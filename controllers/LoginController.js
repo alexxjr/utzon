@@ -44,20 +44,14 @@ async function validateLogin(username, password) {
  * Generate a hash from a password using PBKDF2. Uses randomized salting to generate unique hashes.
  */
 async function generateHash(password) {
-
     if ((typeof password) !== "string") {
         throw new Error("The password when generating a hash is not a string")
     }
-
     const salt = await crypto.randomBytes(16).toString('hex');
     let iterations = 65536;
-
-    
     let hash;
     hash = crypto.pbkdf2Sync(password, salt, iterations, 64, "sha512").toString('hex');
-
     return [hash, salt, iterations].join(":");
-
 }
 
 /**
@@ -68,14 +62,11 @@ async function validatePassword(typedPassword, storedPassword) {
     if ((typeof typedPassword) !== "string" || (typeof storedPassword) !== "string") {
         throw new Error("One of the password when validating a hash is not a string")
     }
-
     let parts = storedPassword.split(":");
     if(parts[1] === undefined || parts[2] === undefined) {
         throw new Error("The stored password had the wrong format")
     }
-
     let hash = crypto.pbkdf2Sync(typedPassword, parts[1], Number.parseInt(parts[2]), 64, "sha512").toString('hex');
-
     return hash === parts[0];
 }
 
@@ -125,6 +116,7 @@ async function getListOfLoginsWithoutEmployee() {
 
 /**
  * Get a list of logins with an attached employee
+ * Not currently in use, but made for future use.
  */
 async function getListOfLoginsWithEmployee() {
     let logins = await getLoginsLean();
