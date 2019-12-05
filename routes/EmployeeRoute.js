@@ -14,16 +14,12 @@ router
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let employees = await employeeController.getEmployees();
             response.send(employees);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .get('/getOneEmployee/:employeeID', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let employee = await employeeController.getEmployeeWithID(request.params.employeeID);
             response.send(employee);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .get('/getOneEmployeeHours/:employee/:startTime/:endTime', async (request, response) => {
@@ -33,8 +29,6 @@ router
             let employee = await employeeController.getEmployeeWithID(request.params.employee);
             let totalHours = await employeeController.getTotalHoursBetweenTwoDatesForAnEmployee(employee, startDate, toDate) + "";
             response.send(totalHours);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     }).get('/getLoginShifts/:fromDate/:toDate', async (request, response) => {
     if (request.session.role === "Admin" || request.session.role === "Employee"){
@@ -46,8 +40,6 @@ router
             let shifts = await employeeController.getShiftsForEmployeeBetweenDates(employee, start, end);
             response.send(shifts);
         }
-    } else {
-        response.redirect("../../noAccess.html");
     }
 })
     .get('/employeeForUser', async (request, response) => {

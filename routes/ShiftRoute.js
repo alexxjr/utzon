@@ -13,8 +13,6 @@ router
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let shifts = await shiftController.getShifts();
             response.send(shifts);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .get('/:date', async (request, response) => {
@@ -22,16 +20,12 @@ router
             let date = new Date(request.params.date);
             let shiftOnDate = await shiftController.getShiftsOnDate(date);
             response.send(shiftOnDate);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .get('/getOneShift/:shiftID', async (request, response) => {
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let getOneShift = await shiftController.getOneShift(request.params.shiftID);
             response.send(getOneShift);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .get('/getShiftsInPeriod/:start/:end', async (request, response) => {
@@ -40,8 +34,6 @@ router
         if (request.session.role === "Admin" || request.session.role === "Employee") {
             let shifts = await shiftController.getShiftsBetweenDates(start, end);
             response.send(shifts);
-        } else {
-            response.redirect("../../noAccess.html");
         }
     })
     .post('/updateShift', async (request, response) => {
