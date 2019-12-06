@@ -48,8 +48,8 @@ async function addEmployeeToShift(employee, shift) {
     employee = await getEmployeeWithID(employee._id);
     shift = await shiftController.getOneShift(shift._id);
 
-    if (employee === undefined) {
-        throw new Error("Employee variable is empty");
+    if (employee === null) {
+        throw new Error("Employee does not exist in the database");
     }
     if (shift.employee === undefined) {
         employee.shifts.push(shift);
