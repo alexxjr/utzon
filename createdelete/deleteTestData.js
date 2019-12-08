@@ -1,9 +1,17 @@
 const employeeController = require('../controllers/employeeController');
 const shiftController = require('../controllers/shiftController');
+const loginController = require('../controllers/loginController');
 
 let listOfCpr = ["0123456789", "2013456789", "9876543210"];
 
 async function dostuff() {
+    let logins = await loginController.getLogins();
+    for(let login of logins){
+        if (login.username === "test") {
+            await loginController.deleteLogin(login);
+        }
+    }
+
     let employees = await employeeController.getEmployees();
     for (let employee of employees) {
         if (listOfCpr.includes(employee.CPR)) {
